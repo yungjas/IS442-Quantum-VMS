@@ -12,3 +12,6 @@ To run frontend:
 cd frontend
 npm run serve
 ```
+
+If you prefer to run build.bat instead (running application via command line), you need to install maven: 
+[link](https://www.tutorialspoint.com/maven/maven_environment_setup.htm)
