@@ -8,5 +8,6 @@ To run the spring boot project, click on Run under main method in BackendApplica
 
 To run frontend:
 ```
+cd frontend
 npm run serve
 ```
