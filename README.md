@@ -6,8 +6,8 @@ If you want to use a local mongo for your own testing, download the mongodb comm
 <br>![image](https://user-images.githubusercontent.com/28746967/221094757-759f3215-47c9-438b-a127-9b726199c88d.png)
 2. Click on the "+" button
 <br>![image](https://user-images.githubusercontent.com/28746967/221094953-5cc9b46e-27a4-43b4-b2c0-bd92156b604b.png)
-3. Enter "vms" as database name and the name of the table you want to create under collection name e.g. form, user etc and click create
-![image](https://user-images.githubusercontent.com/28746967/221095193-804750c5-4619-45ab-85bc-37fb4e7e59c3.png)
+3. Enter "vms" as database name and the name of the table you want to create under collection name e.g. form, user etc and click create db
+<br>![image](https://user-images.githubusercontent.com/28746967/221095193-804750c5-4619-45ab-85bc-37fb4e7e59c3.png)
 
 
 
