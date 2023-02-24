@@ -3,7 +3,12 @@ package com.quantum.backend.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Document(collection="user")
+@Getter
+@Setter
 public class User {
     @Id
     private String userId;
@@ -16,43 +21,43 @@ public class User {
 
     private String email;
 
-    public String getUserId() {
-        return userId;
-    }
+    // public String getUserId() {
+    //     return userId;
+    // }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+    // public void setUserId(String userId) {
+    //     this.userId = userId;
+    // }
 
-    public char getUserType() {
-        return userType;
-    }
+    // public char getUserType() {
+    //     return userType;
+    // }
 
-    public void setUserType(char userType) {
-        this.userType = userType;
-    }
+    // public void setUserType(char userType) {
+    //     this.userType = userType;
+    // }
 
-    public String getUsername() {
-        return username;
-    }
+    // public String getUsername() {
+    //     return username;
+    // }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    // public void setUsername(String username) {
+    //     this.username = username;
+    // }
 
-    public String getPassword() {
-        return password;
-    }
+    // public String getPassword() {
+    //     return password;
+    // }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    // public void setPassword(String password) {
+    //     this.password = password;
+    // }
 
-    public String getEmailAddress() {
-        return email;
-    }
+    // public String getEmailAddress() {
+    //     return email;
+    // }
 
-    public void setEmailAddress(String email) {
-        this.email = email;
-    }
+    // public void setEmailAddress(String email) {
+    //     this.email = email;
+    // }
 }

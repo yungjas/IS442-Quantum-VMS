@@ -22,4 +22,31 @@ public class UserService {
     public Optional<User> getUserById(String userId){
         return userRepo.findById(userId);
     }
+
+    public User createUser(User user){
+        userRepo.save(user);
+        return user;
+    }
+
+    public User updateUser(String userId, User userUpdate){
+        Optional<User> user = userRepo.findById(userId);
+        if(user.isPresent()){
+            User userOriginal = user.get();
+            userOriginal.setUserType(userUpdate.getUserType());
+            userOriginal.setUsername(userUpdate.getUsername());
+            userOriginal.setEmail(userUpdate.getEmail());
+            userOriginal.setPassword(userUpdate.getPassword());
+            userRepo.save(userOriginal);
+            return userOriginal;
+        }
+        return null;
+    }
+
+    public void deleteUser(String userId){
+        Optional<User> user = userRepo.findById(userId);
+        if(user.isPresent()){
+            User userData = user.get();
+            userRepo.delete(userData);
+        }
+    }
 }
