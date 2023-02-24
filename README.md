@@ -1,6 +1,8 @@
-## Setup and Execution Instructions
-To configure db connections go to: src/main/resources/application.properties
+## DB Setup
+If you want to use a local mongo for your own testing, download the mongodb community server from this [link](https://www.mongodb.com/try/download/community)
+<br>To configure db connections go to: src/main/resources/application.properties
 
+## Setup and Execution Instructions
 Go to vscode extensions and install the Spring boot extension pack:
 ![image](https://user-images.githubusercontent.com/28746967/220386515-c81e6f4b-8f79-47f9-8b66-ac497a608296.png)
 
