@@ -1,7 +1,7 @@
 package com.quantum.backend.model;
 
 public enum RoleType {
-    ADMIN,
-    APPROVER,
-    VENDOR
+    ROLE_ADMIN,
+    ROLE_APPROVER,
+    ROLE_VENDOR
 }

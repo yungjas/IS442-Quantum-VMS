@@ -3,6 +3,9 @@ package com.quantum.backend.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +23,9 @@ import com.quantum.backend.service.UserService;
 @CrossOrigin
 @RequestMapping(path="api/users")
 public class UserController {
+    @Autowired
+	PasswordEncoder encoder;
+    
     private final UserService userService;
 
     public UserController(UserService userService){
@@ -37,7 +43,9 @@ public class UserController {
     }
 
     @PostMapping("create")
+    @PreAuthorize("hasRole('APPROVER')")
     public User createUser(@RequestBody User user){
+        user.setPassword(encoder.encode(user.getPassword()));
         return userService.createUser(user);
     }
 
