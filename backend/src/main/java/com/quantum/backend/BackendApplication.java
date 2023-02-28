@@ -6,35 +6,28 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-import com.quantum.model.User;
-import com.quantum.repo.UserRepo;
+import com.quantum.backend.model.Vendor;
+import com.quantum.backend.service.implement.VendorServiceImplement;
 
 @SpringBootApplication
 @EnableMongoRepositories
 public class BackendApplication implements CommandLineRunner	//Remove implements and run() if not using CLI
 {	
-	@Autowired
-    UserRepo userRepo;	
-
 	public static void main(String[] args) 
 	{
-		SpringApplication.run(BackendApplication.class, args);
-		
-		
+		SpringApplication.run(BackendApplication.class, args);	
 	}
 
 	//CREATE
-    void createUser() {
+    void createVendor() 
+    {
         System.out.println("Data creation started...");
-        
-        User u = new User("1", "John");
-        System.out.println(u.getName());
-//        userRepo.save(u);
-//        userRepo.save(new User("1", "John"));
-//        userRepo.save(new User("2", "Mary"));
+//        Vendor u = new Vendor("1", "John");
         System.out.println("Data creation complete...");
-    }	
-	public void run(String... args) {
-		createUser();
+    }
+    
+	public void run(String... args) 
+	{
+//		createUser();
 	}
 }
