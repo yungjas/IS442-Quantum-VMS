@@ -19,6 +19,10 @@ public class UserService {
         return userRepo.findAll();
     }
 
+    public List<User> getUsersByUserType(String userType){
+        return userRepo.findByUserType(userType);
+    }
+
     public Optional<User> getUserById(String userId){
         return userRepo.findById(userId);
     }
@@ -42,11 +46,13 @@ public class UserService {
         return null;
     }
 
-    public void deleteUser(String userId){
+    public User deleteUser(String userId){
         Optional<User> user = userRepo.findById(userId);
         if(user.isPresent()){
             User userData = user.get();
             userRepo.delete(userData);
+            return userData;
         }
+        return null;
     }
 }
