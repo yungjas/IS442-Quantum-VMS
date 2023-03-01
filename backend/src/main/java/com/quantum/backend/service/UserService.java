@@ -28,8 +28,11 @@ public class UserService {
     }
 
     public User createUser(User user){
-        userRepo.save(user);
-        return user;
+        if(!userRepo.existsByUsername(user.getUsername()) && !userRepo.existsByEmail(user.getEmail())){
+            userRepo.save(user);
+            return user;
+        }
+        return null;
     }
 
     public User updateUser(String userId, User userUpdate){

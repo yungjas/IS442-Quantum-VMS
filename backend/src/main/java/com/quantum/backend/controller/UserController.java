@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -69,7 +70,10 @@ public class UserController {
         try{
             user.setPassword(encoder.encode(user.getPassword()));
             User userCreated = userService.createUser(user);
-            return new ResponseEntity<>(userCreated, HttpStatus.OK);
+            if(userCreated != null){
+                return new ResponseEntity<>(userCreated, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         catch(Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
