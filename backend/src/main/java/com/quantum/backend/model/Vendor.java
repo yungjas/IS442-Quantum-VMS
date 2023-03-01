@@ -16,9 +16,9 @@ public class Vendor extends User
 //	evaluation_id
 
 	
-	public Vendor(RoleType userType, String username, String password, String email, String companyName)
+	public Vendor(String username, String password, String email, String companyName)
 	{
-		super(userType, username, password, email);
+		super(RoleType.ROLE_VENDOR, username, password, email);
 		this.companyName = companyName;
 	}
 
@@ -37,6 +37,14 @@ public class Vendor extends User
 	public String getVendorId()
 	{
 		return getUserId();
+	}
+
+	@Override
+	public String toString() 
+	{
+		return "Vendor [companyName=" + companyName + ", getUserType()="
+				+ getUserType() + ", getUsername()=" + getUsername() + ", getPassword()=" + getPassword()
+				+ ", getEmail()=" + getEmail() + "]";
 	}
 	
 }
