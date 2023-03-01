@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,7 +41,7 @@ public class AuthController {
 	JwtUtils jwtUtils;
 
 	@PostMapping("login")
-    public JwtResponse authenticateUser(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<JwtResponse> authenticateUser(@RequestBody LoginRequest loginRequest){
         Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -51,6 +53,7 @@ public class AuthController {
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 		
-		return new JwtResponse(jwt, userDetails.getUserId(), userDetails.getUsername(), userDetails.getEmail(), roles);
+		JwtResponse response = new JwtResponse(jwt, userDetails.getUserId(), userDetails.getUsername(), userDetails.getEmail(), roles);
+		return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

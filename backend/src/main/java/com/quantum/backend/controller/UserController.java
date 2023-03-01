@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.quantum.backend.model.User;
 import com.quantum.backend.service.UserService;
@@ -37,6 +35,7 @@ public class UserController {
     }
 
     @GetMapping("all")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> allUsers = userService.getAllUsers();
         if(allUsers.size() == 0){
@@ -65,7 +64,7 @@ public class UserController {
     }
 
     @PostMapping("create")
-    //@PreAuthorize("hasRole('APPROVER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> createUser(@RequestBody User user){
         try{
             user.setPassword(encoder.encode(user.getPassword()));
@@ -78,6 +77,7 @@ public class UserController {
     }
 
     @PutMapping("update/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> updateUser(@PathVariable String userId, @RequestBody User user){
         User userUpdate = userService.updateUser(userId, user);
         if(userUpdate == null){
@@ -87,6 +87,7 @@ public class UserController {
     }
 
     @DeleteMapping("delete/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable String userId){
         try{
             User userDelete = userService.deleteUser(userId);
