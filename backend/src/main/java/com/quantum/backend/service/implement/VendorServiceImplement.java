@@ -37,7 +37,25 @@ public class VendorServiceImplement implements VendorService
     public Optional<Vendor> getVendorById(String vendorId)
     {
         return vendorRepository.findById(vendorId);
-    }	
+    }
+
+    public Vendor updateVendor(String vendorId, Vendor tempVendor)
+    {
+        Optional<Vendor> vendorObj = vendorRepository.findById(vendorId);
+        
+        if(vendorObj.isPresent())
+        {
+            Vendor vendor = vendorObj.get();
+            vendor.setUserType(tempVendor.getUserType());
+            vendor.setUsername(tempVendor.getUsername());
+            vendor.setEmail(tempVendor.getEmail());
+            vendor.setPassword(tempVendor.getPassword());
+            vendor.setCompanyName(tempVendor.getCompanyName());
+            vendorRepository.save(vendor);
+            return vendor;
+        }
+        return null;
+    }    
 	
     public boolean deleteVendor(String vendorId)
     {

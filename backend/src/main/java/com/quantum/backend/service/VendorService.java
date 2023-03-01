@@ -13,5 +13,6 @@ public interface VendorService
 	public Vendor createVendor(Vendor vendor);
 	public List<Vendor> getAllVendors();
     public Optional<Vendor> getVendorById(String vendorId);
+    public Vendor updateVendor(String vendorId, Vendor tempVendor);
 	public boolean deleteVendor(String vendorId);
 }
