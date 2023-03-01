@@ -40,7 +40,7 @@ export default{
                 console.log(response);
                 if(response.status == 200){
                     localStorage.token = response.data.token;
-                    //
+                    // testing if localStorage works
                     axios.get("http://localhost:8080/api/users/all", {
                         headers:{
                             "Content-Type": "application/json",
