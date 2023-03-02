@@ -9,16 +9,16 @@ import lombok.Setter;
 @Setter
 public class AssignedWorkflow {
     @Id
-    private String assignedWorkFlowID;
+    private String assignedWorkflowId;
 
-    private String workflowID;
-    
+    private String workflowId;
+
     private Workflow workflow;
 
-    private String vendorID;
+    private String vendorId;
 
     // DD/MM/YYYY
-    private String dataAssigned;
+    private String dateAssigned;
 
     private String deadline;
 }
