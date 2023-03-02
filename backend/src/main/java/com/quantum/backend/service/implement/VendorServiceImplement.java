@@ -24,9 +24,18 @@ public class VendorServiceImplement implements VendorService
 
 	public Vendor createVendor(Vendor vendor)
 	{
-		CommonFunction.println(vendor.toString());
-    	vendorRepository.save(vendor);
-        return vendor;
+		if
+		(
+			!vendorRepository.existsByUsername(vendor.getUsername()) && 
+			!vendorRepository.existsByEmail(vendor.getEmail())
+		)
+		{
+			CommonFunction.println(vendor.toString());
+	    	vendorRepository.save(vendor);
+	        return vendor;
+		}
+		CommonFunction.printlnTime("Username: " + vendor.getUsername() + " & Email: " + vendor.getEmail() + " already exist in the database");
+        return null;
 	}
 	
     public List<Vendor> getAllVendors()

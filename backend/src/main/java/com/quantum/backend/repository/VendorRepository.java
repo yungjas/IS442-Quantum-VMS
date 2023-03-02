@@ -8,5 +8,7 @@ import com.quantum.backend.model.Vendor;
 @Repository
 public interface VendorRepository extends MongoRepository<Vendor, String>
 {
-    
+    Boolean existsByUsername(String username);
+
+    Boolean existsByEmail(String email);
 }
