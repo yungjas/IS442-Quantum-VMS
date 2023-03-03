@@ -36,7 +36,6 @@ public class UserController {
     }
 
     @GetMapping("all")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> allUsers = userService.getAllUsers();
         if(allUsers.size() == 0){
@@ -46,7 +45,7 @@ public class UserController {
     }
 
     @GetMapping("usertype/{userType}")
-    public ResponseEntity<List<User>> getAllAdmins(@PathVariable String userType){
+    public ResponseEntity<List<User>> getUsersByUserType(@PathVariable String userType){
         List<User> users = userService.getUsersByUserType(userType);
         if(users.size() == 0){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
