@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quantum.backend.global.CommonFunction;
-import com.quantum.backend.model.User;
 import com.quantum.backend.model.Vendor;
 import com.quantum.backend.service.VendorService;
 
