@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 
 import com.quantum.backend.model.Workflow;
 import com.quantum.backend.service.WorkflowService;
@@ -48,7 +47,7 @@ public class WorkflowController {
         }
     }
 
-    @PutMapping("update/{userId}")
+    @PutMapping("update/{workflowId}")
     public ResponseEntity<Workflow> updateWorkflow(@PathVariable String workflowId, @RequestBody Workflow workflow){
         Workflow workflowUpdate = workflowService.updateWorkflow(workflowId, workflow);
         if (workflowUpdate == null){
