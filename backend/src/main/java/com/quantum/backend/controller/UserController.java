@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quantum.backend.model.User;
+import com.quantum.backend.model.Vendor;
 import com.quantum.backend.service.UserService;
 
 @RestController
@@ -71,6 +72,22 @@ public class UserController {
             User userCreated = userService.createUser(user);
             if(userCreated != null){
                 return new ResponseEntity<>(userCreated, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("createVendor")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
+    public ResponseEntity<Vendor> createVendor(@RequestBody Vendor vendor){
+        try{
+            vendor.setPassword(encoder.encode(vendor.getPassword()));
+            Vendor vendorCreated = userService.createVendor(vendor);
+            if(vendorCreated != null){
+                return new ResponseEntity<>(vendorCreated, HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }

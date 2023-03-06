@@ -35,6 +35,14 @@ public class UserService {
         return null;
     }
 
+    public Vendor createVendor(Vendor vendor){
+        if(!userRepo.existsByUsername(vendor.getUsername()) && !userRepo.existsByEmail(vendor.getEmail())){
+            userRepo.save(vendor);
+            return vendor;
+        }
+        return null;
+    }
+
     public User updateUser(String userId, User userUpdate){
         Optional<User> user = userRepo.findById(userId);
         if(user.isPresent()){
