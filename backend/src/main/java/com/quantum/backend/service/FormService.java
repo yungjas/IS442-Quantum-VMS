@@ -4,6 +4,9 @@ import com.quantum.backend.model.*;
 import com.quantum.backend.repository.*;
 import java.util.*;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class FormService {
     private final FormRepository formRepo;
 
