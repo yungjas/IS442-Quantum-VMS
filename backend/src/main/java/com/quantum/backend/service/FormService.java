@@ -18,7 +18,7 @@ public class FormService {
         return formRepo.findAll();
     }
 
-    public Form createWorkflow(Form form){
+    public Form createForm(Form form){
         formRepo.save(form);
         return form;
     }
