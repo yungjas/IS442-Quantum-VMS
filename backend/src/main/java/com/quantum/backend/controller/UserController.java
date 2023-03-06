@@ -27,9 +27,7 @@ import com.quantum.backend.service.UserService;
 @CrossOrigin
 @RequestMapping(path="api/users")
 public class UserController {
-    @Autowired
-	PasswordEncoder encoder;
-    
+
     private final UserService userService;
 
     public UserController(UserService userService){
@@ -68,7 +66,6 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<User> createUser(@RequestBody User user){
         try{
-            user.setPassword(encoder.encode(user.getPassword()));
             User userCreated = userService.createUser(user);
             if(userCreated != null){
                 return new ResponseEntity<>(userCreated, HttpStatus.OK);
@@ -84,7 +81,6 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<Vendor> createVendor(@RequestBody Vendor vendor){
         try{
-            vendor.setPassword(encoder.encode(vendor.getPassword()));
             Vendor vendorCreated = userService.createVendor(vendor);
             if(vendorCreated != null){
                 return new ResponseEntity<>(vendorCreated, HttpStatus.OK);
