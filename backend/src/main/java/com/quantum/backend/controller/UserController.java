@@ -64,7 +64,7 @@ public class UserController {
     }
 
     @PostMapping("create")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<User> createUser(@RequestBody User user){
         try{
             user.setPassword(encoder.encode(user.getPassword()));
@@ -80,7 +80,7 @@ public class UserController {
     }
 
     @PutMapping("update/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<User> updateUser(@PathVariable String userId, @RequestBody User user){
         User userUpdate = userService.updateUser(userId, user);
         if(userUpdate == null){
@@ -90,7 +90,7 @@ public class UserController {
     }
 
     @DeleteMapping("delete/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable String userId){
         try{
             User userDelete = userService.deleteUser(userId);
