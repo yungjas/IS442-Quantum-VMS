@@ -64,7 +64,7 @@ public class UserController {
         
     }
 
-    @PostMapping("create")
+    @PostMapping("create_user")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<User> createUser(@RequestBody User user){
         try{
@@ -80,7 +80,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("createVendor")
+    @PostMapping("create_vendor")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<Vendor> createVendor(@RequestBody Vendor vendor){
         try{
@@ -96,7 +96,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("update/{userId}")
+    @PutMapping("update_user/{userId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<User> updateUser(@PathVariable String userId, @RequestBody User user){
         User userUpdate = userService.updateUser(userId, user);
@@ -104,6 +104,16 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(userUpdate, HttpStatus.OK);
+    }
+
+    @PutMapping("update_vendor/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
+    public ResponseEntity<Vendor> updateVendor(@PathVariable String userId, @RequestBody Vendor vendor){
+        Vendor vendorUpdate = userService.updateVendor(userId, vendor);
+        if(vendorUpdate == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(vendorUpdate, HttpStatus.OK);
     }
 
     @DeleteMapping("delete/{userId}")

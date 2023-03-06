@@ -46,13 +46,28 @@ public class UserService {
     public User updateUser(String userId, User userUpdate){
         Optional<User> user = userRepo.findById(userId);
         if(user.isPresent()){
-            User userOriginal = user.get();
-            userOriginal.setUserType(userUpdate.getUserType());
-            userOriginal.setUsername(userUpdate.getUsername());
-            userOriginal.setEmail(userUpdate.getEmail());
-            userOriginal.setPassword(userUpdate.getPassword());
-            userRepo.save(userOriginal);
-            return userOriginal;
+            User userData = user.get();
+            userData.setUserType(userUpdate.getUserType());
+            userData.setUsername(userUpdate.getUsername());
+            userData.setEmail(userUpdate.getEmail());
+            userData.setPassword(userUpdate.getPassword());
+            userRepo.save(userData);
+            return userData;
+        }
+        return null;
+    }
+
+    public Vendor updateVendor(String userId, Vendor vendorUpdate){
+        Optional<User> user = userRepo.findById(userId);
+        if(user.isPresent()){
+            Vendor vendorData = (Vendor) user.get();
+            vendorData.setUserType(vendorUpdate.getUserType());
+            vendorData.setUsername(vendorUpdate.getUsername());
+            vendorData.setEmail(vendorUpdate.getEmail());
+            vendorData.setPassword(vendorUpdate.getPassword());
+            vendorData.setCompanyName(vendorUpdate.getCompanyName());
+            userRepo.save(vendorData);
+            return vendorData;
         }
         return null;
     }
