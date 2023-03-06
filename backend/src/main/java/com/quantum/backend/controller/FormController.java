@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
-
 @RestController
 @CrossOrigin
 public class FormController {
@@ -34,9 +33,9 @@ public class FormController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<Form> createWorkflow(@RequestBody Form form) {
+    public ResponseEntity<Form> createForm(@RequestBody Form form) {
         try {
-            Form createdForm = formService.createWorkflow(form);
+            Form createdForm = formService.createForm(form);
             if (createdForm != null) {
                 return new ResponseEntity<>(createdForm, HttpStatus.OK);
             }
@@ -55,8 +54,8 @@ public class FormController {
         return new ResponseEntity<>(formUpdate, HttpStatus.OK);
     }
 
-    @DeleteMapping("delete/{workflowId}")
-    public ResponseEntity<HttpStatus> deleteWorkflow(@PathVariable String formId) {
+    @DeleteMapping("delete/{formId}")
+    public ResponseEntity<HttpStatus> deleteForm(@PathVariable String formId) {
         try {
             if (formService.deleteForm(formId) == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -67,4 +66,5 @@ public class FormController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
 }
