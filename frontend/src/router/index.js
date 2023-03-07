@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import UpdateAccount from '../views/UpdateAccount.vue'
+import ViewAccount from '../views/ViewAccount.vue'
 
 const routes = [
   {
@@ -26,6 +27,11 @@ const routes = [
     path: '/updateaccount',
     name: 'UpdateAccount',
     component: UpdateAccount
+  },
+  {
+    path: '/viewaccount',
+    name: 'ViewAccount',
+    component: ViewAccount
   },
 ]
 

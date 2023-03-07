@@ -10,19 +10,25 @@
     <!-- create a 2 by 2 table with bootstrap-->
 
 
-    <div v-if="userType === 'ROLE_ADMIN'">
+    <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
         <table class="table">
             <tbody>
                 <tr v-for="(v, k) in data" :key="k.userid">
-                    <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId'"><label>{{ k }}</label></td>
-                    <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId'"><input type=text v-bind:id="k" v-bind:value="v" style="width: 100%"></td>                    
+                    <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><label>{{ k }}</label></td>
+                    <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><input type=text v-bind:id="k" v-bind:value="v" style="width: 100%"></td>                    
                 </tr>
                 <tr>
                     <td><label>Password</label></td>
                     <td>
                         <input type="password" id="password" v-model="password" style="width: 100%" placeholder="Enter current password to confirm changes">
                     </td>
-                </tr>         
+                </tr>
+                <tr>
+                    <td><label>[Optional]<br>Change Password</label></td>
+                    <td>
+                        <input type="password" id="changePassword" v-model="changePassword" style="width: 100%" placeholder="Only enter password here if you want to change password">
+                    </td>
+                </tr>                        
             </tbody>
         </table>
 
@@ -47,6 +53,7 @@ export default {
             username: "",
             email: "",
             password: "",
+            changePassword: "",
         }
     },
     methods: 
@@ -63,10 +70,10 @@ export default {
         update: function()
         {
             // update the data
-            if(this.userType === 'ROLE_ADMIN')
+            if(this.userType === 'ROLE_ADMIN' || this.userType === 'ROLE_APPROVER')
             {
                 // update the data
-                this.updateAdmin();
+                this.updateAccount();
             }
         },
         reset: function()
@@ -74,7 +81,7 @@ export default {
             // reset the data
             this.data = JSON.parse(localStorage.data);
         },
-        updateAdmin()
+        updateAccount()
         {
             if(this.password === "")
             {
@@ -125,6 +132,12 @@ export default {
                         console.log("====")
 
                     }
+
+                    if(this.changePassword !== "")
+                    {
+                        this.password = this.changePassword;
+                    }
+
                     data += '"password":"' + this.password + '"';
                     data += '}';
                     data = JSON.parse(data);
@@ -210,7 +223,6 @@ export default {
         // }
         
         this.username = this.data.username;
-
-    }
-    }
+    },
+}
 </script>

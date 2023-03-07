@@ -36,7 +36,7 @@
     <div class="btn-group" role="currentUser" >
       <button type="button" class="btn btn-secondary" @click="home">Home</button>
       <button type="button" class="btn btn-secondary" @click="about">About</button>
-      <button type="button" class="btn btn-secondary">View My Account</button>
+      <button type="button" class="btn btn-secondary" @click="viewAccount">View My Account</button>
       <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
     </div>
     <br><br>
@@ -76,6 +76,10 @@ export default
     {
       this.$router.push({name: 'UpdateAccount'});
     },
+    viewAccount: function()
+    {
+      this.$router.push({name: 'ViewAccount'});
+    },
     logout: function()
     {
       localStorage.clear();
@@ -114,9 +118,6 @@ export default
     // }
     
     
-
-  },
-  mounted() {
     this.username = this.data.username;
   },
 }
