@@ -54,6 +54,20 @@ export default{
 
                     //Replace the following with router.push
                     localStorage.userType = response.data.userType;
+
+                    // suggestion 1 - get user detail and store it in localstorage
+                    // so that u don't have to call login in UpdateAccount.vue again
+                    // axios.get("http://localhost:8080/api/users/" + response.data.userId, 
+                    // {
+                    //     headers:{
+                    //         "Content-Type": "application/json",
+                    //         "Access-Control-Allow-Origin": "*",
+                    //         "Authorization": "Bearer " + localStorage.token
+                    //     },
+                    // })
+                    // .then((response_user) => {
+                    //     console.log(response_user)
+                    // })
                     localStorage.data = JSON.stringify(response.data);
 
                     this.$router.push({ name: 'Home'})      

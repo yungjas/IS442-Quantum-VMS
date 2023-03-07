@@ -38,14 +38,14 @@
 import axios from "axios";
     // @ is an alias to /src
     //import HelloWorld from '@/components/HelloWorld.vue'
-
-    export default 
-    {
-    name: 'updateaccount',
+export default {
+    name: 'UpdateAccount',
     data () {
         return {
             data: JSON.parse(localStorage.data),
             userType: localStorage.userType,
+            username: "",
+            email: "",
             password: "",
         }
     },
@@ -128,11 +128,31 @@ import axios from "axios";
                     data += '"password":"' + this.password + '"';
                     data += '}';
                     data = JSON.parse(data);
-                    console.log(data);
+                    console.log(this.password);
                     console.log("==")
                     console.log(JSON.stringify(data))
 
-                    axios.put("http://localhost:8080/api/users/update_user/" + this.data.userId, data, {
+                    // how to use axios.put
+                    // axios.put("http://localhost:8080/api/users/update_user/" + this.data.userId, 
+                    //     {
+                    //         userType: this.data.userType,
+                    //         username: this.data.username,
+                    //         email: this.data.email,
+                    //         password: this.password,
+                    //     },
+                    //     {
+                    //         headers:{
+                    //             "Content-Type": "application/json",
+                    //             "Authorization": "Bearer " + localStorage.token,
+                    //             "Access-Control-Allow-Origin": "*",
+                    //         }
+                    //     }
+                    // )
+                    // .then((response_users) => {
+                    //     console.log(response_users)
+                    // })
+
+                    axios.put("http://localhost:8080/api/users/update_user/" + this.data.userId, {
                         headers:{
                             "Content-Type": "application/json",
                             "Authorization": "Bearer " + localStorage.token,
