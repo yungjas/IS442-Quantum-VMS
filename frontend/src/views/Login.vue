@@ -49,9 +49,14 @@ export default{
                 if(response.status == 200)
                 {
                     localStorage.token = response.data.token;
-
+                    
                     // this.$router.push('/');
-                    this.$router.push({name: 'Home', params: { data: "yourData"}})
+
+                    //Replace the following with router.push
+                    localStorage.userType = response.data.userType;
+                    localStorage.data = JSON.stringify(response.data);
+
+                    this.$router.push({ name: 'Home'})      
 
                     // testing if localStorage works
                     // axios.get("http://localhost:8080/api/users/all", {
