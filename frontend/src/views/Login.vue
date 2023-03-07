@@ -2,14 +2,18 @@
     <div>
         <form @submit.prevent="login()">
             <div>
-                <labeL>Username</labeL>
-                <input type="text" v-model="username"/>
+                <labeL>Email</labeL>
+                <input type="text" v-model="email"/>
             </div>
             <div>
                 <labeL>Password</labeL>
                 <input type="password" v-model="password"/>
+                <br>
+                {{ email }} 
+                <br>
+                {{  password }}
             </div>
-            <button>Submit</button>
+            <button>Login</button>
         </form>
         <button @click="logout">Logout</button>
     </div>
@@ -22,14 +26,14 @@ export default{
     name: "Login",
     data() {
         return {
-            username: "",
+            email: "",
             password: "",
         }
     },
     methods: {
         login: function(){
             axios.post("http://localhost:8080/api/auth/login", {
-                username: this.username,
+                email: this.email,
                 password: this.password,
             },
             {
@@ -39,21 +43,28 @@ export default{
                 },
             }
             )
-            .then((response) => {
+            .then((response) => 
+            {
                 console.log(response);
-                if(response.status == 200){
+                if(response.status == 200)
+                {
                     localStorage.token = response.data.token;
+
+                    // this.$router.push('/');
+                    this.$router.push({name: 'Home', params: { data: "yourData"}})
+
                     // testing if localStorage works
-                    axios.get("http://localhost:8080/api/users/all", {
-                        headers:{
-                            "Content-Type": "application/json",
-                            "Authorization": "Bearer " + localStorage.token,
-                            "Access-Control-Allow-Origin": "*",
-                        }
-                    })
-                    .then((response_users) => {
-                        console.log(response_users);
-                    })
+                    // axios.get("http://localhost:8080/api/users/all", {
+                    //     headers:{
+                    //         "Content-Type": "application/json",
+                    //         "Authorization": "Bearer " + localStorage.token,
+                    //         "Access-Control-Allow-Origin": "*",
+                    //     }
+                    // })
+                    // .then((response_users) => {
+                    //     console.log(response_users);
+                    // })
+
                 }
             });
         },
@@ -62,16 +73,16 @@ export default{
             localStorage.clear();
 
             // testing if logout works
-            axios.get("http://localhost:8080/api/users/all", {
-                headers:{
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + localStorage.token,
-                    "Access-Control-Allow-Origin": "*",
-                }
-                })
-                .then((response_users) => {
-                    console.log(response_users);
-                })
+            // axios.get("http://localhost:8080/api/users/all", {
+            //     headers:{
+            //         "Content-Type": "application/json",
+            //         "Authorization": "Bearer " + localStorage.token,
+            //         "Access-Control-Allow-Origin": "*",
+            //     }
+            //     })
+            //     .then((response_users) => {
+            //         console.log(response_users);
+            //     })
         }
     }
 }
