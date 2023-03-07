@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 
 @RestController
 @CrossOrigin
+@RequestMapping("api/forms")
 public class FormController {
     private final FormService formService;
 
@@ -23,7 +25,7 @@ public class FormController {
         this.formService = formService;
     }
 
-    @GetMapping("allForms")
+    @GetMapping("all")
     public ResponseEntity<List<Form>> getAllForms() {
         List<Form> allForms = formService.getAllForms();
         if (allForms.size() == 0) {
