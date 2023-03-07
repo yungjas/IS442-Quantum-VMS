@@ -25,7 +25,6 @@ import com.quantum.backend.global.CommonFunction;
 import com.quantum.backend.model.User;
 import com.quantum.backend.repository.UserRepository;
 
-// test comment - removing later!!!!
 @RestController
 @CrossOrigin
 @RequestMapping(path="api/auth")
