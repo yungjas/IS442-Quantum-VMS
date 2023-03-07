@@ -23,7 +23,7 @@ public class FormController {
         this.formService = formService;
     }
 
-    @GetMapping("all")
+    @GetMapping("allForms")
     public ResponseEntity<List<Form>> getAllForms() {
         List<Form> allForms = formService.getAllForms();
         if (allForms.size() == 0) {
@@ -32,7 +32,7 @@ public class FormController {
         return new ResponseEntity<>(allForms, HttpStatus.OK);
     }
 
-    @PostMapping("create")
+    @PostMapping("createForm")
     public ResponseEntity<Form> createForm(@RequestBody Form form) {
         try {
             Form createdForm = formService.createForm(form);
@@ -45,7 +45,7 @@ public class FormController {
         }
     }
 
-    @PutMapping("update/{userId}")
+    @PutMapping("update/{formId}")
     public ResponseEntity<Form> updateForm(@PathVariable String formId, @RequestBody Form form){
         Form formUpdate = formService.updateForm(formId, form);
         if (formUpdate == null){
