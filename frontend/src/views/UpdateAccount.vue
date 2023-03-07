@@ -70,10 +70,10 @@ import axios from "axios";
         update: function()
         {
             // update the data
-            if(this.userType === 'ROLE_ADMIN')
+            if(this.userType === 'ROLE_ADMIN' || this.userType === 'ROLE_APPROVER')
             {
                 // update the data
-                this.updateAdmin();
+                this.updateAccount();
             }
         },
         reset: function()
@@ -81,7 +81,7 @@ import axios from "axios";
             // reset the data
             this.data = JSON.parse(localStorage.data);
         },
-        updateAdmin()
+        updateAccount()
         {
             if(this.password === "")
             {
