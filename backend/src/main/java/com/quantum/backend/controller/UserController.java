@@ -20,15 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quantum.backend.model.User;
+import com.quantum.backend.model.Vendor;
 import com.quantum.backend.service.UserService;
 
 @RestController
 @CrossOrigin
 @RequestMapping(path="api/users")
 public class UserController {
-    @Autowired
-	PasswordEncoder encoder;
-    
+
     private final UserService userService;
 
     public UserController(UserService userService){
@@ -36,7 +35,6 @@ public class UserController {
     }
 
     @GetMapping("all")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> allUsers = userService.getAllUsers();
         if(allUsers.size() == 0){
@@ -46,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping("usertype/{userType}")
-    public ResponseEntity<List<User>> getAllAdmins(@PathVariable String userType){
+    public ResponseEntity<List<User>> getUsersByUserType(@PathVariable String userType){
         List<User> users = userService.getUsersByUserType(userType);
         if(users.size() == 0){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -64,11 +62,10 @@ public class UserController {
         
     }
 
-    @PostMapping("create")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("create_user")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<User> createUser(@RequestBody User user){
         try{
-            user.setPassword(encoder.encode(user.getPassword()));
             User userCreated = userService.createUser(user);
             if(userCreated != null){
                 return new ResponseEntity<>(userCreated, HttpStatus.OK);
@@ -80,8 +77,23 @@ public class UserController {
         }
     }
 
-    @PutMapping("update/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("create_vendor")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
+    public ResponseEntity<Vendor> createVendor(@RequestBody Vendor vendor){
+        try{
+            Vendor vendorCreated = userService.createVendor(vendor);
+            if(vendorCreated != null){
+                return new ResponseEntity<>(vendorCreated, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("update_user/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<User> updateUser(@PathVariable String userId, @RequestBody User user){
         User userUpdate = userService.updateUser(userId, user);
         if(userUpdate == null){
@@ -90,8 +102,18 @@ public class UserController {
         return new ResponseEntity<>(userUpdate, HttpStatus.OK);
     }
 
+    @PutMapping("update_vendor/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
+    public ResponseEntity<Vendor> updateVendor(@PathVariable String userId, @RequestBody Vendor vendor){
+        Vendor vendorUpdate = userService.updateVendor(userId, vendor);
+        if(vendorUpdate == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(vendorUpdate, HttpStatus.OK);
+    }
+
     @DeleteMapping("delete/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable String userId){
         try{
             User userDelete = userService.deleteUser(userId);

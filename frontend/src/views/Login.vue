@@ -1,15 +1,18 @@
 <template>
-    <form @submit.prevent="login()">
-        <div>
-            <labeL>Username</labeL>
-            <input type="text" v-model="username"/>
-        </div>
-        <div>
-            <labeL>Password</labeL>
-            <input type="password" v-model="password"/>
-        </div>
-        <button>Submit</button>
-    </form>
+    <div>
+        <form @submit.prevent="login()">
+            <div>
+                <labeL>Username</labeL>
+                <input type="text" v-model="username"/>
+            </div>
+            <div>
+                <labeL>Password</labeL>
+                <input type="password" v-model="password"/>
+            </div>
+            <button>Submit</button>
+        </form>
+        <button @click="logout">Logout</button>
+    </div>
 </template>
 
 <script>
@@ -53,7 +56,22 @@ export default{
                     })
                 }
             });
+        },
 
+        logout: function(){
+            localStorage.clear();
+
+            // testing if logout works
+            axios.get("http://localhost:8080/api/users/all", {
+                headers:{
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + localStorage.token,
+                    "Access-Control-Allow-Origin": "*",
+                }
+                })
+                .then((response_users) => {
+                    console.log(response_users);
+                })
         }
     }
 }

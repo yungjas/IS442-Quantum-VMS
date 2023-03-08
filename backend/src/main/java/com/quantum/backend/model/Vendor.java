@@ -2,7 +2,12 @@ package com.quantum.backend.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("vendor")
+import lombok.Getter;
+import lombok.Setter;
+
+@Document("users")
+@Getter
+@Setter
 public class Vendor extends User
 {
 	private String companyName;
@@ -23,21 +28,21 @@ public class Vendor extends User
 	}
 
 
-	public String getCompanyName()
-	{
-		return companyName;
-	}
+	// public String getCompanyName()
+	// {
+	// 	return companyName;
+	// }
 
 
-	public void setCompanyName(String companyName) 
-	{
-		this.companyName = companyName;
-	}
+	// public void setCompanyName(String companyName) 
+	// {
+	// 	this.companyName = companyName;
+	// }
 	
-	public String getVendorId()
-	{
-		return getUserId();
-	}
+	// public String getVendorId()
+	// {
+	// 	return getUserId();
+	// }
 
 	@Override
 	public String toString() 
