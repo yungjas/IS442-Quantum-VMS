@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import UpdateAccount from '../views/UpdateAccount.vue'
 import ViewAccount from '../views/ViewAccount.vue'
+import ViewUser from '../views/ViewUser.vue'
 
 const routes = [
   {
@@ -32,6 +33,11 @@ const routes = [
     path: '/viewaccount',
     name: 'ViewAccount',
     component: ViewAccount
+  },
+  {
+    path: '/viewUser',
+    name: 'ViewUser',
+    component: ViewUser
   },
 ]
 

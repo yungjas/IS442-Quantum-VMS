@@ -11,10 +11,10 @@
       <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
     </div>
     <br><br>
-    Vendor Management
+    User Management
     <br>
-    <div class="btn-group" role="vendorGroup" >
-      <button type="button" class="btn btn-secondary">View/Update/Delete</button>
+    <div class="btn-group" role="userGroup" >
+      <button type="button" class="btn btn-secondary" @click="viewUser">View/Update/Delete</button>
       <button type="button" class="btn btn-secondary">Create</button>
     </div>
     <br><br>
@@ -46,7 +46,6 @@
       <button type="button" class="btn btn-secondary">View</button>
     </div>
   </div>
-      <button type="button" class="btn btn-secondary" @click="refresh">refresh</button>
 </template>
 
 <script>
@@ -86,10 +85,9 @@ export default
       localStorage.clear();
       this.$router.push({name: 'Login'});
     },
-    refresh: function()
+    viewUser: function()
     {
-      this.$router.go();
-      this.username = "hello";
+      this.$router.push({name: 'ViewUser'});
     },
     // initAdmin()
     // {

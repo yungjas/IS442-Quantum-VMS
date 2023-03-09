@@ -46,7 +46,6 @@ export default {
         return {
             data: JSON.parse(localStorage.data),
             userType: localStorage.userType,
-            username: "",
             email: "",
             password: "",
             changePassword: "",
@@ -149,7 +148,7 @@ export default {
                     .then((response_users) => {
                         console.log(response_users);
                         localStorage.clear();
-                        localStorage.token = response_users.data.token;
+                        localStorage.token = response.data.token;
                         localStorage.userType = response_users.data.userType;
                         localStorage.data = JSON.stringify(response_users.data);
 
@@ -195,8 +194,6 @@ export default {
         // {
         
         // }
-        
-        this.username = this.data.username;
     },
 }
 </script>
