@@ -12,6 +12,8 @@ public class Question {
     private String questionText;
     private String questionType;
     private List<String> answerChoices;
+    private String fileUploadName; 
+    private boolean isRequired;
 
     public String getQuestionText() {
         return questionText;
@@ -36,4 +38,19 @@ public class Question {
     public void setAnswerChoices(List<String> answerChoices) {
         this.answerChoices = answerChoices;
     }
+
+    public String getFileUploadName() {
+        return fileUploadName;
+    }
+
+    public void setFileUploadName(String fileUploadName) {
+        this.fileUploadName = fileUploadName;
+    }
+    public boolean isRequired() {
+        return isRequired;
+    }
+    public void setRequired(boolean required) {
+        isRequired = required;
+    }
 }
+
