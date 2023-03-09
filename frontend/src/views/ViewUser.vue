@@ -30,8 +30,8 @@
                         <td>{{ item.username }}</td>
                         <td>{{ item.email }}</td>
                         <td>{{ item.userType }}</td>
-                        <td><button class="btn btn-warning">Edit</button></td>
-                        <td><button class="btn btn-danger">Delete</button></td>
+                        <td v-if="item.userId !== this.userId"><button class="btn btn-warning" @click="editUser(item.userId)">Edit</button></td>
+                        <td v-if="item.userId !== this.userId"><button class="btn btn-danger" @click="deleteUser(item.userId)">Delete</button></td>
                     </tr>
                 </tbody>
             </table>                 
@@ -53,6 +53,7 @@
             return {
                 data: [],
                 userType: localStorage.userType,
+                userId: JSON.parse(localStorage.data).userId,
                 dropdownData: ['ALL', 'ROLE_ADMIN','ROLE_APPROVER','ROLE_VENDOR'],
             }
         },
@@ -66,24 +67,73 @@
             {
                 localStorage.clear();
                 this.$router.push({name: 'Login'});
-            },           
+            },
+            editUser: function(userId)
+            {
+                console.log(userId);
+                
+                axios.get("http://localhost:8080/api/users/" + userId, {
+                    headers:{
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + localStorage.token,
+                        "Access-Control-Allow-Origin": "*",
+                    }
+                })
+                .then((response) => {
+                    console.log(response.data);
+                    localStorage.editUser = response.data
+                    this.$router.push({name: 'EditUser'});
+                })
+
+            },
+            deleteUser: function(userId)
+            {
+                console.log(userId);
+                // this.$router.push({name: 'DeleteUser', params: {id: userid}});
+
+                axios.delete("http://localhost:8080/api/users/delete/" + userId, {
+                    headers:{
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + localStorage.token,
+                        "Access-Control-Allow-Origin": "*",
+                    }
+                })
+                .then((response) => {
+                    console.log(response.status);
+                    if(response.status == 200)
+                    {
+                        alert("User deleted successfully");
+                        this.viewUser();
+                    }
+                    else
+                    {
+                        alert("Err: user deletion failed");
+                    }
+                })
+
+            },
+            viewUser()
+            {
+                axios.get("http://localhost:8080/api/users/all", {
+                    headers:{
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + localStorage.token,
+                        "Access-Control-Allow-Origin": "*",
+                    }
+                })
+                .then((response) => {
+                    console.log(response.data);
+                    this.data = response.data;
+                })
+            }
+            
         },
         created()
         {
             try
             {
                 console.log("viewing user");
-                axios.get("http://localhost:8080/api/users/all", {
-                        headers:{
-                            "Content-Type": "application/json",
-                            "Authorization": "Bearer " + localStorage.token,
-                            "Access-Control-Allow-Origin": "*",
-                        }
-                    })
-                    .then((response) => {
-                        console.log(response.data);
-                        this.data = response.data;
-                    })                                   
+                this.viewUser();
             }
             catch(e)
             {

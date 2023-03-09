@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import UpdateAccount from '../views/UpdateAccount.vue'
 import ViewAccount from '../views/ViewAccount.vue'
 import ViewUser from '../views/ViewUser.vue'
+import EditUser from '../views/EditUser.vue'
 
 const routes = [
   {
@@ -38,6 +39,11 @@ const routes = [
     path: '/viewUser',
     name: 'ViewUser',
     component: ViewUser
+  },
+  {
+    path: '/editUser',
+    name: 'EditUser',
+    component: EditUser
   },
 ]
 
