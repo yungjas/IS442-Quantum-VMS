@@ -80,6 +80,35 @@ public class UserService {
         return null;
     }
 
+    // when admin/approver updates other user info (excluding password)
+    public User updateOtherUser(String userId, User userUpdate){
+        Optional<User> user = userRepo.findById(userId);
+        if(user.isPresent()){
+            User userData = user.get();
+            userData.setUserType(userUpdate.getUserType());
+            userData.setUsername(userUpdate.getUsername());
+            userData.setEmail(userUpdate.getEmail());
+            userRepo.save(userData);
+            return userData;
+        }
+        return null;
+    }
+
+    // when admin/approver updates other vendor info (excluding password)
+    public Vendor updateOtherVendor(String userId, Vendor vendorUpdate){
+        Optional<User> user = userRepo.findById(userId);
+        if(user.isPresent()){
+            Vendor vendorData = (Vendor) user.get();
+            vendorData.setUserType(vendorUpdate.getUserType());
+            vendorData.setUsername(vendorUpdate.getUsername());
+            vendorData.setEmail(vendorUpdate.getEmail());
+            vendorData.setCompanyName(vendorUpdate.getCompanyName());
+            userRepo.save(vendorData);
+            return vendorData;
+        }
+        return null;
+    } 
+
     public User deleteUser(String userId){
         Optional<User> user = userRepo.findById(userId);
         if(user.isPresent()){

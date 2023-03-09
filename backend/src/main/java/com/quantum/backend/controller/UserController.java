@@ -102,6 +102,16 @@ public class UserController {
         return new ResponseEntity<>(userUpdate, HttpStatus.OK);
     }
 
+    @PutMapping("update_other_user/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
+    public ResponseEntity<User> updateOtherUser(@PathVariable String userId, @RequestBody User user){
+        User otherUserUpdate = userService.updateOtherUser(userId, user);
+        if(otherUserUpdate == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(otherUserUpdate, HttpStatus.OK);
+    }
+
     @PutMapping("update_vendor/{userId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<Vendor> updateVendor(@PathVariable String userId, @RequestBody Vendor vendor){
@@ -110,6 +120,16 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(vendorUpdate, HttpStatus.OK);
+    }
+
+    @PutMapping("update_other_vendor/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
+    public ResponseEntity<Vendor> updateOtherVendor(@PathVariable String userId, @RequestBody Vendor vendor){
+        Vendor otherVendorUpdate = userService.updateOtherVendor(userId, vendor);
+        if(otherVendorUpdate == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(otherVendorUpdate, HttpStatus.OK);
     }
 
     @DeleteMapping("delete/{userId}")
