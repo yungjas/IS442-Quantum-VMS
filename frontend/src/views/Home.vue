@@ -46,6 +46,7 @@
       <button type="button" class="btn btn-secondary">View</button>
     </div>
   </div>
+      <button type="button" class="btn btn-secondary" @click="refresh">refresh</button>
 </template>
 
 <script>
@@ -57,8 +58,8 @@ export default
   name: 'home',
   data () {
     return {      
-      data: JSON.parse(localStorage.data),
-      userType: localStorage.userType,
+      data: null,
+      userType: null,
       username: "",
     }
   },
@@ -85,6 +86,11 @@ export default
       localStorage.clear();
       this.$router.push({name: 'Login'});
     },
+    refresh: function()
+    {
+      this.$router.go();
+      this.username = "hello";
+    },
     // initAdmin()
     // {
 
@@ -100,10 +106,28 @@ export default
   },
   created()
   {
-    if(this.userType === undefined)
+    try
     {
-      this.$router.push({name: 'Login'});
+      console.log("running");
+      this.data = JSON.parse(localStorage.data);
+      this.userType = localStorage.userType;
+      this.username = this.data.username;
     }
+    catch(e)
+    {
+      if(e instanceof SyntaxError)
+      {
+        this.$router.push({name: 'Login'});
+      }
+      else
+      {
+        console.log(e);
+      }
+    }
+    // if(this.userType === null)
+    // {
+    //   this.$router.push({name: 'Login'});
+    // }
     // else if(this.userType === 'ROLE_ADMIN')
     // {
       
@@ -118,7 +142,7 @@ export default
     // }
     
     
-    this.username = this.data.username;
+    
   },
 }
 </script>

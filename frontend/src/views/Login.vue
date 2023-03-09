@@ -46,7 +46,8 @@ export default{
             .then((response) => 
             {
                 console.log(response);
-
+                localStorage.token = response.data.token;
+                
                 if(response.status == 200)
                 {
 
@@ -64,9 +65,6 @@ export default{
                         console.log(response);
                         if(response.status == 200)
                         {
-
-                            localStorage.token = response.data.token;
-
                             // //Replace the following with router.push
                             localStorage.userType = response.data.userType;
                              // suggestion 1 - get user detail and store it in localstorage

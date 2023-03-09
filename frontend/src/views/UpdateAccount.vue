@@ -6,10 +6,6 @@
         <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
     </div>
     <br><br>
-    <!-- if role = ROLE_ADMIN for loop data -->
-    <!-- create a 2 by 2 table with bootstrap-->
-
-
     <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
         <table class="table">
             <tbody>
@@ -110,8 +106,6 @@ export default {
                     {
                         console.log(v);
                         
-                        
-
                         if(v === "tokenType" || v === "token" || v ==="userId")
                         {
                             console.log("NO DATA BECAUSE THIS IS NOT REQUIRED IN BODY");
@@ -141,31 +135,11 @@ export default {
                     data += '"password":"' + this.password + '"';
                     data += '}';
                     data = JSON.parse(data);
-                    console.log(this.password);
+                    console.log(data);
                     console.log("==")
                     console.log(JSON.stringify(data))
 
-                    // how to use axios.put
-                    // axios.put("http://localhost:8080/api/users/update_user/" + this.data.userId, 
-                    //     {
-                    //         userType: this.data.userType,
-                    //         username: this.data.username,
-                    //         email: this.data.email,
-                    //         password: this.password,
-                    //     },
-                    //     {
-                    //         headers:{
-                    //             "Content-Type": "application/json",
-                    //             "Authorization": "Bearer " + localStorage.token,
-                    //             "Access-Control-Allow-Origin": "*",
-                    //         }
-                    //     }
-                    // )
-                    // .then((response_users) => {
-                    //     console.log(response_users)
-                    // })
-
-                    axios.put("http://localhost:8080/api/users/update_user/" + this.data.userId, {
+                    axios.put("http://localhost:8080/api/users/update_user/" + this.data.userId, data, {
                         headers:{
                             "Content-Type": "application/json",
                             "Authorization": "Bearer " + localStorage.token,
@@ -175,9 +149,9 @@ export default {
                     .then((response_users) => {
                         console.log(response_users);
                         localStorage.clear();
-                        localStorage.token = response.data.token;
-                        localStorage.userType = response.data.userType;
-                        localStorage.data = JSON.stringify(response.data);
+                        localStorage.token = response_users.data.token;
+                        localStorage.userType = response_users.data.userType;
+                        localStorage.data = JSON.stringify(response_users.data);
 
                         alert("Account updated successfully");
                     })                        
