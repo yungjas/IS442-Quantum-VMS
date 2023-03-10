@@ -83,71 +83,108 @@ public class UserService {
         return vendor;
     }
 
-    public User updateUser(String userId, User userUpdate){
+    public User updateUser(String userId, User userUpdate) throws ResourceNotFoundException, RequestErrorException{
         Optional<User> user = userRepo.findById(userId);
-        if(user.isPresent()){
-            User userData = user.get();
+        User userData = null;
+        
+        if(!user.isPresent()){
+            throw new ResourceNotFoundException("User", "userId", userId);
+        }
+
+        try{
+            userData = user.get();
             userData.setUserType(userUpdate.getUserType());
             userData.setUsername(userUpdate.getUsername());
             userData.setEmail(userUpdate.getEmail());
             userData.setPassword(encoder.encode(userUpdate.getPassword()));
             userRepo.save(userData);
-            return userData;
         }
-        return null;
+        catch(Exception e){
+            throw new RequestErrorException("update", "User", e.getMessage());
+        }
+
+        return userData;
     }
 
-    public Vendor updateVendor(String userId, Vendor vendorUpdate){
+    public Vendor updateVendor(String userId, Vendor vendorUpdate) throws ResourceNotFoundException, RequestErrorException{
         Optional<User> user = userRepo.findById(userId);
-        if(user.isPresent()){
-            Vendor vendorData = (Vendor) user.get();
+        Vendor vendorData = null;
+
+        if(!user.isPresent()){
+            throw new ResourceNotFoundException("Vendor", "userId", userId);
+        }
+
+        try{
+            vendorData = (Vendor) user.get();
             vendorData.setUserType(vendorUpdate.getUserType());
             vendorData.setUsername(vendorUpdate.getUsername());
             vendorData.setEmail(vendorUpdate.getEmail());
             vendorData.setPassword(encoder.encode(vendorUpdate.getPassword()));
             vendorData.setCompanyName(vendorUpdate.getCompanyName());
             userRepo.save(vendorData);
-            return vendorData;
         }
-        return null;
+        catch(Exception e){
+            throw new RequestErrorException("update", "Vendor", e.getMessage());
+        }
+        return vendorData;
     }
 
     // when admin/approver updates other user info (excluding password)
-    public User updateOtherUser(String userId, User userUpdate){
+    public User updateOtherUser(String userId, User userUpdate) throws ResourceNotFoundException, RequestErrorException{
         Optional<User> user = userRepo.findById(userId);
-        if(user.isPresent()){
-            User userData = user.get();
+        User userData = null;
+
+        if(!user.isPresent()){
+            throw new ResourceNotFoundException("User", "userId", userId);
+        }
+        try{
+            userData = user.get();
             userData.setUserType(userUpdate.getUserType());
             userData.setUsername(userUpdate.getUsername());
             userData.setEmail(userUpdate.getEmail());
             userRepo.save(userData);
-            return userData;
         }
-        return null;
+        catch(Exception e){
+            throw new RequestErrorException("update", "User", e.getMessage());
+        }
+        return userData;
     }
 
     // when admin/approver updates other vendor info (excluding password)
-    public Vendor updateOtherVendor(String userId, Vendor vendorUpdate){
+    public Vendor updateOtherVendor(String userId, Vendor vendorUpdate) throws ResourceNotFoundException, RequestErrorException{
         Optional<User> user = userRepo.findById(userId);
-        if(user.isPresent()){
-            Vendor vendorData = (Vendor) user.get();
+        Vendor vendorData = null;
+
+        if(!user.isPresent()){
+            throw new ResourceNotFoundException("Vendor", "userId", userId);
+        }
+        try{
+            vendorData = (Vendor) user.get();
             vendorData.setUserType(vendorUpdate.getUserType());
             vendorData.setUsername(vendorUpdate.getUsername());
             vendorData.setEmail(vendorUpdate.getEmail());
             vendorData.setCompanyName(vendorUpdate.getCompanyName());
-            userRepo.save(vendorData);
-            return vendorData;
+            userRepo.save(vendorData);        
         }
-        return null;
+        catch(Exception e){
+            throw new RequestErrorException("update", "Vendor", e.getMessage());
+        }
+        return vendorData;
     } 
 
-    public User deleteUser(String userId){
+    public User deleteUser(String userId) throws ResourceNotFoundException, RequestErrorException{
         Optional<User> user = userRepo.findById(userId);
-        if(user.isPresent()){
-            User userData = user.get();
-            userRepo.delete(userData);
-            return userData;
+        User userData = null;
+        if(!user.isPresent()){
+            throw new ResourceNotFoundException("User", "userId", userId);
         }
-        return null;
+        try{
+            userData = user.get();
+            userRepo.delete(userData);
+        }
+        catch(Exception e){
+            throw new RequestErrorException("delete", "User", e.getMessage());
+        }
+        return userData;
     }
 }

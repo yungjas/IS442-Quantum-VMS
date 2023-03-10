@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.quantum.backend.exception.ResourceNotFoundException;
 import com.quantum.backend.model.User;
 import com.quantum.backend.model.Vendor;
 import com.quantum.backend.service.UserService;
@@ -101,56 +102,81 @@ public class UserController {
 
     @PutMapping("update_user/{userId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
-    public ResponseEntity<User> updateUser(@PathVariable String userId, @RequestBody User user){
-        User userUpdate = userService.updateUser(userId, user);
-        if(userUpdate == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> updateUser(@PathVariable String userId, @RequestBody User user){
+        User userUpdate = null;
+        try{
+            userUpdate = userService.updateUser(userId, user);
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(userUpdate, HttpStatus.OK);
     }
 
     @PutMapping("update_other_user/{userId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
-    public ResponseEntity<User> updateOtherUser(@PathVariable String userId, @RequestBody User user){
-        User otherUserUpdate = userService.updateOtherUser(userId, user);
-        if(otherUserUpdate == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> updateOtherUser(@PathVariable String userId, @RequestBody User user){
+        User otherUserUpdate = null;
+        try{
+            otherUserUpdate = userService.updateOtherUser(userId, user);
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(otherUserUpdate, HttpStatus.OK);
     }
 
     @PutMapping("update_vendor/{userId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
-    public ResponseEntity<Vendor> updateVendor(@PathVariable String userId, @RequestBody Vendor vendor){
-        Vendor vendorUpdate = userService.updateVendor(userId, vendor);
-        if(vendorUpdate == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> updateVendor(@PathVariable String userId, @RequestBody Vendor vendor){
+        Vendor vendorUpdate = null;
+        try{
+            vendorUpdate = userService.updateVendor(userId, vendor);
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(vendorUpdate, HttpStatus.OK);
     }
 
     @PutMapping("update_other_vendor/{userId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
-    public ResponseEntity<Vendor> updateOtherVendor(@PathVariable String userId, @RequestBody Vendor vendor){
-        Vendor otherVendorUpdate = userService.updateOtherVendor(userId, vendor);
-        if(otherVendorUpdate == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> updateOtherVendor(@PathVariable String userId, @RequestBody Vendor vendor){
+        Vendor otherVendorUpdate = null;
+        try{
+            otherVendorUpdate = userService.updateOtherVendor(userId, vendor);
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(otherVendorUpdate, HttpStatus.OK);
     }
 
     @DeleteMapping("delete/{userId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable String userId){
+    public ResponseEntity<Object> deleteUser(@PathVariable String userId){
+        User userDelete = null;
         try{
-            User userDelete = userService.deleteUser(userId);
-            if(userDelete == null){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
-            }
-            return new ResponseEntity<>(HttpStatus.OK);
+            userDelete = userService.deleteUser(userId);            
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
         }
         catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR); 
         }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
