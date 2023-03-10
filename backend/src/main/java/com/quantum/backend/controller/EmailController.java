@@ -1,5 +1,7 @@
 package com.quantum.backend.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +23,13 @@ public class EmailController {
     }
 
     @GetMapping("send")
-    public void sendSimpleMessage(@RequestBody SendEmailRequest sendEmail){
-        emailService.sendSimpleMessage(sendEmail);
+    public ResponseEntity<HttpStatus> sendSimpleMessage(@RequestBody SendEmailRequest sendEmail){
+        try{
+            emailService.sendSimpleMessage(sendEmail);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+        }
     }
 }

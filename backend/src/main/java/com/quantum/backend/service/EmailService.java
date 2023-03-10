@@ -17,7 +17,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender emailSender;
 
-    public void sendSimpleMessage(SendEmailRequest sendEmail) {
+    public void sendSimpleMessage(SendEmailRequest sendEmail) throws Exception{
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(mailServerSender);
@@ -25,8 +25,14 @@ public class EmailService {
             message.setSubject(sendEmail.getSubject());
             message.setText(sendEmail.getText());
             emailSender.send(message);
-        } catch (MailException exception) {
-            exception.printStackTrace();
+        } 
+        catch (Exception e) {
+            throw new Exception(e);
         }
     }
+
+    // for sending attachments, need to use relative path
+    // public void sendEmailWithAttachment() {
+
+    // }
 }
