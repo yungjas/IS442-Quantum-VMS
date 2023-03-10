@@ -3,11 +3,15 @@ package com.quantum.backend.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.quantum.backend.exception.RequestErrorException;
+import com.quantum.backend.exception.ResourceNotFoundException;
 import com.quantum.backend.model.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ServerErrorException;
+
 import com.quantum.backend.repository.UserRepository;
 
 @Service
@@ -25,30 +29,58 @@ public class UserService {
         return userRepo.findAll();
     }
 
-    public List<User> getUsersByUserType(String userType){
-        return userRepo.findByUserType(userType);
+    public List<User> getUsersByUserType(String userType) throws ResourceNotFoundException{
+        List<User> users = userRepo.findByUserType(userType);
+        if(users.size() == 0){
+            throw new ResourceNotFoundException("User", "userType", userType);
+        }
+        return users;
     }
 
-    public Optional<User> getUserById(String userId){
-        return userRepo.findById(userId);
+    public Optional<User> getUserById(String userId) throws ResourceNotFoundException{
+        Optional<User> userData = userRepo.findById(userId);
+        if(!userData.isPresent()){
+            throw new ResourceNotFoundException("User", "userId", userId);
+        }
+        return userData;
     }
 
-    public User createUser(User user){
-        if(!userRepo.existsByUsername(user.getUsername()) && !userRepo.existsByEmail(user.getEmail())){
+    public User createUser(User user) throws IllegalArgumentException, RequestErrorException{
+        if(userRepo.existsByUsername(user.getUsername())){
+            throw new IllegalArgumentException("The username has already been taken");
+        }
+        
+        if (userRepo.existsByEmail(user.getEmail())){
+            throw new IllegalArgumentException("The email has already been taken");
+        }
+
+        try{
             user.setPassword(encoder.encode(user.getPassword()));
             userRepo.save(user);
-            return user;
         }
-        return null;
+        catch(Exception e){
+            throw new RequestErrorException("create", "User", e.getMessage());
+        }
+        return user;
     }
 
-    public Vendor createVendor(Vendor vendor){
-        if(!userRepo.existsByUsername(vendor.getUsername()) && !userRepo.existsByEmail(vendor.getEmail())){
+    public Vendor createVendor(Vendor vendor) throws IllegalArgumentException, RequestErrorException{
+        if(userRepo.existsByUsername(vendor.getUsername())){
+            throw new IllegalArgumentException("The username has already been taken");
+        }
+        
+        if (userRepo.existsByEmail(vendor.getEmail())){
+            throw new IllegalArgumentException("The email has already been taken");
+        }
+
+        try{
             vendor.setPassword(encoder.encode(vendor.getPassword()));
             userRepo.save(vendor);
-            return vendor;
         }
-        return null;
+        catch(Exception e){
+            throw new RequestErrorException("create", "Vendor", e.getMessage());
+        }
+        return vendor;
     }
 
     public User updateUser(String userId, User userUpdate){

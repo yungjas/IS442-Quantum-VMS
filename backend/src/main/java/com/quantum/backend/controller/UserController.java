@@ -44,52 +44,59 @@ public class UserController {
     }
 
     @GetMapping("usertype/{userType}")
-    public ResponseEntity<List<User>> getUsersByUserType(@PathVariable String userType){
-        List<User> users = userService.getUsersByUserType(userType);
-        if(users.size() == 0){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> getUsersByUserType(@PathVariable String userType){
+        List<User> users = null;
+        try{
+            users = userService.getUsersByUserType(userType);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("{userId}")
-    public ResponseEntity<Optional<User>> getUserById(@PathVariable String userId){
-        Optional<User> userData = userService.getUserById(userId);
-        if(!userData.isPresent()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> getUserById(@PathVariable String userId){
+        Optional<User> userData = null;
+        try{
+            userData = userService.getUserById(userId);
         }
-        return new ResponseEntity<>(userData, HttpStatus.OK);
-        
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(userData.get(), HttpStatus.OK);
     }
 
     @PostMapping("create_user")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
-    public ResponseEntity<User> createUser(@RequestBody User user){
+    public ResponseEntity<Object> createUser(@RequestBody User user){
+        User userCreated = null;
         try{
-            User userCreated = userService.createUser(user);
-            if(userCreated != null){
-                return new ResponseEntity<>(userCreated, HttpStatus.OK);
-            }
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            userCreated = userService.createUser(user);
+        }
+        catch(IllegalArgumentException ill){
+            return new ResponseEntity<>(ill.getMessage(), HttpStatus.CONFLICT);
         }
         catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return new ResponseEntity<>(userCreated, HttpStatus.OK);
     }
 
     @PostMapping("create_vendor")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
-    public ResponseEntity<Vendor> createVendor(@RequestBody Vendor vendor){
+    public ResponseEntity<Object> createVendor(@RequestBody Vendor vendor){
+        Vendor vendorCreated = null;
         try{
-            Vendor vendorCreated = userService.createVendor(vendor);
-            if(vendorCreated != null){
-                return new ResponseEntity<>(vendorCreated, HttpStatus.OK);
-            }
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            vendorCreated = userService.createVendor(vendor);
+        }
+        catch(IllegalArgumentException ill){
+            return new ResponseEntity<>(ill.getMessage(), HttpStatus.CONFLICT);
         }
         catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return new ResponseEntity<>(vendorCreated, HttpStatus.OK);
     }
 
     @PutMapping("update_user/{userId}")
