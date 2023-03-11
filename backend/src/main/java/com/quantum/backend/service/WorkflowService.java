@@ -29,7 +29,7 @@ public class WorkflowService {
         Optional<Workflow> workflow = workflowRepo.findById(workflowId);
         if(workflow.isPresent()){
             Workflow workflowOriginal = workflow.get();
-            workflowOriginal.setQuestionnaires(workflowUpdate.getQuestionnaires());
+            // workflowOriginal.setQuestionnaires(workflowUpdate.getQuestionnaires());
             workflowOriginal.setVendorId(workflowUpdate.getWorkflowId());
             workflowOriginal.setAdminId(workflowUpdate.getAdminId());
             workflowOriginal.setVendorId(workflowUpdate.getVendorId());
@@ -40,7 +40,7 @@ public class WorkflowService {
     }
     
     public Workflow deleteWorkflow(String workflowId){
-        Optional<Workflow> workflow = workflowRepo.findByWorkflowID(workflowId);
+        Optional<Workflow> workflow = workflowRepo.findByWorkflowId(workflowId);
         if(workflow.isPresent()){
             Workflow workflowData = workflow.get();
             workflowRepo.delete(workflowData);

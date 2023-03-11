@@ -22,6 +22,6 @@ public class Workflow {
 
     private String vendorId;
 
-    // questionnaires required for the workflow, with number representing the order
-    private HashMap<Integer, Questionnaire> questionnaires;
+    //forms required for the workflow, with number representing the order
+    private HashMap<Integer, Form> questionnaires;
 }
