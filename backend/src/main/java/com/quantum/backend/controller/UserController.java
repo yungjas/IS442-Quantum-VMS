@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.quantum.backend.exception.ResourceNotFoundException;
 import com.quantum.backend.model.User;
 import com.quantum.backend.model.Vendor;
 import com.quantum.backend.service.UserService;
@@ -44,86 +45,138 @@ public class UserController {
     }
 
     @GetMapping("usertype/{userType}")
-    public ResponseEntity<List<User>> getUsersByUserType(@PathVariable String userType){
-        List<User> users = userService.getUsersByUserType(userType);
-        if(users.size() == 0){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> getUsersByUserType(@PathVariable String userType){
+        List<User> users = null;
+        try{
+            users = userService.getUsersByUserType(userType);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("{userId}")
-    public ResponseEntity<Optional<User>> getUserById(@PathVariable String userId){
-        Optional<User> userData = userService.getUserById(userId);
-        if(!userData.isPresent()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> getUserById(@PathVariable String userId){
+        Optional<User> userData = null;
+        try{
+            userData = userService.getUserById(userId);
         }
-        return new ResponseEntity<>(userData, HttpStatus.OK);
-        
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(userData.get(), HttpStatus.OK);
     }
 
     @PostMapping("create_user")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
-    public ResponseEntity<User> createUser(@RequestBody User user){
+    public ResponseEntity<Object> createUser(@RequestBody User user){
+        User userCreated = null;
         try{
-            User userCreated = userService.createUser(user);
-            if(userCreated != null){
-                return new ResponseEntity<>(userCreated, HttpStatus.OK);
-            }
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            userCreated = userService.createUser(user);
+        }
+        catch(IllegalArgumentException ill){
+            return new ResponseEntity<>(ill.getMessage(), HttpStatus.CONFLICT);
         }
         catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return new ResponseEntity<>(userCreated, HttpStatus.OK);
     }
 
     @PostMapping("create_vendor")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
-    public ResponseEntity<Vendor> createVendor(@RequestBody Vendor vendor){
+    public ResponseEntity<Object> createVendor(@RequestBody Vendor vendor){
+        Vendor vendorCreated = null;
         try{
-            Vendor vendorCreated = userService.createVendor(vendor);
-            if(vendorCreated != null){
-                return new ResponseEntity<>(vendorCreated, HttpStatus.OK);
-            }
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            vendorCreated = userService.createVendor(vendor);
+        }
+        catch(IllegalArgumentException ill){
+            return new ResponseEntity<>(ill.getMessage(), HttpStatus.CONFLICT);
         }
         catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return new ResponseEntity<>(vendorCreated, HttpStatus.OK);
     }
 
     @PutMapping("update_user/{userId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
-    public ResponseEntity<User> updateUser(@PathVariable String userId, @RequestBody User user){
-        User userUpdate = userService.updateUser(userId, user);
-        if(userUpdate == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> updateUser(@PathVariable String userId, @RequestBody User user){
+        User userUpdate = null;
+        try{
+            userUpdate = userService.updateUser(userId, user);
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(userUpdate, HttpStatus.OK);
     }
 
+    @PutMapping("update_other_user/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
+    public ResponseEntity<Object> updateOtherUser(@PathVariable String userId, @RequestBody User user){
+        User otherUserUpdate = null;
+        try{
+            otherUserUpdate = userService.updateOtherUser(userId, user);
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(otherUserUpdate, HttpStatus.OK);
+    }
+
     @PutMapping("update_vendor/{userId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
-    public ResponseEntity<Vendor> updateVendor(@PathVariable String userId, @RequestBody Vendor vendor){
-        Vendor vendorUpdate = userService.updateVendor(userId, vendor);
-        if(vendorUpdate == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> updateVendor(@PathVariable String userId, @RequestBody Vendor vendor){
+        Vendor vendorUpdate = null;
+        try{
+            vendorUpdate = userService.updateVendor(userId, vendor);
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(vendorUpdate, HttpStatus.OK);
     }
 
-    @DeleteMapping("delete/{userId}")
+    @PutMapping("update_other_vendor/{userId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable String userId){
+    public ResponseEntity<Object> updateOtherVendor(@PathVariable String userId, @RequestBody Vendor vendor){
+        Vendor otherVendorUpdate = null;
         try{
-            User userDelete = userService.deleteUser(userId);
-            if(userDelete == null){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
-            }
-            return new ResponseEntity<>(HttpStatus.OK);
+            otherVendorUpdate = userService.updateOtherVendor(userId, vendor);
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
         }
         catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return new ResponseEntity<>(otherVendorUpdate, HttpStatus.OK);
+    }
+
+    @DeleteMapping("delete/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
+    public ResponseEntity<Object> deleteUser(@PathVariable String userId){
+        User userDelete = null;
+        try{
+            userDelete = userService.deleteUser(userId);            
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR); 
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
