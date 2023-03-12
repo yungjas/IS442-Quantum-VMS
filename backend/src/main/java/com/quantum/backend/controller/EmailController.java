@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,14 +23,25 @@ public class EmailController {
         this.emailService = emailService;
     }
 
-    @GetMapping("send")
-    public ResponseEntity<HttpStatus> sendSimpleMessage(@RequestBody SendEmailRequest sendEmail){
+    @PostMapping("send")
+    public ResponseEntity<Object> sendSimpleEmail(@RequestBody SendEmailRequest sendEmail){
         try{
-            emailService.sendSimpleMessage(sendEmail);
+            emailService.sendSimpleEmail(sendEmail);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR); 
+        }
+    }
+
+    @PostMapping("send_attachment")
+    public ResponseEntity<Object> sendEmailWithAttachment(@RequestBody SendEmailRequest sendEmail){
+        try{
+            emailService.sendEmailWithAttachment(sendEmail);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR); 
         }
     }
 }
