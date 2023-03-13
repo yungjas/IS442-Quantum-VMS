@@ -88,15 +88,15 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<Object> createVendor(@RequestBody Vendor vendor){
         Vendor vendorCreated = null;
-        try{
+//        try{
             vendorCreated = userService.createVendor(vendor);
-        }
-        catch(IllegalArgumentException ill){
-            return new ResponseEntity<>(ill.getMessage(), HttpStatus.CONFLICT);
-        }
-        catch(Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+//        }
+//        catch(IllegalArgumentException ill){
+//            return new ResponseEntity<>(ill.getMessage(), HttpStatus.CONFLICT);
+//        }
+//        catch(Exception e){
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
         return new ResponseEntity<>(vendorCreated, HttpStatus.OK);
     }
 
