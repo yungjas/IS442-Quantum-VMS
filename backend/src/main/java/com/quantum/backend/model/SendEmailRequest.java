@@ -17,4 +17,10 @@ public class SendEmailRequest {
     private String text;
 
     private String pathToAttachment;
+
+    public SendEmailRequest(String to, String subject, String text){
+        this.to = to;
+        this.subject = subject;
+        this.text = text;
+    }
 }
