@@ -5,6 +5,7 @@ import UpdateAccount from '../views/UpdateAccount.vue'
 import ViewAccount from '../views/ViewAccount.vue'
 import ViewUser from '../views/ViewUser.vue'
 import EditUser from '../views/EditUser.vue'
+import CreateUser from '../views/CreateUser.vue'
 
 const routes = [
   {
@@ -45,6 +46,11 @@ const routes = [
     name: 'EditUser',
     component: EditUser
   },
+  {
+    path: '/createUser',
+    name: 'CreateUser',
+    component: CreateUser
+  }
 ]
 
 const router = createRouter({

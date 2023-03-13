@@ -15,7 +15,7 @@
     <br>
     <div class="btn-group" role="userGroup" >
       <button type="button" class="btn btn-secondary" @click="viewUser">View/Update/Delete</button>
-      <button type="button" class="btn btn-secondary">Create</button>
+      <button type="button" class="btn btn-secondary" @click="createUser">Create</button>
     </div>
     <br><br>
     Workflow Management (Not coded yet)
@@ -88,6 +88,10 @@ export default
     viewUser: function()
     {
       this.$router.push({name: 'ViewUser'});
+    },
+    createUser: function()
+    {
+      this.$router.push({name: 'CreateUser'});
     },
     // initAdmin()
     // {

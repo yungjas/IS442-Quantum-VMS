@@ -10,7 +10,7 @@
 
             <label for="role">Filter by roles:</label>
             <br>
-            <select name="selectRole" id="selectRole">
+            <select name="selectRole" id="selectRole" @change="onChange($event)">
                 <option v-for="item in dropdownData" :key="item" v-bind:value="item">{{item}}</option>
             </select>
 
@@ -55,6 +55,8 @@
                 userType: localStorage.userType,
                 userId: JSON.parse(localStorage.data).userId,
                 dropdownData: ['ALL', 'ROLE_ADMIN','ROLE_APPROVER','ROLE_VENDOR'],
+                role: 'ALL',
+                backupData: [],
             }
         },
         methods: 
@@ -81,7 +83,7 @@
                 })
                 .then((response) => {
                     console.log(response.data);
-                    localStorage.editUser = response.data
+                    localStorage.editUser = JSON.stringify(response.data);
                     this.$router.push({name: 'EditUser'});
                 })
 
@@ -122,11 +124,20 @@
                     }
                 })
                 .then((response) => {
-                    console.log(response.data);
                     this.data = response.data;
+                    this.backupData = response.data;
                 })
+            },
+            onChange(event) 
+            {
+                console.log(event.target.value)
+                this.data = this.backupData;
+                if(event.target.value != 'ALL')
+                {
+                    this.data = this.data.filter((item) => item.userType == event.target.value);
+                }
+                
             }
-            
         },
         created()
         {
