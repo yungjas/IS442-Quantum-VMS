@@ -31,8 +31,11 @@ public class ScheduledService {
         long diff = deadline.getTime() - currDate.getTime();
         long diffDays = diff / (24 * 60 * 60 * 1000);
 
-        if(diffDays == 2){
-            SendEmailRequest emailReminder = new SendEmailRequest(userEmail, "Reminder", "Rmb to complete!!!");
+        String subject = "Reminder";
+        String text = String.format("Reminder to complete %s by %s", workflowName, deadlineStr);
+
+        if(diffDays <= 3){
+            SendEmailRequest emailReminder = new SendEmailRequest(userEmail, subject, text);
             emailService.sendSimpleEmail(emailReminder);
         }
 

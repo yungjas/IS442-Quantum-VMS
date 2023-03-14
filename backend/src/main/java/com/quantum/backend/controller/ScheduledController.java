@@ -1,5 +1,7 @@
 package com.quantum.backend.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,13 +20,15 @@ public class ScheduledController {
         this.scheduledService = scheduledService;
     }
 
+    //@GetMapping("test")
     @Scheduled(cron = "0 23 23 * * ?") // executes a send remainder email every day at 11.23pm
-    void emailReminder(){
+    public ResponseEntity<Object> emailReminder(){
         try{
             scheduledService.sendReminderEmail();
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
