@@ -1,6 +1,8 @@
 ## Documentation
 
-Documentation for Project Design should be on the shared [google drive](https://drive.google.com/drive/folders/1XKTilrG06X8pr-Nr0WpW3K2VfH7jISyc?usp=sharing). Please see below for build instructions
+Documentation for Project Design should be on the shared [google drive](https://drive.google.com/drive/folders/1XKTilrG06X8pr-Nr0WpW3K2VfH7jISyc?usp=sharing). 
+<br>After running the BackendApplication.java, you can access API documentation using this [link](http://localhost:8080/swagger-ui/index.html)
+<br>Please see below for build instructions
 
 ## Setup and Execution Instructions
 Go to vscode extensions and install the Spring boot extension pack:
@@ -32,3 +34,12 @@ If you want to use a local mongo for your own testing, download the mongodb comm
 <br>![image](https://user-images.githubusercontent.com/28746967/221094953-5cc9b46e-27a4-43b4-b2c0-bd92156b604b.png)
 3. Enter "vms" as database name and the name of the table you want to create under collection name e.g. form, user etc and click create db
 <br>![image](https://user-images.githubusercontent.com/28746967/221095193-804750c5-4619-45ab-85bc-37fb4e7e59c3.png)
+
+
+## Lombok Troubleshooting/Installation for Spring Tool Suite 4 / Eclipse
+When starting with a fresh eclipse installation you, in fact, need to "install" Lombok before being able to use it.
+<br>
+1. Go where you Lombok jar is (e.g. (e.g. you can find in ~/.m2/repository/org/projectlombok/lombok/1.16.10/lombok-1.16.10.jar), run it (Example: java -jar lombok-1.16.10.jar). A window should appear, browse to your eclipse.exe location.<br>
+2. Click on install.<br>
+3. Launch Eclipse, update project configuration on all projects
+
