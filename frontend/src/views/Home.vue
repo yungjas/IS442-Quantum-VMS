@@ -8,6 +8,7 @@
       <button type="button" class="btn btn-secondary" @click="home">Home</button>
       <button type="button" class="btn btn-secondary" @click="about">About</button>
       <button type="button" class="btn btn-secondary" @click="updateAccount">Update My Account</button>
+      <button type="button" class="btn btn-secondary" @click="sendEmail">Send Email</button>
       <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
     </div>
     <br><br>
@@ -92,6 +93,10 @@ export default
     createUser: function()
     {
       this.$router.push({name: 'CreateUser'});
+    },
+    sendEmail: function()
+    {
+      this.$router.push({name: 'SendEmail'});
     },
     // initAdmin()
     // {

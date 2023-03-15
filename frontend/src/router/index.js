@@ -6,6 +6,7 @@ import ViewAccount from '../views/ViewAccount.vue'
 import ViewUser from '../views/ViewUser.vue'
 import EditUser from '../views/EditUser.vue'
 import CreateUser from '../views/CreateUser.vue'
+import SendEmail from '../views/SendEmail.vue'
 
 const routes = [
   {
@@ -50,6 +51,11 @@ const routes = [
     path: '/createUser',
     name: 'CreateUser',
     component: CreateUser
+  },
+  {
+    path: '/sendEmail',
+    name: 'SendEmail',
+    component: SendEmail
   }
 ]
 
