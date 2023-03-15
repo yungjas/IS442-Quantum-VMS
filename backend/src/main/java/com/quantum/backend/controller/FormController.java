@@ -58,7 +58,7 @@ public class FormController {
                 // Create a map to store the form data
                 Map<String, Object> formData = new HashMap<>();
                 formData.put("formName", createdForm.getFormName());
-                formData.put("formID", createdForm.getFormID());
+                formData.put("formId", createdForm.getFormId());
                 formData.put("formDescription", createdForm.getFormDescription());
 
                 // Create a list of questions
@@ -82,17 +82,16 @@ public class FormController {
 
                     // Add the question data to the question list
                     questionList.add(questionData);
+
+                }
+                formData.put("questions", questionList);
+                return new ResponseEntity<>(formData, HttpStatus.OK);
             }
-
-            // Add the question list to the form data
-            formData.put("questions", questionList);
-
-            return new ResponseEntity<>(formData, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
-    } catch (Exception e) {
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 }
 
 

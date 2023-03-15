@@ -11,43 +11,12 @@ import lombok.Setter;
 
 public class Form {
     private String formName;
-    private String formID;
+    private String formId;
     private String formDescription;
     private List<Question> questions;
     private Date revisionDate = new Date();
     private Date submittedDate;
     private Map<String, Object> formInfo;
 
-    public String getFormName() {
-        return formName;
-    }
-
-    public void setFormName(String formName) {
-        this.formName = formName;
-    }
-
-    public String getFormID() {
-        return formID;
-    }
-
-    public void setFormID(String formID) {
-        this.formID = formID;
-    }
-
-    public String getFormDescription() {
-        return formDescription;
-    }
-
-    public void setFormDescription(String formDescription) {
-        this.formDescription = formDescription;
-    }
-
-    public List<Question> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
-    }
 }
 

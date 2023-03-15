@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
 @RestController
-@RequestMapping("/form-builder")
+@RequestMapping("api/form-builder")
 public class FormBuilderController {
 
     @PostMapping("/add-question")
@@ -28,8 +28,8 @@ public class FormBuilderController {
     @PostMapping("/add-textbox")
     public ResponseEntity<Question> addTextbox(@RequestBody String label) {
         Question textbox = new Question();
-        textbox.setType("textbox");
-        textbox.setLabel(label);
+        textbox.setQuestionType("textbox");
+        // textbox.setQuestionLabel(label);
         // Add code to save the question to the database
         return new ResponseEntity<>(textbox, HttpStatus.CREATED);
     }
