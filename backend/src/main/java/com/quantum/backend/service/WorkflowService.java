@@ -29,10 +29,15 @@ public class WorkflowService {
         Optional<Workflow> workflow = workflowRepo.findById(workflowId);
         if(workflow.isPresent()){
             Workflow workflowOriginal = workflow.get();
-            // workflowOriginal.setQuestionnaires(workflowUpdate.getQuestionnaires());
-            workflowOriginal.setVendorId(workflowUpdate.getWorkflowId());
-            workflowOriginal.setAdminId(workflowUpdate.getAdminId());
-            workflowOriginal.setVendorId(workflowUpdate.getVendorId());
+            
+           
+            workflowOriginal.setWorkflowId(workflowUpdate.getWorkflowId());
+            workflowOriginal.setWorkflowName(workflowUpdate.getWorkflowName());
+            workflowOriginal.setDeadline(workflowUpdate.getDeadline());
+            workflowOriginal.setAssignedUsers(workflowUpdate.getAssignedUsers());
+            workflowOriginal.setForm(workflowUpdate.getForm());
+            // workflowOriginal.setAdminId(workflowUpdate.getAdminId());
+            // workflowOriginal.setVendorId(workflowUpdate.getVendorId());
             workflowRepo.save(workflowOriginal);
             return workflowOriginal;
         }

@@ -1,9 +1,11 @@
 package com.quantum.backend.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashMap;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,10 +20,22 @@ public class Workflow {
     @Id
     private String workflowId;
 
-    private String adminId;
+    private String workflowName;
 
-    private String vendorId;
+    // form in a workflow need to be done by a certain date, not placed in form model as maybe one form used in different workflow may have different deadlines
+    private String deadline;
 
-    //forms required for the workflow, with number representing the order
-    private HashMap<Integer, Form> questionnaires;
+    // a workflow can have multiple users assigned to it
+    @DBRef
+    private List<User> assignedUsers; // update branch to resolve User cannot be defined to a type
+
+    // since a workflow is an approval sequence of one or more questionnaires that must be filled out in order for the system to produce a form,
+    // this means a workflow has a one to one relationship with form (since we are going with the form approach)
+    @DBRef
+    private Form form; // update branch to resolve Form cannot be defined to a type
+
+    // private String adminId;
+
+    // private String vendorId;
+
 }
