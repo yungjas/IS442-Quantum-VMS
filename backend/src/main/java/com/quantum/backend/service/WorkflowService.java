@@ -43,7 +43,7 @@ public class WorkflowService {
     }
     
     public Workflow deleteWorkflow(String workflowId){
-        Optional<Workflow> workflow = workflowRepo.findByWorkflowID(workflowId);
+        Optional<Workflow> workflow = workflowRepo.findByWorkflowId(workflowId);
         if(workflow.isPresent()){
             Workflow workflowData = workflow.get();
             workflowRepo.delete(workflowData);
