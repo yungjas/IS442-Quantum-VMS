@@ -8,16 +8,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Document(collection = "form")
+
 public class Form {
-    @Id
-    private String formId;
-
     private String formName;
-
+    private String formId;
+    private String formDescription;
+    private List<Question> questions;
     private Date revisionDate = new Date();
-
     private Date submittedDate;
-
     private Map<String, Object> formInfo;
 
 }
+
