@@ -33,7 +33,7 @@ public class ScheduledService {
             long diff = deadline.getTime() - currDate.getTime();
             long diffDays = diff / (24 * 60 * 60 * 1000);
 
-            if(diffDays <= 3){
+            if(diffDays <= 3 && wf.getAssignedUsers() != null){
                 String text = String.format("Reminder to complete %s by %s", wf.getWorkflowName(), wf.getDeadline());
                 for(User user: wf.getAssignedUsers()){
                     SendEmailRequest emailReminder = new SendEmailRequest(user.getEmail(), subject, text);
