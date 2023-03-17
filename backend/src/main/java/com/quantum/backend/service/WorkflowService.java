@@ -53,4 +53,43 @@ public class WorkflowService {
         }
         return null;
     }
+
+//    private final WorkflowRepository workflowRepo;
+//
+//    public WorkflowService(WorkflowRepository workflowRepo){
+//        this.workflowRepo = workflowRepo;
+//    }
+//
+//    public List<Workflow> getAllWorkflows(){
+//        return workflowRepo.findAll();
+//    }
+//
+//    public Workflow createWorkflow(Workflow workflow){
+//        workflowRepo.save(workflow);
+//        return workflow;
+//    }
+//
+//    public Workflow updateWorkflow(String workflowId, Workflow workflowUpdate){
+//        Optional<Workflow> workflow = workflowRepo.findById(workflowId);
+//        if(workflow.isPresent()){
+//            Workflow workflowOriginal = workflow.get();
+////            workflowOriginal.setQuestionnaires(workflowUpdate.getQuestionnaires());
+//            workflowOriginal.setVendorId(workflowUpdate.getWorkflowId());
+//            workflowOriginal.setAdminId(workflowUpdate.getAdminId());
+//            workflowOriginal.setVendorId(workflowUpdate.getVendorId());
+//            workflowRepo.save(workflowOriginal);
+//            return workflowOriginal;
+//        }
+//        return null;
+//    }
+//    
+//    public Workflow deleteWorkflow(String workflowId){
+//        Optional<Workflow> workflow = workflowRepo.findByWorkflowID(workflowId);
+//        if(workflow.isPresent()){
+//            Workflow workflowData = workflow.get();
+//            workflowRepo.delete(workflowData);
+//            return workflowData;
+//        }
+//        return null;
+//    }
 }
