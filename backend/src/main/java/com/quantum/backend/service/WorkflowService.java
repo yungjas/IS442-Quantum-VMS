@@ -3,6 +3,7 @@ package com.quantum.backend.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.quantum.backend.exception.ResourceNotFoundException;
 import com.quantum.backend.model.*;
 import org.springframework.stereotype.Service;
 import com.quantum.backend.repository.WorkflowRepository;
@@ -20,6 +21,14 @@ public class WorkflowService {
         return workflowRepo.findAll();
     }
 
+    public Optional<Workflow> getWorkflowById(String workflowId){
+        Optional<Workflow> workflowData = workflowRepo.findById(workflowId);
+        if(! workflowData.isPresent()){
+            throw new ResourceNotFoundException("Workflow", "workflowId", workflowId);
+        }
+        return workflowData;
+    }
+
     public Workflow createWorkflow(Workflow workflow){
         workflowRepo.save(workflow);
         return workflow;
@@ -30,12 +39,11 @@ public class WorkflowService {
         if(workflow.isPresent()){
             Workflow workflowOriginal = workflow.get();
             
-           
             workflowOriginal.setWorkflowId(workflowUpdate.getWorkflowId());
             workflowOriginal.setWorkflowName(workflowUpdate.getWorkflowName());
             workflowOriginal.setDeadline(workflowUpdate.getDeadline());
-            workflowOriginal.setAssignedUsers(workflowUpdate.getAssignedUsers());
-            workflowOriginal.setForm(workflowUpdate.getForm());
+            // workflowOriginal.setAssignedUsers(workflowUpdate.getAssignedUsers());
+            // workflowOriginal.setForm(workflowUpdate.getForm());
             // workflowOriginal.setAdminId(workflowUpdate.getAdminId());
             // workflowOriginal.setVendorId(workflowUpdate.getVendorId());
             workflowRepo.save(workflowOriginal);
