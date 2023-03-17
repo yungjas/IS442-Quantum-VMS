@@ -22,11 +22,6 @@ public class ScheduledService {
     private WorkflowService workflowService;
 
     public void sendReminderEmail() throws ParseException{
-        // String userEmail = "jasminelim509@gmail.com";
-        // String workflowName = "workflow 1";
-        // String deadlineStr = "16/03/2023";
-        // String formNo = "form123";
-
         List<Workflow> allWorkflows = workflowService.getAllWorkflows();
         Date currDate = new Date();
         String subject = "Reminder";
