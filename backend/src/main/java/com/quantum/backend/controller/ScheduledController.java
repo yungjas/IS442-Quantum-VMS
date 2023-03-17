@@ -21,7 +21,7 @@ public class ScheduledController {
     }
 
     //@GetMapping("test")
-    @Scheduled(cron = "0 39 16 * * ?") // executes a send remainder email every day at 11.23pm
+    @Scheduled(cron = "0 0 0 * * *") // executes a send remainder email every day at midnight
     public ResponseEntity<Object> emailReminder(){
         try{
             scheduledService.sendReminderEmail();
