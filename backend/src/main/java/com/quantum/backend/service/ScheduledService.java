@@ -42,4 +42,23 @@ public class ScheduledService {
             }
         }
     }
+
+    public void sendApprovedEmail(){
+        List<Workflow> allWorkflows = workflowService.getAllWorkflows();
+        String subject = "Form Approved";
+        boolean test = true; // for testing purposes
+
+        for(Workflow wf: allWorkflows){
+            if(test){ // must check if form is approved by getting approvedBy which holds a user object
+                //String text = String.format("%s has been approved", wf.getForm().getFormName());
+                String testText = String.format("%s has been approved", "form 1"); // for testing purposes
+                if(wf.getAssignedUsers() != null){
+                    for(User user: wf.getAssignedUsers()){
+                        SendEmailRequest emailReminder = new SendEmailRequest(user.getEmail(), subject, testText);
+                        emailService.sendSimpleEmail(emailReminder);
+                    }
+                }
+            }
+        }
+    }
 }
