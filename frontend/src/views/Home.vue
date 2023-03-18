@@ -22,8 +22,8 @@
     Workflow Management (Not coded yet)
     <br>
     <div class="btn-group" role="workflowGroup">
-      <button type="button" class="btn btn-secondary">View/Update/Delete</button>
-      <button type="button" class="btn btn-secondary">Create</button>
+      <button type="button" class="btn btn-secondary" @click="viewWorkflow">View/Update/Delete</button>
+      <button type="button" class="btn btn-secondary" @click="createWorkflow">Create</button>
     </div>
     <br><br>
     Form Management (Not coded yet)
@@ -97,6 +97,14 @@ export default
     sendEmail: function()
     {
       this.$router.push({name: 'SendEmail'});
+    },
+    viewWorkflow: function ()
+    {
+      this.$router.push({name: 'ViewWorkflow'})
+    },
+    createWorkflow: function ()
+    {
+      this.$router.push({name: 'CreateWorkflow'})
     },
     // initAdmin()
     // {
