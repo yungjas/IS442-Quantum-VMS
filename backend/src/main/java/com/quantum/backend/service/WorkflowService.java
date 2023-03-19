@@ -29,6 +29,8 @@ public class WorkflowService {
         Optional<Workflow> workflow = workflowRepo.findById(workflowId);
         if(workflow.isPresent()){
             Workflow workflowOriginal = workflow.get();
+            
+           
             workflowOriginal.setWorkflowId(workflowUpdate.getWorkflowId());
             workflowOriginal.setWorkflowName(workflowUpdate.getWorkflowName());
             workflowOriginal.setDeadline(workflowUpdate.getDeadline());
@@ -43,7 +45,7 @@ public class WorkflowService {
     }
     
     public Workflow deleteWorkflow(String workflowId){
-        Optional<Workflow> workflow = workflowRepo.findByWorkflowID(workflowId);
+        Optional<Workflow> workflow = workflowRepo.findByWorkflowId(workflowId);
         if(workflow.isPresent()){
             Workflow workflowData = workflow.get();
             workflowRepo.delete(workflowData);
