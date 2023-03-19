@@ -1,5 +1,7 @@
 package com.quantum.backend.service;
 
+import com.quantum.backend.exception.RequestErrorException;
+import com.quantum.backend.exception.ResourceNotFoundException;
 import com.quantum.backend.model.*;
 import com.quantum.backend.repository.*;
 import java.util.*;
@@ -23,26 +25,25 @@ public class FormService {
         return form;
     }
 
-    public Form updateForm(String formId, Form formUpdate){
+    public Form updateForm(String formId, Form formUpdate) throws ResourceNotFoundException{
         Optional<Form> form = formRepo.findById(formId);
         if(form.isPresent()){
             Form formOriginal = form.get();
             formOriginal.setRevisionDate(formUpdate.getRevisionDate());
-            formOriginal.setFormInfo(formUpdate.getFormInfo());
             formRepo.save(formOriginal);
             return formOriginal;
         }
-        return null;
+        throw new ResourceNotFoundException("Form", "formId", formId);
     }
     
-    public Form deleteForm(String formId){
+    public Form deleteForm(String formId) throws ResourceNotFoundException{
         Optional<Form> form = formRepo.findByFormId(formId);
         if(form.isPresent()){
             Form formData = form.get();
             formRepo.delete(formData);
             return formData;
         }
-        return null;
+        throw new ResourceNotFoundException("Form", "formId", formId);
     }
 
 }
