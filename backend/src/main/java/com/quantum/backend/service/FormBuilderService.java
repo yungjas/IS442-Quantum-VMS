@@ -1,5 +1,6 @@
 package com.quantum.backend.service;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.quantum.backend.exception.RequestErrorException;
+import com.quantum.backend.exception.ResourceNotFoundException;
 import com.quantum.backend.model.Question;
 import com.quantum.backend.repository.*;
 
@@ -33,13 +35,37 @@ public class FormBuilderService {
         return question;
     }
 
-    // @PostMapping("/add-textbox")
-    // public ResponseEntity<Question> addTextbox(@RequestBody String label) {
-    //     Question textbox = new Question();
-    //     textbox.setQuestionType("textbox");
-    //     // textbox.setQuestionLabel(label);
-    //     // Add code to save the question to the database
+    public Question updateQuestion(String questionId, Question questionUpdate) throws IllegalArgumentException{
+        Optional<Question> question = formBuilderRepo.findById(questionId);
+        Question questionData = null;
 
-    //     return new ResponseEntity<>(textbox, HttpStatus.CREATED);
-    // }
+        if(!question.isPresent()){
+            throw new ResourceNotFoundException("Question", "questionId", questionId);
+        } try {
+            questionData = question.get();
+            questionData.setAnswerChoices(questionUpdate.getAnswerChoices());
+            questionData.setQuestionText(questionUpdate.getQuestionText());
+            questionData.setQuestionType(questionUpdate.getQuestionType());
+            // cannot update whether a question is required or not
+            // questionData.setRequired(questionUpdate.);
+        } catch(Exception e){
+            throw new RequestErrorException("update", "Question", e.getMessage());
+        }
+
+        return questionData;
+    }   
+
+    public Question deleteQuestion(String questionId) throws ResourceNotFoundException, RequestErrorException{
+        Optional<Question> question = formBuilderRepo.findById(questionId);
+        Question questionData = null;
+        if(!question.isPresent()){
+            throw new ResourceNotFoundException("Question", "userId", questionId);
+        } try {
+            questionData = question.get();
+            formBuilderRepo.delete(questionData);
+        } catch (Exception e) {
+            throw new RequestErrorException("delete", "Question", questionId);
+        }
+        return questionData;
+    }
 }
