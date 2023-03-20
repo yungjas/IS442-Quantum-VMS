@@ -23,6 +23,7 @@
             <th scope="col">ID</th>
             <th scope="col">Name</th>
             <th scope="col">Form</th>
+            <th scope="col">Assigned</th>
             <th scope="col">Deadline</th>
             <th scope="col" colspan="2">Action</th>
           </tr>
@@ -31,7 +32,8 @@
           <tr v-for="item in data" :key="item.userId">
             <td>{{ item.workflowId }}</td>
             <td>{{ item.workflowName }}</td>
-            <td>{{ item.deadline }}</td>
+            <td>form placeholder</td>
+            <td>assigned users placeholder</td>
             <td>{{ item.deadline }}</td>
             <td v-if="item.workflowId !== this.workflowId">
               <button
@@ -131,7 +133,7 @@ export default {
                 })
                 .then((response) => {
                     console.log(response.data);
-                    localStorage.editUser = JSON.stringify(response.data);
+                    localStorage.editWorkflow = JSON.stringify(response.data);
                     this.$router.push({name: 'EditWorkflow'});
                 })
     }
