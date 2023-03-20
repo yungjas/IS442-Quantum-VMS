@@ -14,14 +14,30 @@ To run the spring boot project, click on Run under main method in BackendApplica
 If you prefer to run build.bat instead (running application via command line), you need to install maven: 
 [link](https://www.tutorialspoint.com/maven/maven_environment_setup.htm)
 
-To run frontend:
+If you are running frontend for the first time:
 <br>Install [nodejs](https://nodejs.org/en/) if you do not have npm
 ```
 cd frontend
 npm install (if it's your first time running the app)
-npm run serve
 ```
 
+If you are running frontend on windows with node version 18 or higher
+```
+cd frontend
+npm run serve-windows
+```
+
+If you are running frontend on windows with node version lower than 17
+```
+cd frontend
+npm run serve-windows-old
+```
+
+If you are running frontend on macos
+```
+cd frontend
+npm run serve-mac
+```
 
 
 ## DB Setup
