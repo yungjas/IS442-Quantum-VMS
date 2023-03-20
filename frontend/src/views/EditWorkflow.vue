@@ -13,31 +13,46 @@
     <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
       <table class="table">
         <tbody>
-          <tr v-for="(v, k) in data" :key="k.workflowId">
-            <td
-              v-if="
-                k !== 'token' &&
-                k !== 'tokenType' &&
-                k !== 'userId' &&
-                k !== 'password'
-              "
-            >
-              <label>{{ k }}</label>
+          <tr>
+            <td>
+              <label>Workflow ID</label>
             </td>
-            <td
-              v-if="
-                k !== 'token' &&
-                k !== 'tokenType' &&
-                k !== 'userId' &&
-                k !== 'password'
-              "
-            >
-              <input
-                type="text"
-                v-bind:id="k"
-                v-bind:value="v"
-                style="width: 100%"
-              />
+            <td>
+              <input type="text" v-model="this.data.workflowId" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label>Workflow Name</label>
+            </td>
+            <td>
+              <input type="text" v-model="this.data.workflowName" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label>Deadline</label>
+            </td>
+            <td>
+              <input type="text" v-model="this.data.deadline" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="forms">Select Users:</label>
+            </td>
+            <td>
+              <select
+                v-model="selectedUsers"
+                id="userSelect"
+                style="width: 50%"
+                multiple
+              >
+                <option v-for="user in this.allUsers" :key="user.userId" :value="user" >
+                  {{ user.username }}
+                </option>
+              </select>
+              <p>You have selected: {{ selectedUsers }}</p>
             </td>
           </tr>
         </tbody>
@@ -67,10 +82,12 @@ export default {
     return {
       data: JSON.parse(localStorage.editWorkflow),
       userType: localStorage.userType,
+      allUsers: [],
+      selectedUsers: [],
       workflowId: "",
       workflowName: "",
-      form: ""
-
+      deadline: "",
+      form: "",
     };
   },
   methods: {
@@ -91,37 +108,12 @@ export default {
       this.data = JSON.parse(localStorage.editWorkflow);
     },
     updateWorkflow() {
-      console.log(localStorage.token);
-      let data = "{";
-      for (var v in this.data) {
-        console.log(document.getElementById(v).value);
-        data += '"' + v + '":"' + document.getElementById(v).value + '",';
-      }
-
-      data = data.substring(0, data.length - 1);
-      data += "}";
-
-      data = JSON.parse(data);
-      // temp to remove assinged users
-      // data.assignedUsers = null;
-      data.form = null;
-      // hardcode for now
-      data.assignedUsers = [
-        {
-          userId: "641468eaa526a31d0609d563",
-          userType: "ROLE_ADMIN",
-          username: "jasmine88888",
-          password:
-            "$2a$10$/HSxHv7n1KPCNy2N6r1Ly.YkvZwNygY1EFcuZxnf4uK4NXal6FeUq",
-          email: "jasmine-lim88@hotmail.com",
-        },
-      ];
-      console.log(data);
-
+      console.log(this.data);
+      this.data.assignedUsers = this.selectedUsers
       axios
         .put(
           "http://localhost:8080/api/workflow/update/" + this.data.workflowId,
-          data,
+          this.data,
           {
             headers: {
               "Content-Type": "application/json",
@@ -138,10 +130,24 @@ export default {
           alert("Error:" + error.response.status);
         });
     },
+    getAllUsers() {
+      axios.get("http://localhost:8080/api/users/all", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.token,
+          "Access-Control-Allow-Origin": "*",
+        },
+      }).then((response)=> {
+        this.allUsers = response.data
+        console.log(this.allUsers);
+      })
+    },
   },
 
   created() {
     try {
+      this.getAllUsers()
+      this.selectedUsers = this.data.assignedUsers
       console.log(" on edit workflow page");
     } catch (e) {
       if (e instanceof SyntaxError) {
