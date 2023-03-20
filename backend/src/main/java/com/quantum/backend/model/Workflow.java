@@ -26,12 +26,11 @@ public class Workflow {
     private String deadline;
 
     // a workflow can have multiple users assigned to it
-    // @DBRef
-    // private List<User> assignedUsers; // update branch to resolve User cannot be defined to a type
+    @DBRef
+    private List<User> assignedUsers; // update branch to resolve User cannot be defined to a type
 
-
-    // @DBRef
-    // private Form form; // update branch to resolve Form cannot be defined to a type
+    @DBRef
+    private Form form; // update branch to resolve Form cannot be defined to a type
 
     // private String adminId;
 
