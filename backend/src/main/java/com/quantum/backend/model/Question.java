@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 
 public class Question {
+    private String questionId;
     private String questionText;
     private String questionType;
     @DBRef
