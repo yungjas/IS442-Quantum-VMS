@@ -1,40 +1,22 @@
 <template>
-    <div class="row">
-        <div class = "justify-content-center align-items-center">
-
-
-        <form  @submit.prevent="login()">
-
+    <div>
+        <form @submit.prevent="login()">
             <div>
-                <img src ="frontend\src\assets\quantum-leap-incorporation.jpg">
+                <labeL>Email</labeL>
+                <input type="text" v-model="email"/>
             </div>
-            <div> 
-                <h1> User Login </h1>
-            </div>
-
-            <br>
-
             <div>
-                <labeL>Email: </labeL>
-                <input type="text" placeholder="Enter Email" v-model="email"/><br/>
-            </div>
-
-            <br> 
-
-            <div>
-                <labeL>Password: </labeL>
-                <input type="password" placeholder="Enter Password" v-model="password"/><br/>
+                <labeL>Password</labeL>
+                <input type="password" v-model="password"/>
                 <br>
                 {{ email }} 
                 <br>
                 {{  password }}
             </div>
-            <button type="button" class="btn btn-primary">Login</button>
+            <button>Login</button>
         </form>
-
-        <button type="button" class="btn btn-secondary " @click="logout">Logout</button>
+        <button @click="logout">Logout</button>
     </div>
-</div>
 </template>
 
 <script>
@@ -50,19 +32,10 @@ export default{
     },
     methods: {
         login: function(){
-            axios.post("http://localhost:8080/api/auth/login", {
-                email: this.email,
-                password: this.password,
-            },
-            {
-                headers:{
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
                 },
             }
             )
             .then((response) => 
-            {
                 console.log(response);
                 localStorage.token = response.data.token;
                 
