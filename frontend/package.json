@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "serve": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --port 4000",
     "serve-windows": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --port 4000",
     "serve-windows-old": "vue-cli-service serve --port 4000",
     "serve-mac": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --port 4000",

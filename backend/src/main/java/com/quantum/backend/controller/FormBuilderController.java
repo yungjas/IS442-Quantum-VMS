@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
 @RestController
+@CrossOrigin
 @RequestMapping("api/form-builder")
 public class FormBuilderController {
     
@@ -26,7 +27,7 @@ public class FormBuilderController {
     }
     
     @GetMapping("/all")
-    public ResponseEntity<List<Question>> getQuestions(@RequestBody Question question) {
+    public ResponseEntity<List<Question>> getQuestions() {
         List<Question> allQns = formBuilderService.getAllQuestions();
         if(allQns.size() == 0){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

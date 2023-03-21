@@ -30,7 +30,7 @@
     <br>
     <div class="btn-group" role="formGroup">
       <button type="button" class="btn btn-secondary">View/Update/Delete</button>
-      <button type="button" class="btn btn-secondary">Create</button>
+      <button type="button" class="btn btn-secondary" @click="createForm">Create</button>
     </div>
   </div>
   <div v-else-if="userType === 'ROLE_VENDOR'">
@@ -98,6 +98,10 @@ export default
     {
       this.$router.push({name: 'SendEmail'});
     },
+    createForm: function()
+    {
+      this.$router.push({name: 'CreateForm'});
+    }
     // initAdmin()
     // {
 
