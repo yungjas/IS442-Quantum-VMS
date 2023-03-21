@@ -26,7 +26,7 @@ public class FormBuilderController {
     }
     
     @GetMapping("/all")
-    public ResponseEntity<List<Question>> getQuestions(@RequestBody Question question) {
+    public ResponseEntity<List<Question>> getQuestions() {
         List<Question> allQns = formBuilderService.getAllQuestions();
         if(allQns.size() == 0){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -46,14 +46,4 @@ public class FormBuilderController {
         }
         return new ResponseEntity<>(questionCreated, HttpStatus.CREATED);
     }
-
-    // @PostMapping("/add-textbox")
-    // public ResponseEntity<Question> addTextbox(@RequestBody String label) {
-    //     Question textbox = new Question();
-    //     textbox.setQuestionType("textbox");
-    //     // textbox.setQuestionLabel(label);
-    //     // Add code to save the question to the database
-
-    //     return new ResponseEntity<>(textbox, HttpStatus.CREATED);
-    // }
 }
