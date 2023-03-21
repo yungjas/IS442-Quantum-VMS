@@ -35,10 +35,7 @@ public class ScheduledService {
 
             if(diffDays <= 3 && wf.getAssignedUsers() != null){
                 String text = String.format("Reminder to complete %s by %s", wf.getWorkflowName(), wf.getDeadline());
-                for(User user: wf.getAssignedUsers()){
-                    SendEmailRequest emailReminder = new SendEmailRequest(user.getEmail(), subject, text);
-                    emailService.sendSimpleEmail(emailReminder);
-                }
+                processEmail(wf.getAssignedUsers(), subject, text);
             }
         }
     }
@@ -53,12 +50,16 @@ public class ScheduledService {
                 //String text = String.format("%s has been approved", wf.getForm().getFormName());
                 String testText = String.format("%s has been approved", "form 1"); // for testing purposes
                 if(wf.getAssignedUsers() != null){
-                    for(User user: wf.getAssignedUsers()){
-                        SendEmailRequest emailReminder = new SendEmailRequest(user.getEmail(), subject, testText);
-                        emailService.sendSimpleEmail(emailReminder);
-                    }
+                    processEmail(wf.getAssignedUsers(), subject, testText);
                 }
             }
+        }
+    }
+
+    private void processEmail(List<User> assignedUsers, String subject, String text){
+        for(User user: assignedUsers){
+            SendEmailRequest emailReminder = new SendEmailRequest(user.getEmail(), subject, text);
+            emailService.sendSimpleEmail(emailReminder);
         }
     }
 }
