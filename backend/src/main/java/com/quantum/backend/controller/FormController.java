@@ -76,9 +76,9 @@ public class FormController {
                     }
 
                     // If the question is a file upload, add the file upload name
-                    if (question.getQuestionType().equals("File upload")) {
-                        questionData.put("fileUploadName", question.getFileUploadName());
-                    }
+                    // if (question.getQuestionType().equals("File upload")) {
+                    //     questionData.put("fileUploadName", question.getFileUploadName());
+                    // }
 
                     // Add the question data to the question list
                     questionList.add(questionData);
