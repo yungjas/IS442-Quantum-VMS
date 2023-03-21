@@ -42,6 +42,8 @@ public class FormService {
         return formData;
     }
 
+    // allow admins to either pick from a list of qns (maybe dropdown box showing a list of qns)
+    // or admins can create a new set of qns
     public Form createForm(Form form) throws RequestErrorException{
         try{
             // loop through each question and check if it is in db, if not save to formbuilder table
@@ -85,6 +87,8 @@ public class FormService {
         return currentFormData;
     }
 
+    // allow admins to either pick from a list of qns (maybe dropdown box showing a list of qns)
+    // or admins can create a new set of qns to update current form
     public Form updateForm(String formId, Form formUpdate) throws RequestErrorException, ResourceNotFoundException{
         Optional<Form> form = formRepo.findById(formId);
         Form formData = null;

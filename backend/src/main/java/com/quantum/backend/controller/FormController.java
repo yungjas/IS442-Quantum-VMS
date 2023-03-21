@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.HttpStatus;
 
 @RestController
@@ -126,6 +127,7 @@ public class FormController {
     }
 
     @PutMapping("approve/{formId}")
+    @PreAuthorize("hasRole('APPROVER')")
     public ResponseEntity<Object> approveForm(@PathVariable String formId, @RequestBody Form form){
         Form approveForm = null;
         try{
