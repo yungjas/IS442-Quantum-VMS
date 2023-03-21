@@ -50,25 +50,34 @@ public class FormService {
         return form;
     }
 
-    public Form approveForm(String formId, Form form){
+    public Form approveForm(String formId, Form form) throws RequestErrorException, RequestErrorException{
         Optional<Form> currentForm = formRepo.findById(formId);
         Form currentFormData = null;
+
+        if(!currentForm.isPresent()){
+            throw new ResourceNotFoundException("Form", "formId", formId);
+        }
         
-        // get current logged in user
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String name = auth.getName();
-        Optional<User> user = userRepo.findByUsername(name);
-        
-        if(user.isPresent()){
-            currentFormData = currentForm.get();
-            currentFormData.setApprovedBy(user.get());
-            formRepo.save(currentFormData);
+        try{
+            // get current logged in user
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String name = auth.getName();
+            Optional<User> user = userRepo.findByUsername(name);
+            
+            if(user.isPresent()){
+                currentFormData = currentForm.get();
+                currentFormData.setApprovedBy(user.get());
+                formRepo.save(currentFormData);
+            }
+        }
+        catch(Exception e){
+            throw new RequestErrorException("approve", "Form", e.getMessage());
         }
         
         return currentFormData;
     }
 
-    public Form updateForm(String formId, Form formUpdate) throws ResourceNotFoundException{
+    public Form updateForm(String formId, Form formUpdate) throws RequestErrorException, ResourceNotFoundException{
         Optional<Form> form = formRepo.findById(formId);
         Form formData = null;
 
@@ -93,7 +102,7 @@ public class FormService {
         return formData;
     }
     
-    public void deleteForm(String formId) throws ResourceNotFoundException{
+    public void deleteForm(String formId) throws RequestErrorException, ResourceNotFoundException{
         Optional<Form> form = formRepo.findById(formId);
         Form formData = null;
         if(!form.isPresent()){
