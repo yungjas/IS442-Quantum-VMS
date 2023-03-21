@@ -6,14 +6,18 @@ import com.quantum.backend.model.*;
 import com.quantum.backend.repository.*;
 import java.util.*;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FormService {
     private final FormRepository formRepo;
+    private final UserRepository userRepo;
 
-    public FormService(FormRepository formRepo){
+    public FormService(FormRepository formRepo, UserRepository userRepo){
         this.formRepo = formRepo;
+        this.userRepo = userRepo;
     }
 
     public List<Form> getAllForms(){
@@ -44,6 +48,24 @@ public class FormService {
             throw new RequestErrorException("create", "Form", e.getMessage());
         }
         return form;
+    }
+
+    public Form approveForm(String formId, Form form){
+        Optional<Form> currentForm = formRepo.findById(formId);
+        Form currentFormData = null;
+        
+        // get current logged in user
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String name = auth.getName();
+        Optional<User> user = userRepo.findByUsername(name);
+        
+        if(user.isPresent()){
+            currentFormData = currentForm.get();
+            currentFormData.setApprovedBy(user.get());
+            formRepo.save(currentFormData);
+        }
+        
+        return currentFormData;
     }
 
     public Form updateForm(String formId, Form formUpdate) throws ResourceNotFoundException{

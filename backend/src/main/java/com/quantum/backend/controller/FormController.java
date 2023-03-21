@@ -84,6 +84,7 @@ public class FormController {
                 // Create a map to store the form data
                 Map<String, Object> formData = new HashMap<>();
                 formData.put("formId", createdForm.getFormId());
+                formData.put("formNo", createdForm.getFormNo());
                 formData.put("formName", createdForm.getFormName());
                 formData.put("revisionNo", createdForm.getRevisionNo());
                 formData.put("lastEdited", createdForm.getLastEdited());
@@ -123,6 +124,20 @@ public class FormController {
         }
     }
 
+    @PutMapping("approve/{formId}")
+    public ResponseEntity<Object> approveForm(@PathVariable String formId, @RequestBody Form form){
+        Form approveForm = null;
+        try{
+            approveForm = formService.approveForm(formId, form);
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(approveForm, HttpStatus.OK);
+    }
 
     @PutMapping("update/{formId}")
     public ResponseEntity<Object> updateForm(@PathVariable String formId, @RequestBody Form form){
