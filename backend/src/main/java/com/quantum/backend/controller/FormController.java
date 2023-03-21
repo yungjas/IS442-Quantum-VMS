@@ -77,10 +77,9 @@ public class FormController {
     // }
 
     @PostMapping("create")
-    public ResponseEntity<Map<String, Object>> createForm(@RequestBody Form form) {
+    public ResponseEntity<Object> createForm(@RequestBody Form form) {
         try {
             Form createdForm = formService.createForm(form);
-            // i think they are trying to structure the data to send it back to frontend?
             if (createdForm != null) {
                 // Create a map to store the form data
                 Map<String, Object> formData = new HashMap<>();
@@ -92,35 +91,35 @@ public class FormController {
                 //formData.put("formDescription", createdForm.getFormDescription());
 
                 // Create a list of questions
-                // List<Map<String, Object>> questionList = new ArrayList<>();
-                // for (Question question : createdForm.getQuestions()) {
-                //     // Create a map to store the question data
-                //     Map<String, Object> questionData = new HashMap<>();
-                //     questionData.put("questionText", question.getQuestionText());
-                //     questionData.put("questionType", question.getQuestionType());
-                //     questionData.put("required", question.isRequired());
+                List<Map<String, Object>> questionList = new ArrayList<>();
+                for (Question question : createdForm.getQuestions()) {
+                    // Create a map to store the question data
+                    Map<String, Object> questionData = new HashMap<>();
+                    questionData.put("questionText", question.getQuestionText());
+                    questionData.put("questionType", question.getQuestionType());
+                    questionData.put("required", question.isRequired());
 
-                //     // If the question is multiple choice, add the answer choices
-                //     if (question.getQuestionType().equals("Multiple choice")) {
-                //         questionData.put("answerChoices", question.getAnswerChoices());
-                //     }
+                    // If the question is multiple choice, add the answer choices
+                    if (question.getQuestionType().equals("Multiple choice")) {
+                        questionData.put("answerChoices", question.getAnswerChoices());
+                    }
 
-                //     // If the question is a file upload, add the file upload name
-                //     if (question.getQuestionType().equals("File upload")) {
-                //         questionData.put("fileUploadName", question.getFileUploadName());
-                //     }
+                    // If the question is a file upload, add the file upload name
+                    // if (question.getQuestionType().equals("File upload")) {
+                    //     questionData.put("fileUploadName", question.getFileUploadName());
+                    // }
 
-                //     // Add the question data to the question list
-                //     questionList.add(questionData);
+                    // Add the question data to the question list
+                    questionList.add(questionData);
 
-                // }
-                // formData.put("questions", questionList);
+                }
+                formData.put("questions", questionList);
                 return new ResponseEntity<>(formData, HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.CONFLICT);
             
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
