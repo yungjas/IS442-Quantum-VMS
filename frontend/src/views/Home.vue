@@ -1,16 +1,45 @@
 <template>
   <!-- NOTE, this is temporary, nav bar should be coded into App.vue as a template across site -->
 
-  <h1>Welcome back, {{ username }}</h1>
   <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#"> Welcome back, {{ username }}</a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+
+      <li class="nav-item active">
+        <a class="nav-link" href="../">Home </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/about">About</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/updateAccount">Update Account</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/sendEmail">Send Email</a>
+      </li>
+
+    </ul>
+
+      <span class="nav-item">
+        <a class="nav-link" href="/login">Logout</a>
+      </span>
+
+      
     
-    <div class="btn-group" role="currentUser" >
-      <button type="button" class="btn btn-secondary" @click="home">Home</button>
-      <button type="button" class="btn btn-secondary" @click="about">About</button>
-      <button type="button" class="btn btn-secondary" @click="updateAccount">Update My Account</button>
-      <button type="button" class="btn btn-secondary" @click="sendEmail">Send Email</button>
-      <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
-    </div>
+
+      </div>
+    </nav>
+
     <br><br>
     User Management
     <br>
@@ -47,6 +76,7 @@
       <button type="button" class="btn btn-secondary">View</button>
     </div>
   </div>
+
 </template>
 
 <script>

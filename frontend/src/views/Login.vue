@@ -1,22 +1,34 @@
 <template>
     <div>
-        <form @submit.prevent="login()">
-            <div>
-                <labeL>Email</labeL>
-                <input type="text" v-model="email"/>
-            </div>
-            <div>
-                <labeL>Password</labeL>
-                <input type="password" v-model="password"/>
+   
+            <form text-align="center" @submit.prevent="login()">
+                
+                <img style="width:300px;height:300px" src= "../assets/quantum-leap-incorporation.jpg">
+                
+                <div>
+                    <input type="text" placeholder="Email" v-model="email"/>
+                </div>
+
                 <br>
-                {{ email }} 
-                <br>
-                {{  password }}
-            </div>
-            <button>Login</button>
-        </form>
-        <button @click="logout">Logout</button>
-    </div>
+
+                <div>
+                    
+                    <input type="password" placeholder="Password" v-model="password"/>
+                    <br>
+                    {{ email }} 
+                    <br>
+                    {{  password }}
+                </div>
+                <button style="width: 200px" class="btn btn-primary">Login</button>
+            
+                <br><br>
+
+                <button style="width: 200px" class="btn btn-secondary" @click="logout">Logout</button>
+                <br><br>
+                
+            </form>
+        </div>
+  
 </template>
 
 <script>
@@ -32,10 +44,19 @@ export default{
     },
     methods: {
         login: function(){
+            axios.post("http://localhost:8080/api/auth/login", {
+                email: this.email,
+                password: this.password,
+            },
+            {
+                headers:{
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
                 },
             }
             )
             .then((response) => 
+            {
                 console.log(response);
                 localStorage.token = response.data.token;
                 
