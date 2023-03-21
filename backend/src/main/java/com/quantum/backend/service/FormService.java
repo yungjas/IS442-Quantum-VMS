@@ -14,10 +14,12 @@ import org.springframework.stereotype.Service;
 public class FormService {
     private final FormRepository formRepo;
     private final UserRepository userRepo;
+    private final FormBuilderRepository formBuilderRepo;
 
-    public FormService(FormRepository formRepo, UserRepository userRepo){
+    public FormService(FormRepository formRepo, UserRepository userRepo, FormBuilderRepository formBuilderRepo){
         this.formRepo = formRepo;
         this.userRepo = userRepo;
+        this.formBuilderRepo = formBuilderRepo;
     }
 
     public List<Form> getAllForms(){
@@ -42,6 +44,12 @@ public class FormService {
 
     public Form createForm(Form form) throws RequestErrorException{
         try{
+            // loop through each question and check if it is in db, if not save to formbuilder table
+            for(Question qn: form.getQuestions()){
+                if(qn.getQuestionId() == null || qn.getQuestionId().isEmpty()){
+                    formBuilderRepo.save(qn);
+                }
+            }
             formRepo.save(form);
         }
         catch(Exception e){
@@ -93,6 +101,12 @@ public class FormService {
             formData.setLastEdited(formUpdate.getLastEdited());
             formData.setDateSubmitted(formUpdate.getDateSubmitted());
             formData.setApprovedBy(formUpdate.getApprovedBy());
+            // loop through each question and check if it is in db, if not save to formbuilder table
+            for(Question qn: formUpdate.getQuestions()){
+                if(qn.getQuestionId() == null || qn.getQuestionId().isEmpty()){
+                    formBuilderRepo.save(qn);
+                }
+            }
             formData.setQuestions(formUpdate.getQuestions());
             formRepo.save(formData);
         }
