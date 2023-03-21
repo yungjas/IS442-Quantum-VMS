@@ -18,19 +18,42 @@ import org.springframework.http.HttpStatus;
 @RestController
 @RequestMapping("api/form-builder")
 public class FormBuilderController {
+    
+    private final FormBuilderService formBuilderService;
+
+    public FormBuilderController(FormBuilderService formBuilderService){
+        this.formBuilderService = formBuilderService;
+    }
+    
+    @GetMapping("/all")
+    public ResponseEntity<List<Question>> getQuestions(@RequestBody Question question) {
+        List<Question> allQns = formBuilderService.getAllQuestions();
+        if(allQns.size() == 0){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(allQns, HttpStatus.OK);
+    }
 
     @PostMapping("/add-question")
-    public ResponseEntity<Question> addQuestion(@RequestBody Question question) {
-        // Add code to save the question to the database
-        return new ResponseEntity<>(question, HttpStatus.CREATED);
+    public ResponseEntity<Object> createQuestion(@RequestBody Question question) {
+        Question questionCreated = null;
+        try {
+            questionCreated = formBuilderService.addQuestion(question);
+        } catch(IllegalArgumentException ill){
+            return new ResponseEntity<>(ill.getMessage(), HttpStatus.CONFLICT);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(questionCreated, HttpStatus.CREATED);
     }
 
-    @PostMapping("/add-textbox")
-    public ResponseEntity<Question> addTextbox(@RequestBody String label) {
-        Question textbox = new Question();
-        textbox.setQuestionType("textbox");
-        // textbox.setQuestionLabel(label);
-        // Add code to save the question to the database
-        return new ResponseEntity<>(textbox, HttpStatus.CREATED);
-    }
+    // @PostMapping("/add-textbox")
+    // public ResponseEntity<Question> addTextbox(@RequestBody String label) {
+    //     Question textbox = new Question();
+    //     textbox.setQuestionType("textbox");
+    //     // textbox.setQuestionLabel(label);
+    //     // Add code to save the question to the database
+
+    //     return new ResponseEntity<>(textbox, HttpStatus.CREATED);
+    // }
 }

@@ -1,48 +1,137 @@
 package com.quantum.backend.service;
 
+import com.quantum.backend.exception.RequestErrorException;
+import com.quantum.backend.exception.ResourceNotFoundException;
 import com.quantum.backend.model.*;
 import com.quantum.backend.repository.*;
 import java.util.*;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FormService {
     private final FormRepository formRepo;
+    private final UserRepository userRepo;
+    private final FormBuilderRepository formBuilderRepo;
 
-    public FormService(FormRepository formRepo){
+    public FormService(FormRepository formRepo, UserRepository userRepo, FormBuilderRepository formBuilderRepo){
         this.formRepo = formRepo;
+        this.userRepo = userRepo;
+        this.formBuilderRepo = formBuilderRepo;
     }
 
     public List<Form> getAllForms(){
         return formRepo.findAll();
     }
 
-    public Form createForm(Form form){
-        formRepo.save(form);
+    public Optional<Form> getFormById(String formId) throws ResourceNotFoundException{
+        Optional<Form> formData = formRepo.findById(formId);
+        if(!formData.isPresent()){
+            throw new ResourceNotFoundException("Form", "formId", formId);
+        }
+        return formData;
+    }
+
+    public Optional<Form> getFormByNo(String formNo) throws ResourceNotFoundException{
+        Optional<Form> formData = formRepo.findByFormNo(formNo);
+        if(!formData.isPresent()){
+            throw new ResourceNotFoundException("Form", "formNo", formNo);
+        }
+        return formData;
+    }
+
+    // allow admins to either pick from a list of qns (maybe dropdown box showing a list of qns)
+    // or admins can create a new set of qns
+    public Form createForm(Form form) throws RequestErrorException{
+        try{
+            // loop through each question and check if it is in db, if not save to formbuilder table
+            for(Question qn: form.getQuestions()){
+                if(qn.getQuestionId() == null || qn.getQuestionId().isEmpty()){
+                    formBuilderRepo.save(qn);
+                }
+            }
+            formRepo.save(form);
+        }
+        catch(Exception e){
+            throw new RequestErrorException("create", "Form", e.getMessage());
+        }
         return form;
     }
 
-    public Form updateForm(String formId, Form formUpdate){
-        Optional<Form> form = formRepo.findById(formId);
-        if(form.isPresent()){
-            Form formOriginal = form.get();
-            formOriginal.setRevisionDate(formUpdate.getRevisionDate());
-            formOriginal.setFormInfo(formUpdate.getFormInfo());
-            formRepo.save(formOriginal);
-            return formOriginal;
+    public Form approveForm(String formId, Form form) throws RequestErrorException, RequestErrorException{
+        Optional<Form> currentForm = formRepo.findById(formId);
+        Form currentFormData = null;
+
+        if(!currentForm.isPresent()){
+            throw new ResourceNotFoundException("Form", "formId", formId);
         }
-        return null;
-    }
-    
-    public Form deleteForm(String formId){
-        Optional<Form> form = formRepo.findByFormId(formId);
-        if(form.isPresent()){
-            Form formData = form.get();
-            formRepo.delete(formData);
-            return formData;
+        
+        try{
+            // get current logged in user
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String name = auth.getName();
+            Optional<User> user = userRepo.findByUsername(name);
+            
+            if(user.isPresent()){
+                currentFormData = currentForm.get();
+                currentFormData.setApprovedBy(user.get());
+                formRepo.save(currentFormData);
+            }
         }
-        return null;
+        catch(Exception e){
+            throw new RequestErrorException("approve", "Form", e.getMessage());
+        }
+        
+        return currentFormData;
     }
 
+    // allow admins to either pick from a list of qns (maybe dropdown box showing a list of qns)
+    // or admins can create a new set of qns to update current form
+    public Form updateForm(String formId, Form formUpdate) throws RequestErrorException, ResourceNotFoundException{
+        Optional<Form> form = formRepo.findById(formId);
+        Form formData = null;
+
+        if(!form.isPresent()){
+            throw new ResourceNotFoundException("Form", "formId", formId);
+        }
+
+        try{
+            formData = form.get();
+            formData.setFormNo(formUpdate.getFormNo());
+            formData.setFormName(formUpdate.getFormName());
+            formData.setRevisionNo(formUpdate.getRevisionNo());
+            formData.setLastEdited(formUpdate.getLastEdited());
+            formData.setDateSubmitted(formUpdate.getDateSubmitted());
+            formData.setApprovedBy(formUpdate.getApprovedBy());
+            // loop through each question and check if it is in db, if not save to formbuilder table
+            for(Question qn: formUpdate.getQuestions()){
+                if(qn.getQuestionId() == null || qn.getQuestionId().isEmpty()){
+                    formBuilderRepo.save(qn);
+                }
+            }
+            formData.setQuestions(formUpdate.getQuestions());
+            formRepo.save(formData);
+        }
+        catch(Exception e){
+            throw new RequestErrorException("update", "Form", e.getMessage());
+        }
+        return formData;
+    }
+    
+    public void deleteForm(String formId) throws RequestErrorException, ResourceNotFoundException{
+        Optional<Form> form = formRepo.findById(formId);
+        Form formData = null;
+        if(!form.isPresent()){
+            throw new ResourceNotFoundException("Form", "formId", formId);
+        }
+        try{
+            formData = form.get();
+            formRepo.delete(formData);
+        }
+        catch(Exception e){
+            throw new RequestErrorException("delete", "Form", e.getMessage());
+        }       
+    }
 }

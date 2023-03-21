@@ -21,10 +21,11 @@ public class ScheduledController {
     }
 
     //@GetMapping("test")
-    @Scheduled(cron = "0 23 23 * * ?") // executes a send remainder email every day at 11.23pm
+    @Scheduled(cron = "0 0 0 * * *") // executes a send remainder email every day at midnight
     public ResponseEntity<Object> emailReminder(){
         try{
             scheduledService.sendReminderEmail();
+            //scheduledService.sendApprovedEmail();
         }
         catch(Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
