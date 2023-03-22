@@ -5,12 +5,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
 @Document(collection = "formBuilder")
 
 public class Question {
+    @Id
     private String questionId;
     private String questionText;
     private String questionType;
