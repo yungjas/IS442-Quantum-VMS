@@ -37,6 +37,15 @@ public class WorkflowController {
         return new ResponseEntity<>(allWorkflows, HttpStatus.OK);
     }
 
+    @GetMapping("user")
+    public ResponseEntity<List<Workflow>> getWorkflowsForUser() {
+        List<Workflow> userWorkflows = workflowService.getWorkflowsForUser();
+        if (userWorkflows.size() == 0) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(userWorkflows, HttpStatus.OK);
+    }
+
     @PostMapping("create")
     public ResponseEntity<Workflow> createWorkflow(@RequestBody Workflow workflow) {
         try {
