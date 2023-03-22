@@ -14,11 +14,15 @@ import lombok.Setter;
 public class Question {
     @Id
     private String questionId;
+    
     private String questionText;
+    
     private String questionType;
+    
     private String questionSectionName; // e.g. Part I: Participation in Safety, can be null if question don't have section
-    //@DBRef
+    
     private List<QuestionInput> answerChoices;
+    
     private boolean isRequired;
 }
 

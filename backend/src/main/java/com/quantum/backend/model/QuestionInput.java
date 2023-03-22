@@ -16,7 +16,7 @@ public class QuestionInput {
     // private String inputId;
     private String inputName; // e.g. Poor
     private String inputValue; // e.g. 1
-    @DBRef
-    private List<User> userResponses; // store users with the same response
+    // @DBRef
+    // private List<User> userResponses; // store users with the same response
 
 }
