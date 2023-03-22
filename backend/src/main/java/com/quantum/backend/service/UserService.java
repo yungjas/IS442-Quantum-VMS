@@ -121,6 +121,11 @@ public class UserService {
             vendorData.setEmail(vendorUpdate.getEmail());
             vendorData.setPassword(encoder.encode(vendorUpdate.getPassword()));
             vendorData.setCompanyName(vendorUpdate.getCompanyName());
+            vendorData.setRegistrationNo(vendorUpdate.getRegistrationNo());
+            vendorData.setAddress(vendorUpdate.getAddress());
+            vendorData.setGstRegistered(vendorUpdate.getGstRegistered());
+            vendorData.setTelephone(vendorUpdate.getTelephone());
+            vendorData.setFax(vendorUpdate.getFax());
             userRepo.save(vendorData);
         }
         catch(Exception e){
@@ -164,6 +169,11 @@ public class UserService {
             vendorData.setUsername(vendorUpdate.getUsername());
             vendorData.setEmail(vendorUpdate.getEmail());
             vendorData.setCompanyName(vendorUpdate.getCompanyName());
+            vendorData.setRegistrationNo(vendorUpdate.getRegistrationNo());
+            vendorData.setAddress(vendorUpdate.getAddress());
+            vendorData.setGstRegistered(vendorUpdate.getGstRegistered());
+            vendorData.setTelephone(vendorUpdate.getTelephone());
+            vendorData.setFax(vendorUpdate.getFax());
             userRepo.save(vendorData);        
         }
         catch(Exception e){

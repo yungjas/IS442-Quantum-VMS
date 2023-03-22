@@ -11,6 +11,11 @@ import lombok.Setter;
 public class Vendor extends User
 {
 	private String companyName;
+	private String registrationNo;
+	private String address;
+	private String gstRegistered;
+	private String telephone;
+	private String fax;
 //	office_address
 //	office_tel
 //	office_tax
@@ -21,10 +26,15 @@ public class Vendor extends User
 //	evaluation_id
 
 	
-	public Vendor(String username, String password, String email, String companyName)
+	public Vendor(String username, String password, String email, String companyName, String registrationNo, String address, String gstRegistered, String telephone, String fax)
 	{
 		super(RoleType.ROLE_VENDOR, username, password, email);
 		this.companyName = companyName;
+		this.registrationNo = registrationNo;
+		this.address = address;
+		this.gstRegistered = gstRegistered;
+		this.telephone = telephone;
+		this.fax = fax;
 	}
 
 
