@@ -48,8 +48,7 @@ public class FormBuilderService {
             questionData.setAnswerChoices(questionUpdate.getAnswerChoices());
             questionData.setQuestionText(questionUpdate.getQuestionText());
             questionData.setQuestionType(questionUpdate.getQuestionType());
-            // cannot update whether a question is required or not
-            // questionData.setRequired(questionUpdate.);
+            questionData.setRequired(questionUpdate.isRequired());
         } catch(Exception e){
             throw new RequestErrorException("update", "Question", e.getMessage());
         }
