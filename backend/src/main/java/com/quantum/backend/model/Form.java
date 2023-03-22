@@ -9,18 +9,28 @@ import lombok.Setter;
 @Getter
 @Setter
 @Document(collection = "form")
-
 public class Form {
     @Id
     private String formId;
-    private String formName;
+    
     private String formNo;
-    private String formDescription;
+    
+    private String formName;
+    //private String formDescription;
+    
+    private int revisionNo;
+    
+    private String lastEdited;
+    
+    private String dateSubmitted;
+    
+    @DBRef
+    private User approvedBy;
+    
     @DBRef
     private List<Question> questions;
-    private Date revisionDate = new Date();
-    private Date submittedDate;
-    private User approvedBy;
+    // private Date revisionDate = new Date();
+    // private Date submittedDate;
 
 }
 

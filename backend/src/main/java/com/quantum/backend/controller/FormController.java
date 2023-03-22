@@ -1,8 +1,10 @@
 package com.quantum.backend.controller;
+import com.quantum.backend.exception.ResourceNotFoundException;
 import com.quantum.backend.model.*;
 import com.quantum.backend.service.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.HttpStatus;
 
 @RestController
@@ -37,6 +40,30 @@ public class FormController {
         return new ResponseEntity<>(allForms, HttpStatus.OK);
     }
 
+    @GetMapping("{formId}")
+    public ResponseEntity<Object> getFormById(@PathVariable String formId){
+        Optional<Form> formData = null;
+        try{
+            formData = formService.getFormById(formId);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(formData.get(), HttpStatus.OK);
+    }
+
+    @GetMapping("formNo/{formNo}")
+    public ResponseEntity<Object> getFormByNo(@PathVariable String formNo){
+        Optional<Form> formData = null;
+        try{
+            formData = formService.getFormByNo(formNo);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(formData.get(), HttpStatus.OK);
+    }
+
     // @PostMapping("createForm")
     // public ResponseEntity<Form> createForm(@RequestBody Form form) {
     //     try {
@@ -51,7 +78,9 @@ public class FormController {
     // }
 
     @PostMapping("create")
-    public ResponseEntity<Map<String, Object>> createForm(@RequestBody Form form) {
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
+    public ResponseEntity<Object> createForm(@RequestBody Form form) {
+        Form createdForm = null;
         try {
             Form createdForm = formService.createForm(form);
             if (createdForm != null) {
@@ -90,31 +119,61 @@ public class FormController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
             
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-}
+        return new ResponseEntity<>(createdForm, HttpStatus.OK) ;
+    }
 
+    @PutMapping("approve/{formId}")
+    @PreAuthorize("hasRole('APPROVER')")
+    public ResponseEntity<Object> approveForm(@PathVariable String formId, @RequestBody Form form){
+        Form approveForm = null;
+        try{
+            approveForm = formService.approveForm(formId, form);
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(approveForm, HttpStatus.OK);
+    }
 
     @PutMapping("update/{formId}")
-    public ResponseEntity<Form> updateForm(@PathVariable String formId, @RequestBody Form form){
-        Form formUpdate = formService.updateForm(formId, form);
-        if (formUpdate == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
+    public ResponseEntity<Object> updateForm(@PathVariable String formId, @RequestBody Form form){
+        Form formUpdate = null;
+        try{
+            formUpdate = formService.updateForm(formId, form);
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(formUpdate, HttpStatus.OK);
     }
 
     @DeleteMapping("delete/{formId}")
-    public ResponseEntity<HttpStatus> deleteForm(@PathVariable String formId) {
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
+    public ResponseEntity<Object> deleteForm(@PathVariable String formId) {
         try {
-            if (formService.deleteForm(formId) == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            } else {
-                return new ResponseEntity<>(HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            // if (formService.deleteForm(formId) == null) {
+            //     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            // } else {
+            //     return new ResponseEntity<>(HttpStatus.OK);
+            // }
+            formService.deleteForm(formId);
         }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        } 
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     
 }
