@@ -29,7 +29,7 @@
     Form Management (Not coded yet)
     <br>
     <div class="btn-group" role="formGroup">
-      <button type="button" class="btn btn-secondary">View/Update/Delete</button>
+      <button type="button" class="btn btn-secondary" @click="viewForm">View/Update/Delete</button>
       <button type="button" class="btn btn-secondary">Create</button>
     </div>
   </div>
@@ -105,6 +105,10 @@ export default
     createWorkflow: function ()
     {
       this.$router.push({name: 'CreateWorkflow'})
+    },
+    viewForm: function ()
+    {
+      this.$router.push({name: 'ViewForm'})
     },
     // initAdmin()
     // {

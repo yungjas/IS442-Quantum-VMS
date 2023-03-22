@@ -10,6 +10,7 @@ import SendEmail from '../views/SendEmail.vue'
 import ViewWorkflow from '../views/ViewWorkflow.vue'
 import CreateWorkflow from '../views/CreateWorkflow.vue'
 import EditWorkflow from '../views/EditWorkflow.vue'
+import ViewForm from '../views/ViewForm.vue'
 const routes = [
   {
     path: '/',
@@ -74,6 +75,11 @@ const routes = [
     name: 'EditWorkflow',
     component: EditWorkflow
   },
+  {
+    path: '/viewForm',
+    name: 'ViewForm',
+    component: ViewForm
+  }
 ]
 
 const router = createRouter({

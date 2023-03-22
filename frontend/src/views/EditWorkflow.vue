@@ -48,11 +48,36 @@
                 style="width: 50%"
                 multiple
               >
-                <option v-for="user in this.allUsers" :key="user.userId" :value="user" >
+                <option
+                  v-for="user in this.allUsers"
+                  :key="user.userId"
+                  :value="user"
+                >
                   {{ user.username }}
                 </option>
               </select>
-              <p>You have selected: {{ selectedUsers }}</p>
+              <!-- <p>You have selected: {{ selectedUsers }}</p> -->
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="forms">Select Form for Workflow:</label>
+            </td>
+            <td>
+              <select
+                v-model="selectedForm"
+                id="formSelect"
+                style="width: 50%"
+              >
+                <option
+                  v-for="user in this.allUsers"
+                  :key="user.userId"
+                  :value="user"
+                >
+                  {{ user.username }}
+                </option>
+              </select>
+              <!-- <p>You have selected: {{ selectedUsers }}</p> -->
             </td>
           </tr>
         </tbody>
@@ -83,11 +108,12 @@ export default {
       data: JSON.parse(localStorage.editWorkflow),
       userType: localStorage.userType,
       allUsers: [],
+      allForms: [],
       selectedUsers: [],
+      selectedForm: {},
       workflowId: "",
       workflowName: "",
       deadline: "",
-      form: "",
     };
   },
   methods: {
@@ -109,7 +135,8 @@ export default {
     },
     updateWorkflow() {
       console.log(this.data);
-      this.data.assignedUsers = this.selectedUsers
+      this.data.assignedUsers = this.selectedUsers;
+      this.data.form = this.allForms[0];
       axios
         .put(
           "http://localhost:8080/api/workflow/update/" + this.data.workflowId,
@@ -131,23 +158,40 @@ export default {
         });
     },
     getAllUsers() {
-      axios.get("http://localhost:8080/api/users/all", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.token,
-          "Access-Control-Allow-Origin": "*",
-        },
-      }).then((response)=> {
-        this.allUsers = response.data
-        console.log(this.allUsers);
-      })
+      axios
+        .get("http://localhost:8080/api/users/all", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.token,
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .then((response) => {
+          this.allUsers = response.data;
+          console.log(this.allUsers);
+        });
     },
+    getAllForms() {
+      axios
+        .get("http://localhost:8080/api/forms/all", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.token,
+            "Access-Control-Allow-Origin": "*",
+          },
+        }).then((response) => {
+          this.allForms = response.data
+          console.log(this.allForms[0])
+        })
+    }
   },
 
   created() {
     try {
-      this.getAllUsers()
-      this.selectedUsers = this.data.assignedUsers
+      this.getAllUsers();
+      this.getAllForms();
+      this.selectedUsers = this.data.assignedUsers;
+      this.selectedForm = this.data.form
       console.log(" on edit workflow page");
     } catch (e) {
       if (e instanceof SyntaxError) {
