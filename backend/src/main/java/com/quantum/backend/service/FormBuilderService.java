@@ -24,11 +24,12 @@ public class FormBuilderService {
     public List<Question> getAllQuestions(){
         return formBuilderRepo.findAll();
     }
+
     public Question addQuestion(@RequestBody Question question) throws IllegalArgumentException{
         // Add code to save the question to the database
-        if(formBuilderRepo.existsById(question.getQuestionId())){
-            throw new IllegalArgumentException("This question exists");
-        }
+        // if(formBuilderRepo.existsById(question.getQuestionId())){
+        //     throw new IllegalArgumentException("This question exists");
+        // }
         try {
             formBuilderRepo.save(question);
         } catch (Exception e) {
