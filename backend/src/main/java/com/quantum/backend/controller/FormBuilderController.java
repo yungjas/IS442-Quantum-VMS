@@ -1,4 +1,5 @@
 package com.quantum.backend.controller;
+import com.quantum.backend.exception.ResourceNotFoundException;
 import com.quantum.backend.model.*;
 import com.quantum.backend.service.*;
 import java.util.List;
@@ -18,19 +19,62 @@ import org.springframework.http.HttpStatus;
 @RestController
 @RequestMapping("api/form-builder")
 public class FormBuilderController {
+    
+    private final FormBuilderService formBuilderService;
 
-    @PostMapping("/add-question")
-    public ResponseEntity<Question> addQuestion(@RequestBody Question question) {
-        // Add code to save the question to the database
-        return new ResponseEntity<>(question, HttpStatus.CREATED);
+    public FormBuilderController(FormBuilderService formBuilderService){
+        this.formBuilderService = formBuilderService;
+    }
+    
+    @GetMapping("/all")
+    public ResponseEntity<List<Question>> getQuestions() {
+        List<Question> allQns = formBuilderService.getAllQuestions();
+        if(allQns.size() == 0){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(allQns, HttpStatus.OK);
     }
 
-    @PostMapping("/add-textbox")
-    public ResponseEntity<Question> addTextbox(@RequestBody String label) {
-        Question textbox = new Question();
-        textbox.setQuestionType("textbox");
-        // textbox.setQuestionLabel(label);
-        // Add code to save the question to the database
-        return new ResponseEntity<>(textbox, HttpStatus.CREATED);
+    @PostMapping("/add-question")
+    public ResponseEntity<Object> createQuestion(@RequestBody Question question) {
+        Question questionCreated = null;
+        try {
+            questionCreated = formBuilderService.addQuestion(question);
+        } catch(IllegalArgumentException ill){
+            return new ResponseEntity<>(ill.getMessage(), HttpStatus.CONFLICT);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(questionCreated, HttpStatus.CREATED);
+    }
+
+    // status 201 BUT doesnt update question
+    @PutMapping("/edit-question/{questionId}")
+    public ResponseEntity<Object> updateQuestion(@PathVariable String questionId, @RequestBody Question question) {
+        Question questionUpdated = null;
+        try {
+            questionUpdated = formBuilderService.updateQuestion(questionId, question);
+        } catch(IllegalArgumentException ill){
+            return new ResponseEntity<>(ill.getMessage(), HttpStatus.CONFLICT);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(questionUpdated, HttpStatus.CREATED);
+    }
+
+    
+    @DeleteMapping("delete/{questionId}")
+    public ResponseEntity<Object> deleteQuestion(@PathVariable String questionId) {
+        Question questionDeleted = null;
+        try{
+            questionDeleted = formBuilderService.deleteQuestion(questionId);            
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR); 
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
