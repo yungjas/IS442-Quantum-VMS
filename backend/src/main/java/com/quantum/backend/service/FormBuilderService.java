@@ -50,6 +50,7 @@ public class FormBuilderService {
             questionData.setQuestionText(questionUpdate.getQuestionText());
             questionData.setQuestionType(questionUpdate.getQuestionType());
             questionData.setRequired(questionUpdate.isRequired());
+            formBuilderRepo.save(questionData);
         } catch(Exception e){
             throw new RequestErrorException("update", "Question", e.getMessage());
         }
