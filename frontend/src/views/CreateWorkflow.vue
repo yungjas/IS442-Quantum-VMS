@@ -27,11 +27,10 @@
             </td>
             <td>
               <select v-model="selectedForms" id="form" style="width: 80%" multiple>
-                <option v-for="form in allForms" :key="form.userId" :value="form">
-                  {{ form.name }}
+                <option v-for="form in this.allForms" :key="form.formId" :value="form">
+                  {{ form.formName }}
                 </option>
               </select>
-              <p>You have selected: {{ selectedForms }}</p>
             </td>
           </tr>
           <tr>
@@ -40,11 +39,10 @@
             </td>
             <td>
               <select v-model="selectedUsers" id="user" style="width: 80%" multiple>
-                <option v-for="user in allUsers" :key="user.userId" :value="user">
-                  {{ user.name }}
+                <option v-for="user in this.allUsers" :key="user.userId" :value="user">
+                  {{ user.username }}
                 </option>
               </select>
-              <p>You have selected: {{ selectedUsers }}</p>
             </td>
           </tr>
         </tbody>
@@ -121,36 +119,40 @@
             });
         }
       },
-    },
-    getAllUsers() {
-      axios
-        .get("http://localhost:8080/api/users/all", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.token,
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .then((response) => {
-          this.allUsers = response.data;
-          console.log(this.allUsers);
-        });
-    },
-    getAllForms() {
-      axios
-        .get("http://localhost:8080/api/forms/all", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.token,
-            "Access-Control-Allow-Origin": "*",
-          },
-        }).then((response) => {
-          this.allForms = response.data
-          console.log(this.allForms[0])
-        })
+      getAllUsers() {
+        axios
+          .get("http://localhost:8080/api/users/all", {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.token,
+              "Access-Control-Allow-Origin": "*",
+            },
+          })
+          .then((response) => {
+            this.allUsers = response.data;
+            console.log(this.allUsers);
+          });
+      },
+      getAllForms() {
+        axios
+          .get("http://localhost:8080/api/forms/all", {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.token,
+              "Access-Control-Allow-Origin": "*",
+            },
+          }).then((response) => {
+            this.allForms = response.data
+            console.log(this.allForms[0])
+          })
+      }
     },
     created() {
     try {
+      this.getAllUsers();
+      this.getAllForms();
+      this.selectedUsers = this.data.assignedUsers;
+      this.selectedForm = this.data.form
       console.log(" on create workflow page");
     } catch (e) {
       if (e instanceof SyntaxError) {
