@@ -27,7 +27,7 @@
             </td>
             <td>
               <select v-model="selectedForms" id="form" style="width: 80%" multiple>
-                <option v-for="form in forms" :key="form.id" :value="form">
+                <option v-for="form in allForms" :key="form.userId" :value="form">
                   {{ form.name }}
                 </option>
               </select>
@@ -40,7 +40,7 @@
             </td>
             <td>
               <select v-model="selectedUsers" id="user" style="width: 80%" multiple>
-                <option v-for="user in users" :key="user.id" :value="user">
+                <option v-for="user in allUsers" :key="user.userId" :value="user">
                   {{ user.name }}
                 </option>
               </select>
@@ -69,19 +69,9 @@
       return {
         userType: localStorage.userType,
         workflowName: "",
-        forms: [
-        { id: 1, name: 'Form 1' },
-        { id: 2, name: 'Form 2' },
-        { id: 3, name: 'Form 3' },
-        { id: 4, name: 'Form 4' },
-        ],
+        allForms: [],
         selectedForms: [],
-        users:[
-        {id:1, name: "Deborah"},
-        {id:2, name: "Jeremy"},
-        {id:3, name: "Abby"},
-        {id:4, name: "Jasmine"}
-        ],
+        allUsers:[],
         selectedUsers: []
       };
     },
@@ -113,7 +103,6 @@
               },
             ],
           };
-          console.log(data);
 
           axios
             .post("http://localhost:8080/api/workflow/create", data, {
@@ -132,6 +121,33 @@
             });
         }
       },
+    },
+    getAllUsers() {
+      axios
+        .get("http://localhost:8080/api/users/all", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.token,
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .then((response) => {
+          this.allUsers = response.data;
+          console.log(this.allUsers);
+        });
+    },
+    getAllForms() {
+      axios
+        .get("http://localhost:8080/api/forms/all", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.token,
+            "Access-Control-Allow-Origin": "*",
+          },
+        }).then((response) => {
+          this.allForms = response.data
+          console.log(this.allForms[0])
+        })
     },
     created() {
     try {
