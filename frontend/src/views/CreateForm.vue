@@ -87,17 +87,14 @@
                                 <input type="checkbox" v-model="selectedQuestion" :value="question"/> &nbsp;
                                 <b>Question Text:</b> <label>{{ question.questionText }}</label><br> &emsp;&nbsp;
                                 <b>Question Type:</b> <label>{{ question.questionType }}</label><br> &emsp;&nbsp;
+                                <b>Question Section Name:</b> <label>{{ question.questionSectionName }}</label><br> &emsp;&nbsp;
                                 <b>Answer Choices:</b> <label>{{ question.answerChoices }}</label><br> &emsp;&nbsp;
                                 <b>Required:</b> <label>{{ question.required }}</label><br>
                                 ================================
                             </div>
                             
 
-                            <!-- <select v-model="selected" style="width: 100%">
-                                <option v-for="question in questionData" v-bind:key="question.questionId">
-                                    {{ question.questionText }}
-                                </option>
-                            </select> -->
+                            <button type="button" class="btn btn-danger" @click="addQuestion" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Question</button>
                         </td>
                     </tr>
                 </tbody>
@@ -106,7 +103,65 @@
             <div class="btn-group" role="submitChange">
                 <button type="button" class="btn btn-secondary" @click="createForm">Create</button>
             </div>
-        </div>    
+        </div>
+
+        <!-- Modal to Add Question -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Question</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 
+                    {
+                        "questionText": "Some safety questions 1",
+                        "questionType": "textbox",
+                        "questionSectionName": "Safety",
+                        "answerChoices" : [{"inputName": "True", "inputValue": "1"}, {"inputName": "False", "inputValue": "0"}],
+                        "required": true
+                    }
+                -->
+                <table>
+                    <tr>
+                        <td>Question Text:</td> 
+                        <td><input type=text v-model="questionText"></td>
+                    </tr>
+                    <tr>
+                        <td>Question Type:</td>
+                        <td><input type=text v-model="questionType"></td>
+                    </tr>
+                    <tr>
+                        <td>Question Selection Name (Group):</td>
+                        <td><input type=text v-model="questionSectionName"></td>
+                    </tr>
+                    <tr>
+                        <td>Answer Choices:</td>
+                        <td>
+                            <div id="answers">
+
+                            </div>
+                            <div class="controls">
+                                
+                                <button type="button" id="add_more_fields" class="btn btn-primary" @click="addAnswer">Add Answers</button>
+                                <button type="button" id="remove_fields" class="btn btn-warning" @click="removeAnswer">Remove Answers</button>
+                            </div>                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Required:</td>
+                        <td><input type=checkbox v-model="required"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="closeModal" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" @click="addNewQuestion">Add</button>
+            </div>
+            </div>
+        </div>
+        </div>
 </template>
 
 
@@ -125,6 +180,12 @@ export default {
             revisionNo: '',
             lastEdited: '',
             dateSubmitted: '',
+            answerArray: null,
+            questionText: '',
+            questionType: '',
+            questionSectionName: '',
+            answerChoices: [],
+            required: false,
         }
     },
     methods: 
@@ -235,6 +296,127 @@ export default {
                     console.log(this.questionData);
             })                                    
         },
+        addAnswer()
+        {
+            console.log("adding answer");
+
+            var inputNameField = document.createElement('input');
+            inputNameField.setAttribute('type','text');
+            inputNameField.setAttribute('name','answersArray[]');
+            inputNameField.setAttribute('siz',50);
+            inputNameField.setAttribute('placeholder','Input Name');
+            this.answerArray.appendChild(inputNameField);
+
+            var inputValueField = document.createElement('input');
+            inputValueField.setAttribute('type','text');
+            inputValueField.setAttribute('name','answersArray[]');
+            inputValueField.setAttribute('siz',50);
+            inputValueField.setAttribute('placeholder','Input Value');
+            this.answerArray.appendChild(inputValueField);
+            
+            this.answerArray.appendChild(document.createElement('br'));
+            this.answerArray.appendChild(document.createElement('br'));
+        },
+        removeAnswer()
+        {
+            console.log('remove answer');
+            var input_tags = this.answerArray.getElementsByTagName('input');
+            
+            var br_tags = this.answerArray.getElementsByTagName('br');
+            if(input_tags.length > 0) {
+                this.answerArray.removeChild(input_tags[(input_tags.length) -1]);
+                this.answerArray.removeChild(input_tags[(input_tags.length) -1]);
+
+                this.answerArray.removeChild(br_tags[(br_tags.length) -1]);
+                this.answerArray.removeChild(br_tags[(br_tags.length) -1]);
+            }
+        },
+        addQuestion()
+        {
+            console.log("add question");  
+            this.answerArray = document.getElementById('answers');
+            console.log(this.answerArray);
+        },
+        addNewQuestion()
+        {
+            //the following is a document.html tag
+            var tempAnswerArray = document.getElementsByName('answersArray[]');
+
+            var tempAnswerArray2 = [];
+            for(var i = 0; i < tempAnswerArray.length; i++)
+            {
+                tempAnswerArray2.push(tempAnswerArray[i].value);
+            }
+
+
+            this.answerChoices = [];
+
+            for(var x = 0; x < tempAnswerArray2.length; x+=2)
+            {
+                var tempObject = "{";
+                tempObject += "\"" + "inputName" + "\": \"" + tempAnswerArray2[x] + "\",";
+                tempObject += "\"" + "inputValue" + "\": \"" + tempAnswerArray2[x+1] + "\"";
+                tempObject += "}";
+                
+                if(x < tempAnswerArray2.length)
+                {
+                    this.answerChoices.push(tempObject);
+                }
+            }
+
+            /*
+                    {
+                        "questionText": "Some safety questions 1",
+                        "questionType": "textbox",
+                        "questionSectionName": "Safety",
+                        "answerChoices" : [{"inputName": "True", "inputValue": "1"}, {"inputName": "False", "inputValue": "0"}],
+                        "required": true
+                    }
+            */
+
+            if(this.answerChoices.length == 0)
+            {
+                this.answerChoices = null;
+            }
+
+            var tempChoices = "";
+            if(this.answerChoices == null)
+            {
+                tempChoices = "\"answerChoices\": " + this.answerChoices + ",";
+            }
+            else
+            {
+                tempChoices = "\"answerChoices\": [" + this.answerChoices + "],";
+            }
+
+            var createQuestion = "{";
+            createQuestion += "\"questionText\": \"" + this.questionText + "\",";
+            createQuestion += "\"questionType\": \"" + this.questionType + "\",";
+            createQuestion += "\"questionSectionName\": \"" + this.questionSectionName + "\",";
+            createQuestion += tempChoices;
+            createQuestion += "\"required\": " + this.required;
+            createQuestion += "}";
+
+            createQuestion = JSON.parse(createQuestion);
+            console.log(createQuestion);
+
+            axios.post("http://localhost:8080/api/form-builder/add-question", createQuestion, {
+                headers:{
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + localStorage.token,
+                    "Access-Control-Allow-Origin": "*",
+                }
+            })
+            .then((response_question) => {
+                console.log(response_question);
+
+                this.questionData = [];
+                this.getQuestionsData();
+                document.getElementById("closeModal").click();
+            })     
+            
+
+        },
         formatDate (input) {
         var datePart = input.match(/\d+/g),
         year = datePart[0], // get only two digits
@@ -265,6 +447,8 @@ export default {
 
         this.lastEdited = this.getCurrentDate();
         this.dateSubmitted = this.getCurrentDate();
+
+
     },
 }
 </script>
