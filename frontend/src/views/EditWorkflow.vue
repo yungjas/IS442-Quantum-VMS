@@ -39,24 +39,44 @@
           </tr>
           <tr>
             <td>
-              <label for="forms">Select Users:</label>
+              <label for="forms">Select Vendors:</label>
             </td>
             <td>
               <select
-                v-model="selectedUsers"
-                id="userSelect"
+                v-model="selectedVendors"
+                id="vendorSelect"
                 style="width: 50%"
                 multiple
               >
                 <option
-                  v-for="user in this.allUsers"
-                  :key="user.userId"
-                  :value="user"
+                  v-for="vendor in this.allVendors"
+                  :key="vendor.userId"
+                  :value="vendor"
                 >
-                  {{ user.username }}
+                  {{ vendor.username }}
                 </option>
               </select>
-              <!-- <p>You have selected: {{ selectedUsers }}</p> -->
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="forms">Select Admins:</label>
+            </td>
+            <td>
+              <select
+                v-model="selectedAdmins"
+                id="adminSelect"
+                style="width: 50%"
+                multiple
+              >
+                <option
+                  v-for="admin in this.allAdmins"
+                  :key="admin.userId"
+                  :value="admin"
+                >
+                  {{ admin.username }}
+                </option>
+              </select>
             </td>
           </tr>
           <tr>
@@ -64,11 +84,7 @@
               <label for="forms">Select Form for Workflow:</label>
             </td>
             <td>
-              <select
-                v-model="selectedForm"
-                id="formSelect"
-                style="width: 50%"
-              >
+              <select v-model="selectedForm" id="formSelect" style="width: 50%">
                 <option
                   v-for="form in this.allForms"
                   :key="form.formId"
@@ -109,6 +125,10 @@ export default {
       userType: localStorage.userType,
       allUsers: [],
       allForms: [],
+      allAdmins: [],
+      allVendors: [],
+      selectedAdmins: [],
+      selectedVendors: [],
       selectedUsers: [],
       selectedForm: {},
       workflowId: "",
@@ -136,7 +156,9 @@ export default {
     updateWorkflow() {
       console.log(this.data);
       this.data.assignedUsers = this.selectedUsers;
-      this.data.form = this.allForms[0];
+      this.data.assignedVendors = this.selectedVendors;
+      this.data.assignedAdmins = this.selectedAdmins;
+      this.data.form = this.selectedForm;
       axios
         .put(
           "http://localhost:8080/api/workflow/update/" + this.data.workflowId,
@@ -169,6 +191,14 @@ export default {
         .then((response) => {
           this.allUsers = response.data;
           console.log(this.allUsers);
+          for (let user of this.allUsers) {
+            if (user.userType == "ROLE_ADMIN") {
+              this.allAdmins.push(user);
+            }
+            if (user.userType == "ROLE_VENDOR") {
+              this.allVendors.push(user);
+            }
+          }
         });
     },
     getAllForms() {
@@ -179,11 +209,11 @@ export default {
             Authorization: "Bearer " + localStorage.token,
             "Access-Control-Allow-Origin": "*",
           },
-        }).then((response) => {
-          this.allForms = response.data
-          console.log(this.allForms[0])
         })
-    }
+        .then((response) => {
+          this.allForms = response.data;
+        });
+    },
   },
 
   created() {
@@ -191,7 +221,9 @@ export default {
       this.getAllUsers();
       this.getAllForms();
       this.selectedUsers = this.data.assignedUsers;
-      this.selectedForm = this.data.form
+      this.selectedForm = this.data.form;
+      this.selectedAdmins = this.data.assignedAdmins;
+      this.selectedVendors = this.data.assignedVendors;
       console.log(" on edit workflow page");
     } catch (e) {
       if (e instanceof SyntaxError) {
