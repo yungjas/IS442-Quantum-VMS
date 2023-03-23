@@ -28,6 +28,14 @@ public class WorkflowService {
         return workflowRepo.findAll();
     }
 
+    public Optional<Workflow> getWorkflowById(String workflowId){
+        Optional<Workflow> workflowData = workflowRepo.findById(workflowId);
+        if(! workflowData.isPresent()){
+            throw new ResourceNotFoundException("Workflow", "workflowId", workflowId);
+        }
+        return workflowData;
+    }
+
     public List<Workflow> getWorkflowsForUser(){
         // get current logged in user
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -64,6 +72,8 @@ public class WorkflowService {
             workflowOriginal.setWorkflowName(workflowUpdate.getWorkflowName());
             workflowOriginal.setDeadline(workflowUpdate.getDeadline());
             workflowOriginal.setAssignedUsers(workflowUpdate.getAssignedUsers());
+            workflowOriginal.setAssignedAdmins(workflowUpdate.getAssignedAdmins());
+            workflowOriginal.setAssignedVendors(workflowUpdate.getAssignedVendors());
             workflowOriginal.setForm(workflowUpdate.getForm());
 
 

@@ -30,6 +30,12 @@ public class Workflow {
     private List<User> assignedUsers; // update branch to resolve User cannot be defined to a type
 
     @DBRef
+    private List<User> assignedVendors; // update branch to resolve User cannot be defined to a type
+    
+    @DBRef
+    private List<User> assignedAdmins; 
+
+    @DBRef
     private Form form; // update branch to resolve Form cannot be defined to a type
 
     // private String adminId;

@@ -41,7 +41,7 @@ public class WorkflowController {
    }
 
    @GetMapping("{workflowId}")
-   public ResponseEntity<Object> getWorkflow(@PathVariable String workflowId) {
+   public ResponseEntity<Object> getWorkflowById(@PathVariable String workflowId) {
     Optional<Workflow> workflowData = null;
     try {
         workflowData = workflowService.getWorkflowById(workflowId);
