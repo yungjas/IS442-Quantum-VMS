@@ -1,10 +1,15 @@
 package com.quantum.backend.service;
 
-import java.util.List;
+import java.util.*;
 import java.util.Optional;
 
 import com.quantum.backend.model.*;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import com.quantum.backend.repository.UserRepository;
 import com.quantum.backend.repository.WorkflowRepository;
 
 @Service
@@ -49,13 +54,37 @@ public class WorkflowService {
 //    }
     
     private final WorkflowRepository workflowRepo;
+    private final UserRepository userRepo;
     
-    public WorkflowService(WorkflowRepository workflowRepo){
+    public WorkflowService(WorkflowRepository workflowRepo, UserRepository userRepo){
         this.workflowRepo = workflowRepo;
+        this.userRepo = userRepo;
     }
 
     public List<Workflow> getAllWorkflows(){
         return workflowRepo.findAll();
+    }
+
+    public List<Workflow> getWorkflowsForUser(){
+        // get current logged in user
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String name = auth.getName();
+        Optional<User> user = userRepo.findByUsername(name);
+        List<Workflow> userWorkflows = new ArrayList<>();
+
+        if(user.isPresent()){
+            List<Workflow> allWorkflows = workflowRepo.findAll();
+            for(Workflow wf: allWorkflows){
+                if(wf.getAssignedUsers() != null){
+                    for(User eachUser: wf.getAssignedUsers()){
+                        if(eachUser.getUserId().equals(user.get().getUserId())){
+                            userWorkflows.add(wf);
+                        }
+                    }
+                }
+            }
+        }
+        return userWorkflows;
     }
 
     public Workflow createWorkflow(Workflow workflow){

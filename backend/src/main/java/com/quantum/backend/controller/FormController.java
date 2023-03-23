@@ -128,11 +128,12 @@ public class FormController {
     // }
 
     @PostMapping("create")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<Object> createForm(@RequestBody Form form) {
         Form createdForm = null;
         try {
             createdForm = formService.createForm(form);
-            // if (createdForm != null) {
+             // if (createdForm != null) {
             //     // Create a map to store the form data
             //     Map<String, Object> formData = new HashMap<>();
             //     formData.put("formId", createdForm.getFormId());
@@ -193,6 +194,7 @@ public class FormController {
     }
 
     @PutMapping("update/{formId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<Object> updateForm(@PathVariable String formId, @RequestBody Form form){
         Form formUpdate = null;
         try{
@@ -208,6 +210,7 @@ public class FormController {
     }
 
     @DeleteMapping("delete/{formId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<Object> deleteForm(@PathVariable String formId) {
         try {
             // if (formService.deleteForm(formId) == null) {
