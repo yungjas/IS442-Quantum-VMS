@@ -26,6 +26,10 @@ public class FormService {
         return formRepo.findAll();
     }
 
+    public List<Form> getAllTemplateForms(){
+        return formRepo.findAllFormTemplates();
+    }
+
     public Optional<Form> getFormById(String formId) throws ResourceNotFoundException{
         Optional<Form> formData = formRepo.findById(formId);
         if(!formData.isPresent()){
@@ -42,22 +46,52 @@ public class FormService {
         return formData;
     }
 
+    public Form createTemplateForm(Form form) throws RequestErrorException{
+        Form formTemplate = new Form();
+        if(form.isTemplate()){
+            try{
+                formTemplate.setFormNo(form.getFormNo());
+                formTemplate.setFormName(form.getFormName());
+                formTemplate.setRevisionNo(form.getRevisionNo());
+                formTemplate.setLastEdited(form.getLastEdited());
+                formTemplate.setTemplate(form.isTemplate());
+                saveFormQuestions(form);
+                formTemplate.setQuestions(form.getQuestions());
+                formRepo.save(formTemplate);
+            }
+            catch(Exception e){
+                throw new RequestErrorException("create form template", "Form", e.getMessage());
+            }
+        }
+        return formTemplate;
+    }
+
+    // create form based on a template
     // allow admins to either pick from a list of qns (maybe dropdown box showing a list of qns)
     // or admins can create a new set of qns
-    public Form createForm(Form form) throws RequestErrorException{
+    public Form createForm(Form formTemplate) throws RequestErrorException{
+        Form actualForm = new Form();
         try{
-            // loop through each question and check if it is in db, if not save to formbuilder table
-            for(Question qn: form.getQuestions()){
-                if(qn.getQuestionId() == null || qn.getQuestionId().isEmpty()){
-                    formBuilderRepo.save(qn);
-                }
-            }
-            formRepo.save(form);
+            actualForm.setFormNo(formTemplate.getFormNo());
+            actualForm.setFormName(formTemplate.getFormName());
+            actualForm.setRevisionNo(formTemplate.getRevisionNo());
+            actualForm.setLastEdited(formTemplate.getLastEdited());
+            // since the form is just created, shouldn't have a submission date
+            actualForm.setDateSubmitted(null); 
+            // template should be false since this form is generated from a template
+            actualForm.setTemplate(false);
+            // since this form is just created, shouldn't have anyone to approve yet
+            actualForm.setApprovedBy(null); 
+            // get predefined questions from form template
+            actualForm.setQuestions(formTemplate.getQuestions());
+            // create a new set of questions in addition to predefined ones in the template
+            saveFormQuestions(actualForm);
+            formRepo.save(actualForm);
         }
         catch(Exception e){
             throw new RequestErrorException("create", "Form", e.getMessage());
         }
-        return form;
+        return actualForm;
     }
 
     public Form approveForm(String formId, Form form) throws RequestErrorException, RequestErrorException{
@@ -105,12 +139,7 @@ public class FormService {
             formData.setLastEdited(formUpdate.getLastEdited());
             formData.setDateSubmitted(formUpdate.getDateSubmitted());
             formData.setApprovedBy(formUpdate.getApprovedBy());
-            // loop through each question and check if it is in db, if not save to formbuilder table
-            for(Question qn: formUpdate.getQuestions()){
-                if(qn.getQuestionId() == null || qn.getQuestionId().isEmpty()){
-                    formBuilderRepo.save(qn);
-                }
-            }
+            saveFormQuestions(formUpdate);
             formData.setQuestions(formUpdate.getQuestions());
             formRepo.save(formData);
         }
@@ -133,5 +162,14 @@ public class FormService {
         catch(Exception e){
             throw new RequestErrorException("delete", "Form", e.getMessage());
         }       
+    }
+
+    private void saveFormQuestions(Form form){
+        // loop through each question and check if it is in db, if not save to formbuilder table
+        for(Question qn: form.getQuestions()){
+            if(qn.getQuestionId() == null || qn.getQuestionId().isEmpty()){
+                formBuilderRepo.save(qn);
+            }
+        }
     }
 }
