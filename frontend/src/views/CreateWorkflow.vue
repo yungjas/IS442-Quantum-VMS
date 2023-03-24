@@ -138,19 +138,27 @@
       },
       resetWorkflow() {
         this.workflowName = "";
-        this.form = "";
+        this.deadline = "";
+        this.selectedAdmins = [];
+        this.selectedForms = {};
+        this.selectedUsers = [];
+        this.selectedVendors = [];
       },
-      createWorkflow: function () {
-        if (this.userType === "ROLE_ADMIN" || this.userType === "ROLE_APPROVER") {
+      createWorkflow() {
+        console.log(this.data);
+        this.data.assignedUsers = this.selectedUsers;
+        this.data.assignedVendors = this.selectedVendors;
+        this.data.assignedAdmins = this.selectedAdmins;
+        this.data.form = this.selectedForms;
         axios
           .post(
             "http://localhost:8080/api/workflow/create",
             this.data,
             {
               headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.token,
-              "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.token,
+                "Access-Control-Allow-Origin": "*",
               },
             }
           )
@@ -161,54 +169,6 @@
           .catch(function (error) {
             alert("Error:" + error.response.status);
           });
-        }
-      },
-      resetWorkflow: function () {
-        this.data = {};
-      },
-      addStep: function () {
-        this.data.steps.push({
-          name: "",
-          description: "",
-          assignedUsers: [],
-          form: {},
-        });
-      },
-      removeStep: function (index) {
-        this.data.steps.splice(index, 1);
-      },
-      addForm: function () {
-        this.allForms.push({
-          formId: "",
-          formName: "",
-        });
-      },
-      removeForm: function (index) {
-        this.allForms.splice(index, 1);
-      },
-      cancel: function () {
-        this.$router.push({ name: "ViewWorkflow" });
-      },
-      validateStep: function (step) {
-        if (step.name === "" || step.description === "" || step.assignedUsers.length === 0 || !step.form.formId) {
-          return false;
-        }
-        return true;
-      },
-      validateWorkflow: function () {
-        for (let i = 0; i < this.data.steps.length; i++) {
-          if (!this.validateStep(this.data.steps[i])) {
-          return false;
-          }
-        }
-        return true;
-      },
-      createWorkflowSubmit: function () {
-        if (this.validateWorkflow()) {
-          this.createWorkflow();
-        } else {
-          alert("Please fill all the fields for each step and select a form.");
-        }
       },
       getAllUsers() {
         axios
@@ -251,7 +211,7 @@
       this.getAllUsers();
       this.getAllForms();
       this.selectedUsers = this.data.assignedUsers;
-      this.selectedForm = this.data.form;
+      this.selectedForms = this.data.form;
       this.selectedAdmins = this.data.assignedAdmins;
       this.selectedVendors = this.data.assignedVendors;
       console.log(" on create workflow page");
