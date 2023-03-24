@@ -1,5 +1,7 @@
 package com.quantum.backend.model;
 
+import java.util.Map;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -21,6 +23,9 @@ public class User {
     private String password;
 
     private String email;
+	
+	// able to add more inputs when creating user in the future
+	//private Map<String, String> otherInfo;
 
 	public User(RoleType userType, String username, String password, String email) 
 	{

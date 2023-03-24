@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
 @RestController
+@CrossOrigin
 @RequestMapping("api/form-builder")
 public class FormBuilderController {
     

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "serve": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --port 4000",
     "serve-windows": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --port 4000",
     "serve-windows-old": "vue-cli-service serve --port 4000",
     "serve-mac": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --port 4000",
@@ -14,6 +15,8 @@
     "axios": "^1.3.3",
     "bootstrap": "^5.2.3",
     "core-js": "^3.6.5",
+    "datatables.net-dt": "^1.13.3",
+    "jquery": "^3.6.4",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0"
   },

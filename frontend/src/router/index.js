@@ -1,6 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
+import UpdateAccount from '../views/UpdateAccount.vue'
+import ViewAccount from '../views/ViewAccount.vue'
+import ViewUser from '../views/ViewUser.vue'
+import EditUser from '../views/EditUser.vue'
+import CreateUser from '../views/CreateUser.vue'
+import SendEmail from '../views/SendEmail.vue'
+import CreateForm from '../views/CreateForm.vue'
 
 const routes = [
   {
@@ -21,6 +28,41 @@ const routes = [
     name: 'Login',
     component: Login
   },
+  {
+    path: '/updateaccount',
+    name: 'UpdateAccount',
+    component: UpdateAccount
+  },
+  {
+    path: '/viewaccount',
+    name: 'ViewAccount',
+    component: ViewAccount
+  },
+  {
+    path: '/viewUser',
+    name: 'ViewUser',
+    component: ViewUser
+  },
+  {
+    path: '/editUser',
+    name: 'EditUser',
+    component: EditUser
+  },
+  {
+    path: '/createUser',
+    name: 'CreateUser',
+    component: CreateUser
+  },
+  {
+    path: '/sendEmail',
+    name: 'SendEmail',
+    component: SendEmail
+  },
+  {
+    path: '/createForm',
+    name: 'CreateForm',
+    component: CreateForm
+  }
 ]
 
 const router = createRouter({
