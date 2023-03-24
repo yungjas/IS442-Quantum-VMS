@@ -50,16 +50,16 @@ public class UserResponseController {
         return new ResponseEntity<>(userResponseData.get(), HttpStatus.OK);
     }
 
-    @GetMapping("question/{userResponseId}")
-    public ResponseEntity<Object> getFormQuestionResponse(@PathVariable String userResponseId){
-        Map<String, Object> userResponseMap = null;
+    @GetMapping("question/{userId}")
+    public ResponseEntity<Object> getFormQuestionResponses(@PathVariable String userId){
+        List<Object> userResponses = null;
         try{
-            userResponseMap = userResponseService.getFormQuestionResponse(userResponseId);
+            userResponses = userResponseService.getFormQuestionResponses(userId);
         }
         catch(Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(userResponseMap, HttpStatus.OK);
+        return new ResponseEntity<>(userResponses, HttpStatus.OK);
     }
 
     @PostMapping("create")
