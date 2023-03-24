@@ -130,13 +130,18 @@
                     </tr>
                     <tr>
                         <td>Question Type:</td>
-                        <td><input type=text v-model="questionType"></td>
+                        <td>
+
+                            <select style="width: 100%" name="selectRole" id="selectRole" @change="onChange($event)">
+                                <option v-for="item in questionTypeArr" :key="item" v-bind:value="item">{{item}}</option>
+                            </select>     
+                        </td>
                     </tr>
                     <tr>
                         <td>Question Selection Name (Group):</td>
                         <td><input type=text v-model="questionSectionName"></td>
                     </tr>
-                    <tr>
+                    <tr v-if="questionType !== 'text'">
                         <td>Answer Choices:</td>
                         <td>
                             <div id="answers">
@@ -182,10 +187,11 @@ export default {
             dateSubmitted: '',
             answerArray: null,
             questionText: '',
-            questionType: '',
+            questionType: 'text',
             questionSectionName: '',
             answerChoices: [],
             required: false,
+            questionTypeArr: ['text', 'radio', 'checkbox'],
         }
     },
     methods: 
@@ -438,6 +444,12 @@ export default {
             }
             var fullDate = year + '-' + month + '-' + day;
             return fullDate;
+        },
+        onChange(event) 
+        {
+            console.log(event.target.value);
+            this.questionType = event.target.value;
+
         },
     },
     created()
