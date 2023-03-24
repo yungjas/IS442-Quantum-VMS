@@ -70,19 +70,18 @@ public class FormService {
     // allow admins to either pick from a list of qns (maybe dropdown box showing a list of qns)
     // or admins can create a new set of qns
     public Form createForm(Form formTemplate) throws RequestErrorException{
-        // Optional<Form> formTemplate = formRepo.findById(formId);
         Form actualForm = new Form();
-        // if(!formTemplate.isPresent()){
-        //     throw new ResourceNotFoundException("Form", "formId", formId);
-        // }
         try{
             actualForm.setFormNo(formTemplate.getFormNo());
             actualForm.setFormName(formTemplate.getFormName());
             actualForm.setRevisionNo(formTemplate.getRevisionNo());
             actualForm.setLastEdited(formTemplate.getLastEdited());
-            actualForm.setDateSubmitted(formTemplate.getDateSubmitted());
+            // since the form is just created, shouldn't have a submission date
+            actualForm.setDateSubmitted(null); 
+            // template should be false since this form is generated from a template
             actualForm.setTemplate(false);
-            actualForm.setApprovedBy(null);
+            // since this form is just created, shouldn't have anyone to approve yet
+            actualForm.setApprovedBy(null); 
             // get predefined questions from form template
             actualForm.setQuestions(formTemplate.getQuestions());
             // create a new set of questions in addition to predefined ones in the template
