@@ -122,9 +122,6 @@ public class UserResponseService {
 
         try{
             userResponseData = userResponse.get();
-            userResponseData.setUserId(userResponseUpdate.getUserId());
-            userResponseData.setFormId(userResponseUpdate.getFormId());
-            userResponseData.setQnId(userResponseUpdate.getQnId());
             userResponseData.setQuestionResponse(userResponseUpdate.getQuestionResponse());
             userResponseRepo.save(userResponseData);
         }
