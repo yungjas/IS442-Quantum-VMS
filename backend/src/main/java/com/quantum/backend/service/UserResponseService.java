@@ -69,14 +69,27 @@ public class UserResponseService {
         return formData;
     }
 
-    public UserResponse createUserResponse(UserResponse userResponse) throws RequestErrorException{
-        try{
-            userResponseRepo.save(userResponse);
+    public UserResponse createUserResponse(UserResponse userResponse) throws RequestErrorException, ResourceNotFoundException{
+        Optional<Form> formData = formRepository.findById(userResponse.getFormId());
+        if (formData.isPresent()) {
+            Form form = formData.get();
+            // only allow saving of form responses if form is not a template
+            if (form.isTemplate() == false) {
+                try {
+                    userResponseRepo.save(userResponse);
+                    return userResponse;
+                } 
+                catch (Exception e) {
+                    throw new RequestErrorException("create", "UserResponse", e.getMessage());
+                }
+            } 
+            else {
+                throw new RequestErrorException("create", "UserResponse", "Cannot save form responses of a form template");
+            }
+        } 
+        else {
+            throw new ResourceNotFoundException("Form", "formId", userResponse.getFormId());
         }
-        catch(Exception e){
-            throw new RequestErrorException("create", "UserResponse", e.getMessage());
-        }
-        return userResponse;
     }
     
     public UserResponse updateUserResponse(String userResponseId, UserResponse userResponseUpdate) throws ResourceNotFoundException, RequestErrorException{
