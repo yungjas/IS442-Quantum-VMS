@@ -1,21 +1,20 @@
 <template>
     <div>
         <img src="../assets/quantum-leap-incorporation2.jpg">
-        <form @submit.prevent="login()">
-            <label for="emailInput">Email</label>
+        <form @submit.prevent="login()" id="loginForm">
+            <label for="emailInput" class="loginLabel">Email</label>
             <div class="mb-4">
-                <input type="text" v-model="email" id="emailInput"/>
+                <input type="text" v-model="email" class="loginInput"/>
             </div>
-            <label>Password</label>
+            <label class="loginLabel">Password</label>
             <div class="mb-4">
-                
-                <input type="password" v-model="password"/>
+                <input type="password" v-model="password" class="loginInput"/>
                 <!-- <br>
                 {{ email }} 
                 <br>
                 {{  password }} -->
             </div>
-            <button class="btn btn-primary">Login</button>
+            <button id="loginBtn" class="btn btn-primary">Login</button>
         </form>
         <!-- <button @click="logout">Logout</button> -->
     </div>
@@ -88,21 +87,21 @@ export default{
 }
 </script>
 <style>
-    form{
+    #loginForm{
         margin-top: 3em;
     }
 
-    label {
+    .loginLabel{
         display: inline-block;
         width: 25%;
         text-align: left;
     }
 
-    input{
+    .loginInput{
         width: 25%;
     }
     
-    button{
+    #loginBtn{
         margin-top: 2em;
     }
 </style>
