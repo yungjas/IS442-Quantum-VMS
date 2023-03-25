@@ -68,14 +68,14 @@
                             <input type=date v-model="lastEdited" style="width: 100%">
                         </td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td>
                             <label>Date Submitted</label>
                         </td>
                         <td>
                             <input type=date v-model="dateSubmitted" style="width: 100%">
                         </td>
-                    </tr>
+                    </tr> -->
                     <tr>
                         <td>
                             <label>Questions</label>
@@ -141,13 +141,13 @@
                         <td>Question Selection Name (Group):</td>
                         <td><input type=text v-model="questionSectionName"></td>
                     </tr>
-                    <tr v-if="questionType !== 'text'">
-                        <td>Answer Choices:</td>
+                    <tr>
+                        <td v-if="questionType !== 'text'" class="controls">Answer Choices:</td>
                         <td>
                             <div id="answers">
 
                             </div>
-                            <div class="controls">
+                            <div v-if="questionType !== 'text'" class="controls">
                                 
                                 <button type="button" id="add_more_fields" class="btn btn-primary" @click="addAnswer">Add Answers</button>
                                 <button type="button" id="remove_fields" class="btn btn-warning" @click="removeAnswer">Remove Answers</button>
@@ -246,8 +246,9 @@ export default {
                 json += "\"formNo\": \"" + this.formNo + "\",";
                 json += "\"formName\": \"" + this.formName + "\",";
                 json += "\"revisionNo\": \"" + this.revisionNo + "\",";
-                json += "\"lastEdited\": \"" + this.formatDate(this.lastEdited) + "\",";
-                json += "\"dateSubmitted\": \"" + this.formatDate(this.dateSubmitted) + "\",";
+                json += "\"lastEdited\": \"" + this.formatDate(this.lastEdited) + "\",";            
+                json += "\"template\": " + true + ",";
+
                 json += "\"questions\": [";
                 for(var i = 0; i < this.selectedQuestion.length; i++)
                 {
@@ -264,11 +265,17 @@ export default {
                 }
                 json += "]}";
 
+                console.log("==================================");
+
+                console.log(json);
+
                 json = JSON.parse(json);
                 
                 console.log(json);
 
-                axios.post("http://localhost:8080/api/forms/create", json, {
+                console.log("==================================");
+
+                axios.post("http://localhost:8080/api/forms/create_template", json, {
                                 headers:{
                                     "Content-Type": "application/json",
                                     "Authorization": "Bearer " + localStorage.token,
