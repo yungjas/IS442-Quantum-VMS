@@ -1,21 +1,23 @@
 <template>
     <div>
+        <img src="../assets/quantum-leap-incorporation2.jpg">
         <form @submit.prevent="login()">
-            <div>
-                <labeL>Email</labeL>
-                <input type="text" v-model="email"/>
+            <label for="emailInput">Email</label>
+            <div class="mb-4">
+                <input type="text" v-model="email" id="emailInput"/>
             </div>
-            <div>
-                <labeL>Password</labeL>
+            <label>Password</label>
+            <div class="mb-4">
+                
                 <input type="password" v-model="password"/>
-                <br>
+                <!-- <br>
                 {{ email }} 
                 <br>
-                {{  password }}
+                {{  password }} -->
             </div>
-            <button>Login</button>
+            <button class="btn btn-primary">Login</button>
         </form>
-        <button @click="logout">Logout</button>
+        <!-- <button @click="logout">Logout</button> -->
     </div>
 </template>
 
@@ -46,17 +48,16 @@ export default{
             .then((response) => 
             {
                 console.log(response);
-                localStorage.token = response.data.token;
                 
                 if(response.status == 200)
                 {
-
+                    localStorage.token = response.data.token;
                     axios.get("http://localhost:8080/api/users/" + response.data.userId,
                     {
                         headers:{
                             "Content-Type": "application/json",
                             "Access-Control-Allow-Origin": "*",
-                            "Authorization": "Bearer " + response.data.token,
+                            "Authorization": "Bearer " + localStorage.token,
                         },
                     }
                     )
@@ -67,80 +68,41 @@ export default{
                         {
                             // //Replace the following with router.push
                             localStorage.userType = response.data.userType;
-                             // suggestion 1 - get user detail and store it in localstorage
-                            // so that u don't have to call login in UpdateAccount.vue again
-                            // axios.get("http://localhost:8080/api/users/" + response.data.userId, 
-                            // {
-                            //     headers:{
-                            //         "Content-Type": "application/json",
-                            //         "Access-Control-Allow-Origin": "*",
-                            //         "Authorization": "Bearer " + localStorage.token
-                            //     },
-                            // })
-                            // .then((response_user) => {
-                            //     console.log(response_user)
-                            // })
                             localStorage.data = JSON.stringify(response.data);
                             
-
                             this.$router.push({ name: 'Home'})      
 
-                            // // testing if localStorage works
-                            // // axios.get("http://localhost:8080/api/users/all", {
-                            // //     headers:{
-                            // //         "Content-Type": "application/json",
-                            // //         "Authorization": "Bearer " + localStorage.token,
-                            // //         "Access-Control-Allow-Origin": "*",
-                            // //     }
-                            // // })
-                            // // .then((response_users) => {
-                            // //     console.log(response_users);
-                            // // })
-
                         }
-                    });
-                    
-                    // localStorage.token = response.data.token;
-                    
-                    // // this.$router.push('/');
-
-                    // //Replace the following with router.push
-                    // localStorage.userType = response.data.userType;
-                    // localStorage.data = JSON.stringify(response.data);
-
-                    // this.$router.push({ name: 'Home'})      
-
-                    // // testing if localStorage works
-                    // // axios.get("http://localhost:8080/api/users/all", {
-                    // //     headers:{
-                    // //         "Content-Type": "application/json",
-                    // //         "Authorization": "Bearer " + localStorage.token,
-                    // //         "Access-Control-Allow-Origin": "*",
-                    // //     }
-                    // // })
-                    // // .then((response_users) => {
-                    // //     console.log(response_users);
-                    // // })
-
+                    })
                 }
+            })
+            .catch((error) => {
+                console.log(error);
+                alert("Wrong credentials, please try again")
             });
         },
-
         logout: function(){
             localStorage.clear();
-
-            // testing if logout works
-            // axios.get("http://localhost:8080/api/users/all", {
-            //     headers:{
-            //         "Content-Type": "application/json",
-            //         "Authorization": "Bearer " + localStorage.token,
-            //         "Access-Control-Allow-Origin": "*",
-            //     }
-            //     })
-            //     .then((response_users) => {
-            //         console.log(response_users);
-            //     })
         }
     }
 }
 </script>
+<style>
+    form{
+        margin-top: 3em;
+    }
+
+    label {
+        display: inline-block;
+        width: 25%;
+        text-align: left;
+    }
+
+    input{
+        width: 25%;
+    }
+    
+    button{
+        margin-top: 2em;
+    }
+</style>
