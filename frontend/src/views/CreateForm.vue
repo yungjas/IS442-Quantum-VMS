@@ -90,6 +90,8 @@
                                 <b>Question Section Name:</b> <label>{{ question.questionSectionName }}</label><br> &emsp;&nbsp;
                                 <b>Answer Choices:</b> <label>{{ question.answerChoices }}</label><br> &emsp;&nbsp;
                                 <b>Required:</b> <label>{{ question.required }}</label><br>
+                                <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)">Delete</button>
+                                <br><br>
                                 ================================
                             </div>
                             
@@ -349,6 +351,30 @@ export default {
             console.log("add question");  
             this.answerArray = document.getElementById('answers');
             console.log(this.answerArray);
+        },
+        deleteQuestion(questionId)
+        {
+            console.log("delete question: " + questionId);
+
+            axios.delete("http://localhost:8080/api/form-builder/delete/" + questionId, {
+                    headers:{
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + localStorage.token,
+                        "Access-Control-Allow-Origin": "*",
+                    }
+                })
+                .then((response) => {
+                    console.log(response.status);
+                    if(response.status == 200)
+                    {
+                        alert("Question deleted successfully");
+                        this.getQuestionsData();
+                    }
+                    else
+                    {
+                        alert("Err: question deletion failed");
+                    }
+                })            
         },
         addNewQuestion()
         {
