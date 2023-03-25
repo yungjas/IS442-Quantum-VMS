@@ -1,6 +1,6 @@
 <template>
     <div>
-        <img src="../assets/quantum-leap-incorporation2.jpg">
+        <img src="../assets/quantum-leap-incorporation2.jpg" style="marginTop: 5em;">
         <form @submit.prevent="login()" id="loginForm">
             <label for="emailInput" class="loginLabel">Email</label>
             <div class="mb-4">
@@ -51,6 +51,7 @@ export default{
                 if(response.status == 200)
                 {
                     localStorage.token = response.data.token;
+                    localStorage.user = JSON.stringify(response.data);
                     axios.get("http://localhost:8080/api/users/" + response.data.userId,
                     {
                         headers:{
