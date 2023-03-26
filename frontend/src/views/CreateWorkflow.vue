@@ -34,7 +34,7 @@
                 <label for="forms">Select Forms:</label>
               </td>
               <td>
-                <select v-model="selectedForms" id="form" style="width: 50%" multiple>
+                <select v-model="selectedForms" id="form" style="width: 50%">
                   <option v-for="form in this.allForms" :key="form.formId" :value="form">
                     {{ form.formName }}
                   </option>
@@ -114,7 +114,7 @@
       name: "CreateWorkflow",
       data() {
         return {
-          data: JSON.parse(localStorage.createWorkflow),
+          data: {},
           userType: localStorage.userType,
           workflowName: "",
           deadline: "",
@@ -145,11 +145,13 @@
           this.selectedVendors = [];
         },
         createWorkflow() {
-          console.log(this.data);
+          this.data.workflowName = this.workflowName;
+          this.data.deadline = this.deadline;
           this.data.assignedUsers = this.selectedUsers;
           this.data.assignedVendors = this.selectedVendors;
           this.data.assignedAdmins = this.selectedAdmins;
           this.data.form = this.selectedForms;
+          console.log(this.data);
           axios
             .post(
               "http://localhost:8080/api/workflow/create",
@@ -210,10 +212,6 @@
       try {
         this.getAllUsers();
         this.getAllForms();
-        this.selectedUsers = this.data.assignedUsers;
-        this.selectedForms = this.data.form;
-        this.selectedAdmins = this.data.assignedAdmins;
-        this.selectedVendors = this.data.assignedVendors;
         console.log(" on create workflow page");
       } catch (e) {
         if (e instanceof SyntaxError) {
