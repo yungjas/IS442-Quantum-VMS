@@ -20,14 +20,14 @@ export default {
   </div>
 </template>
 
-<script>
+<!-- <script>
 import Navbar from "./components/NavBar.vue"
 
 export default ({
   components: {Navbar}
 })
 
-</script>
+</script> -->
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -37,7 +37,7 @@ export default ({
   color: #2c3e50;
 }
 
-#nav {
+/* #nav {
   padding: 30px;
 }
 
@@ -48,7 +48,7 @@ export default ({
 
 #nav a.router-link-exact-active {
   color: #42b983;
-}
+} */
 
 
 

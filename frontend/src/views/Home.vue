@@ -2,11 +2,11 @@
   <!-- NOTE, this is temporary, nav bar should be coded into App.vue as a template across site -->
   <div>
     <h1>Welcome back, {{ username }}</h1>
-    <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
-      <div class="btn-group" role="currentUser" >
+    <!-- <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
+      <div class="btn-group" role="currentUser" > -->
         <!-- <button type="button" class="btn btn-secondary" @click="home">Home</button>
         <button type="button" class="btn btn-secondary" @click="about">About</button> -->
-        <button type="button" class="btn btn-secondary" @click="updateAccount">Update My Account</button>
+        <!-- <button type="button" class="btn btn-secondary" @click="updateAccount">Update My Account</button>
         <button type="button" class="btn btn-secondary" @click="sendEmail">Send Email</button>
         <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
       </div>
@@ -31,83 +31,10 @@
         <button type="button" class="btn btn-secondary">View/Update/Delete</button>
         <button type="button" class="btn btn-secondary" @click="createForm">Create</button>
       </div>
-    </div>
+     </div> -->
 
-  <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
-    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#"> Welcome back, {{ username }}</a>
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-
-      <li class="nav-item active">
-        <a class="nav-link" href="../">Home </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="/about">About</a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="/updateAccount">Update Account</a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="/sendEmail">Send Email</a>
-      </li>
-
-    </ul>
-
-      <span class="nav-item">
-        <a class="nav-link" href="/login">Logout</a>
-      </span>
-
-      
-    
-
-      </div>
-    </nav> -->
-
-    <br><br>
-    User Management
-    <br>
-    <div class="btn-group" role="userGroup" >
-      <button type="button" class="btn btn-secondary" @click="viewUser">View/Update/Delete</button>
-      <button type="button" class="btn btn-secondary" @click="createUser">Create</button>
-    </div>
-    <br><br>
-    Workflow Management (Not coded yet)
-    <br>
-    <div class="btn-group" role="workflowGroup">
-      <button type="button" class="btn btn-secondary">View/Update/Delete</button>
-      <button type="button" class="btn btn-secondary">Create</button>
-    </div>
-    <br><br>
-    Form Management (Not coded yet)
-    <br>
-    <div class="btn-group" role="formGroup">
-      <button type="button" class="btn btn-secondary">View/Update/Delete</button>
-      <button type="button" class="btn btn-secondary" @click="createForm">Create</button>
-    </div>
-  </div>
-  <div v-else-if="userType === 'ROLE_VENDOR'">
-    <div class="btn-group" role="currentUser" >
-      <button type="button" class="btn btn-secondary" @click="home">Home</button>
-      <button type="button" class="btn btn-secondary" @click="about">About</button>
-      <button type="button" class="btn btn-secondary" @click="viewAccount">View My Account</button>
-      <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
-    </div>
-    <br><br>
-    Workflow (Not coded yet)
-    <br>
-    <div class="btn-group" role="workflowGroup" >
-      <button type="button" class="btn btn-secondary">View</button>
-    </div>
-  </div>
+</div>
 
 </template>
 <script>

@@ -16,7 +16,7 @@ export default {
             <span v-if="collapsed">
                 <img style= "width:50px;height:55px" src ="../../assets/quantum-logo.png">
             </span>
-            <img v-else style= "width:160px;height:60px" src ="../../assets/quantum-leap-incorporation-rectangular.jpg">
+            <img v-else style= "width:165px;height:60px" src ="../../assets/quantum-leap-incorporation-rectangular.jpg">
         </h1>
         
         <SidebarLink to="./" icon="fa-solid fa-house"> Home </SidebarLink>
