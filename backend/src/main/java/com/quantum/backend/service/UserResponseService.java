@@ -46,6 +46,51 @@ public class UserResponseService {
         return userResponseData;
     }
 
+    // get a user's responses to a form
+    public Map<String, Object> getFormResponse(String userId, String formId){
+        List<UserResponse> userResponses = userResponseRepo.findFormResponse(userId, formId);
+        
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> formData = new HashMap<>();
+        Map<String, Object> userData = new HashMap<>();
+        List<Object> qnResponseInfoList = new ArrayList<>();
+
+        for(UserResponse response: userResponses){
+            Map<String, Object> qnData = new HashMap<>();
+            User user = userRepository.findById(response.getUserId()).get();
+            Form form = formRepository.findById(response.getFormId()).get();
+            Question question = formBuilderRepository.findById(response.getQnId()).get();
+            
+            if(!result.containsKey("user")){
+                userData.put("userId", user.getUserId());
+                userData.put("username", user.getUsername());
+                userData.put("email", user.getEmail());
+                result.put("user", userData);
+            }
+
+            if(!result.containsKey("form")){
+                formData.put("formId", form.getFormId());
+                formData.put("formNo", form.getFormNo());
+                formData.put("formName", form.getFormName());
+                formData.put("revisionNo", form.getRevisionNo());
+                formData.put("lastEdited", form.getLastEdited());
+                formData.put("dateSubmitted", form.getDateSubmitted());
+                result.put("form", formData);
+            }
+
+            qnData.put("questionId", question.getQuestionId());
+            qnData.put("questionText", question.getQuestionText());
+            qnData.put("questionType", question.getQuestionType());
+            qnData.put("answerChoices", question.getAnswerChoices());
+            qnData.put("questionResponse", response.getQuestionResponse());
+            qnResponseInfoList.add(qnData);
+
+            result.put("questionResponseInfo", qnResponseInfoList);
+        }
+
+        return result;
+    }
+
     // getting all forms and questions that the user has responded to
     public List<Object> getFormQuestionResponses(String userId){
         List<UserResponse> userResponses = userResponseRepo.findResponsesByUserId(userId);

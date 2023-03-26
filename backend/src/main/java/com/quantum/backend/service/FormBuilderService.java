@@ -44,12 +44,15 @@ public class FormBuilderService {
 
         if(!question.isPresent()){
             throw new ResourceNotFoundException("Question", "questionId", questionId);
-        } try {
+        } 
+        try {
             questionData = question.get();
-            questionData.setAnswerChoices(questionUpdate.getAnswerChoices());
             questionData.setQuestionText(questionUpdate.getQuestionText());
             questionData.setQuestionType(questionUpdate.getQuestionType());
+            questionData.setQuestionSectionName(questionUpdate.getQuestionSectionName());
+            questionData.setAnswerChoices(questionUpdate.getAnswerChoices());
             questionData.setRequired(questionUpdate.isRequired());
+            questionData.setAnswerChoices(questionUpdate.getAnswerChoices());
             formBuilderRepo.save(questionData);
         } catch(Exception e){
             throw new RequestErrorException("update", "Question", e.getMessage());
