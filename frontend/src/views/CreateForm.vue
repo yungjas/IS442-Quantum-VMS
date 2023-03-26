@@ -88,7 +88,11 @@
                                 <b>Question Text:</b> <label>{{ question.questionText }}</label><br> &emsp;&nbsp;
                                 <b>Question Type:</b> <label>{{ question.questionType }}</label><br> &emsp;&nbsp;
                                 <b>Question Section Name:</b> <label>{{ question.questionSectionName }}</label><br> &emsp;&nbsp;
-                                <b>Answer Choices:</b> <label>{{ question.answerChoices }}</label><br> &emsp;&nbsp;
+                                <b>Answer Choices:</b> <br><label v-for="choices in question.answerChoices" :key="choices">
+                                    <label v-for="v,k in choices" :key="k">
+                                        &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br>
+                                    </label>
+                                    </label><br> &emsp;&nbsp;
                                 <b>Required:</b> <label>{{ question.required }}</label><br>
                                 <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)">Delete</button>
                                 <br><br>
