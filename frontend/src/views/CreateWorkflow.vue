@@ -34,7 +34,7 @@
                 <label for="forms">Select Forms:</label>
               </td>
               <td>
-                <select v-model="selectedForms" id="form" style="width: 50%">
+                <select v-model="displayedForms" id="form" style="width: 50%">
                   <option v-for="form in this.allForms" :key="form.formId" :value="form">
                     {{ form.formName }}
                   </option>
@@ -118,14 +118,14 @@
           userType: localStorage.userType,
           workflowName: "",
           deadline: "",
-          allForms: [],
           selectedForms:{},
           allUsers:[],
           selectedUsers: [],
           allAdmins: [],
           allVendors: [],
           selectedAdmins: [],
-          selectedVendors: []
+          selectedVendors: [],
+          displayedForms: []
         };
       },
       methods: {
@@ -203,8 +203,13 @@
                 "Access-Control-Allow-Origin": "*",
               },
             }).then((response) => {
-              this.allForms = response.data
-              console.log(this.allForms[0])
+              for (let form of response.data){
+                console.log(form);
+                if (form.isTemplate == true){
+                  this.displayedForms.push(form);
+                }
+              }
+              
             })
         }
       },
