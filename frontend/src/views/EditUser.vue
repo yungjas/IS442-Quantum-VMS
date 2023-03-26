@@ -1,6 +1,6 @@
 <template>
     <div class="createUser">
-        <h1>Update user account</h1>
+        <h1>Update my account</h1>
         <!-- <div class="btn-group" role="currentUser" >
             <button type="button" class="btn btn-secondary" @click="home">Home</button>
             <button type="button" class="btn btn-secondary" @click="logout">Logout</button>

@@ -53,6 +53,7 @@ public class FormBuilderService {
             questionData.setAnswerChoices(questionUpdate.getAnswerChoices());
             questionData.setRequired(questionUpdate.isRequired());
             questionData.setAnswerChoices(questionUpdate.getAnswerChoices());
+            formBuilderRepo.save(questionData);
         } catch(Exception e){
             throw new RequestErrorException("update", "Question", e.getMessage());
         }

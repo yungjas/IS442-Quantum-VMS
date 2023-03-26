@@ -2,11 +2,11 @@
   <!-- NOTE, this is temporary, nav bar should be coded into App.vue as a template across site -->
   <div>
     <h1>Welcome back, {{ username }}</h1>
-    <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
-      <div class="btn-group" role="currentUser" >
+    <!-- <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
+      <div class="btn-group" role="currentUser" > -->
         <!-- <button type="button" class="btn btn-secondary" @click="home">Home</button>
         <button type="button" class="btn btn-secondary" @click="about">About</button> -->
-        <button type="button" class="btn btn-secondary" @click="updateAccount">Update My Account</button>
+        <!-- <button type="button" class="btn btn-secondary" @click="updateAccount">Update My Account</button>
         <button type="button" class="btn btn-secondary" @click="sendEmail">Send Email</button>
         <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
       </div>
@@ -31,23 +31,11 @@
         <button type="button" class="btn btn-secondary">View/Update/Delete</button>
         <button type="button" class="btn btn-secondary" @click="createForm">Create</button>
       </div>
-    </div>
+     </div> -->
 
-    <div v-else-if="userType === 'ROLE_VENDOR'">
-      <div class="btn-group" role="currentUser" >
-        <!-- <button type="button" class="btn btn-secondary" @click="home">Home</button>
-        <button type="button" class="btn btn-secondary" @click="about">About</button> -->
-        <button type="button" class="btn btn-secondary" @click="viewAccount">View My Account</button>
-        <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
-      </div>
-      <br><br>
-      Workflow (Not coded yet)
-      <br>
-      <div class="btn-group" role="workflowGroup" >
-        <button type="button" class="btn btn-secondary">View assigned workflow</button>
-      </div>
-    </div>
-  </div>
+
+</div>
+
 </template>
 <script>
 // @ is an alias to /src

@@ -1,22 +1,33 @@
+<script>
+import Sidebar from '@/components/sidebar/Sidebar'
+import { sidebarWidth } from '@/components/sidebar/state'
+
+export default {
+  components: { Sidebar },
+  setup() {
+    return { sidebarWidth }
+  }
+}
+
+</script>
+
 <template>
-  <!-- <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-    
-    
-  </div> -->
-  <Navbar :page="home"></Navbar>
-  <router-view/>
+  
+  <Sidebar />
+
+  <div :style="{'margin-left':sidebarWidth }">
+    <router-view/>
+  </div>
 </template>
 
-<script>
+<!-- <script>
 import Navbar from "./components/NavBar.vue"
 
 export default ({
   components: {Navbar}
 })
 
-</script>
+</script> -->
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -26,7 +37,7 @@ export default ({
   color: #2c3e50;
 }
 
-#nav {
+/* #nav {
   padding: 30px;
 }
 
@@ -37,5 +48,8 @@ export default ({
 
 #nav a.router-link-exact-active {
   color: #42b983;
-}
+} */
+
+
+
 </style>

@@ -2,8 +2,8 @@
     <div class="updateAccount">
         <h1>View my account</h1>
         <div class="btn-group" role="currentUser" >
-            <button type="button" class="btn btn-secondary" @click="home">Home</button>
-            <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
+            <!-- <button type="button" class="btn btn-secondary" @click="home">Home</button>
+            <button type="button" class="btn btn-secondary" @click="logout">Logout</button> -->
         </div>
         <br><br>
 

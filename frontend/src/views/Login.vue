@@ -1,23 +1,34 @@
 <template>
     <div>
-        <img src="../assets/quantum-leap-incorporation2.jpg" style="marginTop: 5em;">
-        <form @submit.prevent="login()" id="loginForm">
-            <label for="emailInput" class="loginLabel">Email</label>
-            <div class="mb-4">
-                <input type="text" v-model="email" class="loginInput"/>
-            </div>
-            <label class="loginLabel">Password</label>
-            <div class="mb-4">
-                <input type="password" v-model="password" class="loginInput"/>
-                <!-- <br>
-                {{ email }} 
+   
+            <form text-align="center" @submit.prevent="login()">
+                
+                <img style="width:300px;height:300px" src= "../assets/quantum-leap-incorporation.jpg">
+                
+                <div>
+                    <input type="text" placeholder="Email" v-model="email"/>
+                </div>
+
                 <br>
-                {{  password }} -->
-            </div>
-            <button id="loginBtn" class="btn btn-primary">Login</button>
-        </form>
-        <!-- <button @click="logout">Logout</button> -->
-    </div>
+
+                <div>
+                    
+                    <input type="password" placeholder="Password" v-model="password"/>
+                    <br>
+                    {{ email }} 
+                    <br>
+                    {{  password }}
+                </div>
+                <button style="width: 200px" class="btn btn-primary">Login</button>
+            
+                <br><br>
+
+                <button style="width: 200px" class="btn btn-secondary" @click="logout">Logout</button>
+                <br><br>
+                
+            </form>
+        </div>
+  
 </template>
 
 <script>
