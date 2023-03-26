@@ -114,6 +114,7 @@
       name: "CreateWorkflow",
       data() {
         return {
+          data: JSON.parse(localStorage.createWorkflow),
           userType: localStorage.userType,
           workflowName: "",
           deadline: "",
