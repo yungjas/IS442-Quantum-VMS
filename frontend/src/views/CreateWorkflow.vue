@@ -163,9 +163,9 @@
           });
         }
       },
-      resetWorkflow: function () {
-        this.data = {};
-      },
+      // resetWorkflow: function () {
+      //   this.data = {};
+      // },
       addStep: function () {
         this.data.steps.push({
           name: "",
