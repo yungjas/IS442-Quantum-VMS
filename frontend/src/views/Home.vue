@@ -2,7 +2,7 @@
   <!-- NOTE, this is temporary, nav bar should be coded into App.vue as a template across site -->
 
   <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#"> Welcome back, {{ username }}</a>
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@
     
 
       </div>
-    </nav>
+    </nav> -->
 
     <br><br>
     User Management
