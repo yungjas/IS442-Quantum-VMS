@@ -2,6 +2,7 @@ package com.quantum.backend.model;
 import java.util.*;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
@@ -23,5 +24,8 @@ public class Question {
     private List<QuestionInput> answerChoices;
     
     private boolean isRequired;
+
+    // @DBRef
+    // private List<UserResponse> userResponses;
 }
 
