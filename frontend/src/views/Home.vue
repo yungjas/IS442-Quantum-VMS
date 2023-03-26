@@ -4,8 +4,8 @@
     <h1>Welcome back, {{ username }}</h1>
     <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
       <div class="btn-group" role="currentUser" >
-        <button type="button" class="btn btn-secondary" @click="home">Home</button>
-        <button type="button" class="btn btn-secondary" @click="about">About</button>
+        <!-- <button type="button" class="btn btn-secondary" @click="home">Home</button>
+        <button type="button" class="btn btn-secondary" @click="about">About</button> -->
         <button type="button" class="btn btn-secondary" @click="updateAccount">Update My Account</button>
         <button type="button" class="btn btn-secondary" @click="sendEmail">Send Email</button>
         <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
@@ -35,8 +35,8 @@
 
     <div v-else-if="userType === 'ROLE_VENDOR'">
       <div class="btn-group" role="currentUser" >
-        <button type="button" class="btn btn-secondary" @click="home">Home</button>
-        <button type="button" class="btn btn-secondary" @click="about">About</button>
+        <!-- <button type="button" class="btn btn-secondary" @click="home">Home</button>
+        <button type="button" class="btn btn-secondary" @click="about">About</button> -->
         <button type="button" class="btn btn-secondary" @click="viewAccount">View My Account</button>
         <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
       </div>

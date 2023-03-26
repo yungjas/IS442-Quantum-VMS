@@ -1,28 +1,28 @@
 <template>
     <div class="createUser">
-        <h1>Update my account</h1>
-        <div class="btn-group" role="currentUser" >
+        <h1>Update user account</h1>
+        <!-- <div class="btn-group" role="currentUser" >
             <button type="button" class="btn btn-secondary" @click="home">Home</button>
             <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
-        </div>
+        </div> -->
         <br><br>
         <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
-            <table class="table">
+            <table class="table table-borderless">
                 <tbody>
                     <tr v-for="(v, k) in data" :key="k.userid">
-                        <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><label>{{ k }}</label></td>
-                        <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><input type=text v-bind:id="k" v-bind:value="v" style="width: 100%"></td>                    
+                        <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><label>{{ k.toUpperCase() }}</label></td>
+                        <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><input type=text v-bind:id="k" v-bind:value="v" style="width: 80%"></td>                    
                     </tr>
                     <tr>
-                        <td><label>Password</label></td>
+                        <td><label>PASSWORD</label></td>
                         <td>
-                            <input type="password" id="password" v-model="password" style="width: 100%" placeholder="Enter current password to confirm changes">
+                            <input type="password" id="password" v-model="password" style="width: 80%" placeholder="Enter current password to confirm changes">
                         </td>
                     </tr>
                     <tr>
-                        <td><label>[Optional]<br>Change Password</label></td>
+                        <td><label>[Optional]<br>CHANGE PASSWORD</label></td>
                         <td>
-                            <input type="password" id="changePassword" v-model="changePassword" style="width: 100%" placeholder="Only enter password here if you want to change password">
+                            <input type="password" id="changePassword" v-model="changePassword" style="width: 80%" placeholder="Only enter password here if you want to change password">
                         </td>
                     </tr>                        
                 </tbody>
@@ -34,9 +34,9 @@
             </div>
         </div>
     </div>
-    </template>
+</template>
     
-    <script>
+<script>
     import axios from "axios";
         // @ is an alias to /src
         //import HelloWorld from '@/components/HelloWorld.vue'
@@ -202,5 +202,5 @@
             }
         },
     }
-    </script>
+</script>
     

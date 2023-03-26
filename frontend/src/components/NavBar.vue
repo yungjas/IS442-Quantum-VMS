@@ -4,12 +4,16 @@
             <img src="../assets/quantum-leap-incorporation2.jpg" class="p-2 m-2" id="navLogo">
         </a>
 
-        <div class="d-flex flex-row-reverse p-3 m-3">
+        <div class="d-flex flex-row-reverse p-3 m-2">
             <div class="d-flex flex-column p-2">
               <div>{{user.username}}</div>
+              <a href="javascript:void(0)" @click="logout">Logout</a>
             </div>
-            <a href="/updateaccount">
-                <img src="../assets/user.png" class="mx-2" width="40" height="40">  
+            <a href="/updateaccount" v-if="user.userType === 'ROLE_ADMIN'">
+                <img src="../assets/user.png" width="40" height="40">  
+            </a>
+            <a href="/viewaccount" v-if="user.userType === 'ROLE_VENDOR'">
+                <img src="../assets/user.png" width="40" height="40">  
             </a>
         </div>
     </div>
@@ -35,6 +39,12 @@ export default {
             else{
                 this.loggedIn = false
             }   
+        }
+    },
+    methods: {
+        logout: function() {
+            localStorage.clear()
+            this.$router.push("/login")
         }
     }
 }
