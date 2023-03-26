@@ -43,21 +43,19 @@ public class ScheduledService {
     public void sendApprovedEmail(){
         List<Workflow> allWorkflows = workflowService.getAllWorkflows();
         String subject = "Form Approved";
-        boolean test = true; // for testing purposes
 
         for(Workflow wf: allWorkflows){
-            if(test){ // must check if form is approved by getting approvedBy which holds a user object
-                //String text = String.format("%s has been approved", wf.getForm().getFormName());
-                String testText = String.format("%s has been approved", "form 1"); // for testing purposes
+            if(wf.getForm().getApprovedBy() != null){
+                String text = String.format("%s has been approved", wf.getForm().getFormName());
                 if(wf.getAssignedUsers() != null){
-                    processEmail(wf.getAssignedUsers(), subject, testText);
+                    processEmail(wf.getAssignedUsers(), subject, text);
                 }
             }
         }
     }
 
-    private void processEmail(List<User> assignedUsers, String subject, String text){
-        for(User user: assignedUsers){
+    private void processEmail(List<User> users, String subject, String text){
+        for(User user: users){
             SendEmailRequest emailReminder = new SendEmailRequest(user.getEmail(), subject, text);
             emailService.sendSimpleEmail(emailReminder);
         }

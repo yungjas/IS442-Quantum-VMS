@@ -1,6 +1,6 @@
 <template>
     <div class="updateAccount">
-        <h1>Update my account</h1>
+        <h1>View my account</h1>
         <div class="btn-group" role="currentUser" >
             <button type="button" class="btn btn-secondary" @click="home">Home</button>
             <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
@@ -11,18 +11,17 @@
             <table class="table">
                 <tbody>
                     <tr v-for="(v, k) in data" :key="k.userid">
-                        <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><label>{{ k }}</label></td>
+                        <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><label>{{ k.toUpperCase() }}</label></td>
                         <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><input type=text v-bind:id="k" v-bind:value="v" style="width: 100%" readonly></td>                    
                     </tr>                       
                 </tbody>
             </table>
         </div>    
     </div>
-    </template>
+</template>
     
-    <script>    
-        export default 
-        {
+<script>    
+    export default {
         name: 'viewaccount',
         data () {
             return {

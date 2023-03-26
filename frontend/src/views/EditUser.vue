@@ -7,22 +7,28 @@
         </div> -->
         <br><br>
         <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
-            <table class="table">
+            <table class="table table-borderless">
                 <tbody>
                     <tr v-for="(v, k) in data" :key="k.userid">
-                        <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><label>{{ k }}</label></td>
-                        <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><input type=text v-bind:id="k" v-bind:value="v" style="width: 100%"></td>                    
-                    </tr>
-                    <tr>
-                        <td><label>Password</label></td>
-                        <td>
-                            <input type="password" id="password" v-model="password" style="width: 100%" placeholder="Enter current password to confirm changes">
+                        <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><label>{{ k.toUpperCase() }}</label></td>
+                        <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password' && k !== 'userType'"><input type=text v-bind:id="k" v-bind:value="v" style="width: 80%"></td>                    
+                        <td v-else-if="k === 'userType'">
+                            <select class="form-control" v-model="selected" :required="true" @change="changeLocation">
+                                <option :selected="true" id="selectedUserType">{{editUserType}}</option>
+                                <option v-for="userType in userTypes" id="selectedUserType" v-bind:key="userType" v-bind:value="userType">{{ userType }}</option>
+                            </select>
                         </td>
                     </tr>
                     <tr>
-                        <td><label>[Optional]<br>Change Password</label></td>
+                        <td><label>PASSWORD</label></td>
                         <td>
-                            <input type="password" id="changePassword" v-model="changePassword" style="width: 100%" placeholder="Only enter password here if you want to change password">
+                            <input type="password" id="password" style="width: 80%" placeholder="Enter current password to confirm changes">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>[Optional]<br>CHANGE PASSWORD</label></td>
+                        <td>
+                            <input type="password" id="changePassword" style="width: 80%" placeholder="Only enter password here if you want to change password">
                         </td>
                     </tr>                        
                 </tbody>
@@ -34,9 +40,9 @@
             </div>
         </div>
     </div>
-    </template>
+</template>
     
-    <script>
+<script>
     import axios from "axios";
         // @ is an alias to /src
         //import HelloWorld from '@/components/HelloWorld.vue'
@@ -44,11 +50,15 @@
         name: 'UpdateAccount',
         data () {
             return {
+                userTypes: ["ROLE_ADMIN", "ROLE_APPROVER", "ROLE_VENDOR"],
                 data: JSON.parse(localStorage.editUser),
                 userType: localStorage.userType,
+                editUserType: "",
                 email: "",
                 password: "",
                 changePassword: "",
+                selected: "",
+                
             }
         },
         methods: 
@@ -77,8 +87,16 @@
                 // reset the data
                 this.data = JSON.parse(localStorage.data);
             },
+            changeLocation()
+            {
+                // var a  = document.getElementById("selectedUserType").value;
+                console.log(this.selected);
+            },
             updateAccount()
             {
+                this.password = document.getElementById("password").value;
+                this.changePassword = document.getElementById("changePassword").value;
+
                 if(this.password === "")
                 {
                     alert("Please enter your current password to confirm changes");
@@ -106,7 +124,7 @@
                         {
                             console.log(v);
                             
-                            if(v === "tokenType" || v === "token" || v ==="userId" || v === "password")
+                            if(v === "tokenType" || v === "token" || v ==="userId" || v === "password" || v === "userType")
                             {
                                 console.log("NO DATA BECAUSE THIS IS NOT REQUIRED IN BODY");
                                 console.log("====")
@@ -126,6 +144,9 @@
                             console.log("====")
     
                         }
+
+                        
+                        data += '"userType":"' + this.selected + '",';
     
                         if(this.changePassword !== "")
                         {
@@ -200,7 +221,21 @@
             {
                 this.$router.push({name: 'Login'});
             }
+
+            console.log(this.data.userType);
+            this.editUserType = this.data.userType;
+
+            this.selected = this.editUserType;
+            //for i in userTypes
+            for(var i = 0; i < this.userTypes.length; i++)
+            {
+                if(this.userTypes[i] === this.editUserType)
+                {
+                    this.userTypes.splice(i, 1);
+                    break;
+                }
+            }
         },
     }
-    </script>
+</script>
     

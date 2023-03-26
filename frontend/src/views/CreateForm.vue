@@ -68,14 +68,14 @@
                             <input type=date v-model="lastEdited" style="width: 100%">
                         </td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td>
                             <label>Date Submitted</label>
                         </td>
                         <td>
                             <input type=date v-model="dateSubmitted" style="width: 100%">
                         </td>
-                    </tr>
+                    </tr> -->
                     <tr>
                         <td>
                             <label>Questions</label>
@@ -88,8 +88,14 @@
                                 <b>Question Text:</b> <label>{{ question.questionText }}</label><br> &emsp;&nbsp;
                                 <b>Question Type:</b> <label>{{ question.questionType }}</label><br> &emsp;&nbsp;
                                 <b>Question Section Name:</b> <label>{{ question.questionSectionName }}</label><br> &emsp;&nbsp;
-                                <b>Answer Choices:</b> <label>{{ question.answerChoices }}</label><br> &emsp;&nbsp;
+                                <b>Answer Choices:</b> <br><label v-for="choices in question.answerChoices" :key="choices">
+                                    <label v-for="v,k in choices" :key="k">
+                                        &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br>
+                                    </label>
+                                    </label><br> &emsp;&nbsp;
                                 <b>Required:</b> <label>{{ question.required }}</label><br>
+                                <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)">Delete</button>
+                                <br><br>
                                 ================================
                             </div>
                             
@@ -141,13 +147,13 @@
                         <td>Question Selection Name (Group):</td>
                         <td><input type=text v-model="questionSectionName"></td>
                     </tr>
-                    <tr v-if="questionType !== 'text'">
-                        <td>Answer Choices:</td>
+                    <tr>
+                        <td v-if="questionType !== 'text'" class="controls">Answer Choices:</td>
                         <td>
                             <div id="answers">
 
                             </div>
-                            <div class="controls">
+                            <div v-if="questionType !== 'text'" class="controls">
                                 
                                 <button type="button" id="add_more_fields" class="btn btn-primary" @click="addAnswer">Add Answers</button>
                                 <button type="button" id="remove_fields" class="btn btn-warning" @click="removeAnswer">Remove Answers</button>
@@ -246,8 +252,9 @@ export default {
                 json += "\"formNo\": \"" + this.formNo + "\",";
                 json += "\"formName\": \"" + this.formName + "\",";
                 json += "\"revisionNo\": \"" + this.revisionNo + "\",";
-                json += "\"lastEdited\": \"" + this.formatDate(this.lastEdited) + "\",";
-                json += "\"dateSubmitted\": \"" + this.formatDate(this.dateSubmitted) + "\",";
+                json += "\"lastEdited\": \"" + this.formatDate(this.lastEdited) + "\",";            
+                json += "\"template\": " + true + ",";
+
                 json += "\"questions\": [";
                 for(var i = 0; i < this.selectedQuestion.length; i++)
                 {
@@ -264,11 +271,17 @@ export default {
                 }
                 json += "]}";
 
+                console.log("==================================");
+
+                console.log(json);
+
                 json = JSON.parse(json);
                 
                 console.log(json);
 
-                axios.post("http://localhost:8080/api/forms/create", json, {
+                console.log("==================================");
+
+                axios.post("http://localhost:8080/api/forms/create_template", json, {
                                 headers:{
                                     "Content-Type": "application/json",
                                     "Authorization": "Bearer " + localStorage.token,
@@ -342,6 +355,30 @@ export default {
             console.log("add question");  
             this.answerArray = document.getElementById('answers');
             console.log(this.answerArray);
+        },
+        deleteQuestion(questionId)
+        {
+            console.log("delete question: " + questionId);
+
+            axios.delete("http://localhost:8080/api/form-builder/delete/" + questionId, {
+                    headers:{
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + localStorage.token,
+                        "Access-Control-Allow-Origin": "*",
+                    }
+                })
+                .then((response) => {
+                    console.log(response.status);
+                    if(response.status == 200)
+                    {
+                        alert("Question deleted successfully");
+                        this.getQuestionsData();
+                    }
+                    else
+                    {
+                        alert("Err: question deletion failed");
+                    }
+                })            
         },
         addNewQuestion()
         {
