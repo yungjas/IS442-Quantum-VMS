@@ -3,6 +3,7 @@ package com.quantum.backend.service;
 import java.util.*;
 import java.util.Optional;
 
+import com.quantum.backend.exception.RequestErrorException;
 import com.quantum.backend.exception.ResourceNotFoundException;
 import com.quantum.backend.model.*;
 
@@ -58,8 +59,13 @@ public class WorkflowService {
         return userWorkflows;
     }
 
-    public Workflow createWorkflow(Workflow workflow){
-        workflowRepo.save(workflow);
+    public Workflow createWorkflow(Workflow workflow) throws RequestErrorException {
+        try {
+            workflowRepo.save(workflow);
+        } catch (Exception e) {
+            throw new RequestErrorException("create", "workflow", e.getMessage());
+        }
+
         return workflow;
     }
 

@@ -59,7 +59,7 @@ public class WorkflowController {
                return new ResponseEntity<>(createdWorkflow, HttpStatus.OK);
            }
            return new ResponseEntity<>(HttpStatus.CONFLICT);
-       } catch (Exception e) {
+       } catch (Exception e) {;
            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
        }
    }
