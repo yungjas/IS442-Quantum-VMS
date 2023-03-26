@@ -90,6 +90,15 @@ public class FormController {
         return new ResponseEntity<>(allForms, HttpStatus.OK);
     }
 
+    @GetMapping("all/templates")
+    public ResponseEntity<List<Form>> getAllTemplateForms() {
+        List<Form> allTemplateForms = formService.getAllTemplateForms();
+        if (allTemplateForms.size() == 0) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(allTemplateForms, HttpStatus.OK);
+    }
+
     @GetMapping("{formId}")
     public ResponseEntity<Object> getFormById(@PathVariable String formId){
         Optional<Form> formData = null;
@@ -127,12 +136,25 @@ public class FormController {
     //     }
     // }
 
+    @PostMapping("create_template")
+    public ResponseEntity<Object> createTemplateForm(@RequestBody Form form){
+        Form createdFormTemplate = null;
+        try{
+            createdFormTemplate = formService.createTemplateForm(form);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(createdFormTemplate, HttpStatus.OK) ;
+    }
+
     @PostMapping("create")
-    public ResponseEntity<Object> createForm(@RequestBody Form form) {
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
+    public ResponseEntity<Object> createForm(@RequestBody Form formTemplate) {
         Form createdForm = null;
         try {
-            createdForm = formService.createForm(form);
-            // if (createdForm != null) {
+            createdForm = formService.createForm(formTemplate);
+             // if (createdForm != null) {
             //     // Create a map to store the form data
             //     Map<String, Object> formData = new HashMap<>();
             //     formData.put("formId", createdForm.getFormId());
@@ -193,6 +215,7 @@ public class FormController {
     }
 
     @PutMapping("update/{formId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<Object> updateForm(@PathVariable String formId, @RequestBody Form form){
         Form formUpdate = null;
         try{
@@ -208,6 +231,7 @@ public class FormController {
     }
 
     @DeleteMapping("delete/{formId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('APPROVER')")
     public ResponseEntity<Object> deleteForm(@PathVariable String formId) {
         try {
             // if (formService.deleteForm(formId) == null) {

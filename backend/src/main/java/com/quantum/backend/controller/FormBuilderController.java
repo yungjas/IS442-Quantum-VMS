@@ -1,4 +1,5 @@
 package com.quantum.backend.controller;
+import com.quantum.backend.exception.ResourceNotFoundException;
 import com.quantum.backend.model.*;
 import com.quantum.backend.service.*;
 import java.util.List;
@@ -48,13 +49,33 @@ public class FormBuilderController {
         return new ResponseEntity<>(questionCreated, HttpStatus.CREATED);
     }
 
-    // @PostMapping("/add-textbox")
-    // public ResponseEntity<Question> addTextbox(@RequestBody String label) {
-    //     Question textbox = new Question();
-    //     textbox.setQuestionType("textbox");
-    //     // textbox.setQuestionLabel(label);
-    //     // Add code to save the question to the database
+    // status 201 BUT doesnt update question
+    @PutMapping("/edit-question/{questionId}")
+    public ResponseEntity<Object> updateQuestion(@PathVariable String questionId, @RequestBody Question question) {
+        Question questionUpdated = null;
+        try {
+            questionUpdated = formBuilderService.updateQuestion(questionId, question);
+        } catch(IllegalArgumentException ill){
+            return new ResponseEntity<>(ill.getMessage(), HttpStatus.CONFLICT);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(questionUpdated, HttpStatus.CREATED);
+    }
 
-    //     return new ResponseEntity<>(textbox, HttpStatus.CREATED);
-    // }
+    
+    @DeleteMapping("delete/{questionId}")
+    public ResponseEntity<Object> deleteQuestion(@PathVariable String questionId) {
+        Question questionDeleted = null;
+        try{
+            questionDeleted = formBuilderService.deleteQuestion(questionId);            
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR); 
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

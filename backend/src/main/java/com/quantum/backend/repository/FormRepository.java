@@ -11,4 +11,7 @@ public interface FormRepository extends MongoRepository<Form, String>{
 
     @Query("{'formNo':?0}")
     Optional<Form> findByFormNo(String formNo);
+
+    @Query("{isTemplate:true}")
+    List<Form> findAllFormTemplates();
 }

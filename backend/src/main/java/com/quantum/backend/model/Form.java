@@ -23,6 +23,8 @@ public class Form {
     private String lastEdited;
     
     private String dateSubmitted;
+
+    private boolean isTemplate;
     
     @DBRef
     private User approvedBy;
