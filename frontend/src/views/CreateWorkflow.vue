@@ -1,14 +1,14 @@
 <template>
     <div class="CreateWorkflow">
       <h1>Create workflow</h1>
-      <div class="btn-group" role="currentUser">
+      <!-- <div class="btn-group" role="currentUser">
         <button type="button" class="btn btn-secondary" @click="home">
           Home
         </button>
         <button type="button" class="btn btn-secondary" @click="logout">
           Logout
         </button>
-      </div>
+      </div> -->
       <br /><br />
       <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
         <table class="table">

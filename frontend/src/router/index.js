@@ -14,7 +14,7 @@ import EditWorkflow from '../views/EditWorkflow.vue'
 import ViewForm from '../views/ViewForm.vue'
 import CreateForm from '../views/CreateForm.vue'
 import ShowWorkflowForm from '../views/ShowWorkflowForm.vue'
-
+import ViewAssignedWorkflows from '../views/ViewAssignedWorkflows.vue'
 
 const routes = [
   {
@@ -96,6 +96,11 @@ const routes = [
     name: 'ShowWorkflowForm',
     component: ShowWorkflowForm
   },
+  {
+    path: '/viewAssignedWorkflows',
+    name: 'ViewAssignedWorkflows',
+    component: ViewAssignedWorkflows
+  }
 ]
 
 const router = createRouter({

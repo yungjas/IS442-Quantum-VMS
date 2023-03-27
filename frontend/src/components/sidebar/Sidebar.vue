@@ -65,7 +65,7 @@ export default {
 
         <div v-else-if="user.userType == 'ROLE_VENDOR'">
             <SidebarLink to="./" icon="fa-solid fa-house"> Home </SidebarLink>
-            <SidebarLink to="/" icon="fas fa-briefcase"> View Workflow </SidebarLink>
+            <SidebarLink to="/viewAssignedWorkflows" icon="fas fa-briefcase"> View Workflow </SidebarLink>
             <SidebarLink to="/" icon="fas fa-file-invoice"> View Form </SidebarLink>
             <SidebarLink to="/login" icon="fas fa-right-from-bracket" @click="logout"> Logout </SidebarLink>
         </div>
