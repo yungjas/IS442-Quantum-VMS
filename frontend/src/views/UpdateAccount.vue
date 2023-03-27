@@ -1,5 +1,5 @@
 <template>
-<div class="updateAccount">
+<div class="updateAccount" style="margin-top: 2em;">
     <h1>Update my account</h1>
 
     <!-- <div class="btn-group" role="currentUser" >
@@ -12,18 +12,24 @@
             <tbody>
                 <tr v-for="(v, k) in data" :key="k.userid">
                     <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><label>{{ k.toUpperCase() }}</label></td>
-                    <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><input type=text v-bind:id="k" v-bind:value="v" style="width: 80%"></td>                    
+                    <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password' && k !== 'userType'"><input type=text v-bind:id="k" v-bind:value="v" style="width: 80%"></td>                    
+                    <td v-else-if="k === 'userType'" style="padding-left: 5em;">
+                            <select class="form-control" v-model="selected" :required="true" @change="changeLocation" style="width: 89%;">
+                                <option :selected="true" id="selectedUserType">{{editUserType}}</option>
+                                <option v-for="userType in userTypes" id="selectedUserType" v-bind:key="userType" v-bind:value="userType">{{ userType }}</option>
+                            </select>
+                        </td>
                 </tr>
                 <tr>
                     <td><label>PASSWORD</label></td>
                     <td>
-                        <input type="password" id="password" v-model="password" style="width: 80%" placeholder="Enter current password to confirm changes">
+                        <input type="password" id="password" style="width: 80%" placeholder="Enter current password to confirm changes">
                     </td>
                 </tr>
                 <tr>
                     <td><label>[Optional]<br>CHANGE PASSWORD</label></td>
                     <td>
-                        <input type="password" id="changePassword" v-model="changePassword" style="width: 80%" placeholder="Only enter password here if you want to change password">
+                        <input type="password" id="changePassword" style="width: 80%" placeholder="Only enter password here if you want to change password">
                     </td>
                 </tr>                        
             </tbody>
@@ -45,11 +51,14 @@ export default {
     name: 'UpdateAccount',
     data () {
         return {
+            userTypes: ["ROLE_ADMIN", "ROLE_APPROVER", "ROLE_VENDOR"],
             data: JSON.parse(localStorage.data),
             userType: localStorage.userType,
             email: "",
             password: "",
             changePassword: "",
+            editUserType: "",
+            selected: "",
         }
     },
     methods: 
@@ -79,6 +88,9 @@ export default {
         },
         updateAccount()
         {
+            this.password = document.getElementById("password").value;
+            this.changePassword = document.getElementById("changePassword").value;
+            
             if(this.password === "")
             {
                 alert("Please enter your current password to confirm changes");
@@ -106,7 +118,7 @@ export default {
                     {
                         console.log(v);
                         
-                        if(v === "tokenType" || v === "token" || v ==="userId")
+                        if(v === "tokenType" || v === "token" || v ==="userId" || v === "userType")
                         {
                             console.log("NO DATA BECAUSE THIS IS NOT REQUIRED IN BODY");
                             console.log("====")
@@ -126,6 +138,8 @@ export default {
                         console.log("====")
 
                     }
+
+                    data += '"userType":"' + this.selected + '",';
 
                     if(this.changePassword !== "")
                     {
@@ -148,7 +162,7 @@ export default {
                     })
                     .then((response_users) => {
                         console.log(response_users);
-                        localStorage.clear();
+                        //localStorage.clear();
                         localStorage.token = response.data.token;
                         localStorage.userType = response_users.data.userType;
                         localStorage.data = JSON.stringify(response_users.data);
@@ -168,6 +182,11 @@ export default {
                 }
             });
         },
+        changeLocation()
+            {
+                // var a  = document.getElementById("selectedUserType").value;
+                console.log(this.selected);
+            },
         // initApprover()
         // {
 
@@ -183,6 +202,19 @@ export default {
         {
             this.$router.push({name: 'Login'});
         }
+
+        this.editUserType = this.data.userType;
+
+        this.selected = this.editUserType;
+        //for i in userTypes
+        for(var i = 0; i < this.userTypes.length; i++)
+        {
+            if(this.userTypes[i] === this.editUserType)
+            {
+                this.userTypes.splice(i, 1);
+                break;
+            }
+        }        
         // else if(this.userType === 'ROLE_ADMIN')
         // {
         

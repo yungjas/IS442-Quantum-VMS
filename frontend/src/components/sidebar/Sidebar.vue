@@ -6,29 +6,69 @@ export default {
     components: { SidebarLink },
     setup() {
         return { collapsed, toggleSidebar, sidebarWidth }
+    },
+    data(){
+        return{
+            user: Object,
+            loggedIn: false
+        }
+    },
+    watch: {
+        $route(){
+            if(localStorage.token){
+                this.loggedIn = true
+                // auto show side bar if logged in
+                this.collapsed = false
+                this.user = JSON.parse(localStorage.user)
+            }
+            else{
+                this.loggedIn = false
+                // don't show side bar if not logged in
+                this.collapsed = true
+            }
+        }
+    },
+    methods: {
+        logout: function() {
+            localStorage.clear()
+            this.$router.push("/login")
+        }
     }
 }
 </script>
 
 <template>
-    <div class="sidebar" :style="{ width: sidebarWidth }">
+    <div class="sidebar" :style="{ width: sidebarWidth }" v-if="loggedIn">
         <h1>
             <span v-if="collapsed">
-                <img style= "width:50px;height:55px" src ="../../assets/quantum-logo.png">
+                <a href="/">
+                    <img style= "width:50px;height:55px" src ="../../assets/quantum-logo.png">
+                </a>
             </span>
-            <img v-else style= "width:165px;height:60px" src ="../../assets/quantum-leap-incorporation-rectangular.jpg">
+            <a v-else href="/">
+                <img style= "width:165px;height:60px" src ="../../assets/quantum-leap-incorporation-rectangular.jpg">
+            </a>
         </h1>
         
-        <SidebarLink to="./" icon="fa-solid fa-house"> Home </SidebarLink>
-        <SidebarLink to="/updateAccount" icon="fa-solid fa-user"> Update Account </SidebarLink>
-        <SidebarLink to="/sendEmail" icon="fas fa-envelope"> Send Email </SidebarLink>
-        <SidebarLink to="/viewUser" icon="fa-solid fa-users"> View User </SidebarLink>
-        <SidebarLink to="/createUser" icon="fas fa-user-plus"> Create User </SidebarLink>
-        <SidebarLink to="/viewWorkflow" icon="fas fa-briefcase"> View Workflow </SidebarLink>
-        <SidebarLink to="/createWorkflow" icon="fas fa-briefcase"> Create Workflow </SidebarLink>
-        <SidebarLink to="/" icon="fas fa-file-invoice"> View Form </SidebarLink>
-        <SidebarLink to="/createForm" icon="fas fa-file-invoice"> Create Form </SidebarLink>
-        <SidebarLink to="/login" icon="fas fa-right-from-bracket"> Logout </SidebarLink>
+        <div v-if="user.userType === 'ROLE_ADMIN' || user.userType === 'ROLE_APPROVER'">
+            <SidebarLink to="./" icon="fa-solid fa-house"> Home </SidebarLink>
+            <SidebarLink to="/updateAccount" icon="fa-solid fa-user"> Update Account </SidebarLink>
+            <SidebarLink to="/sendEmail" icon="fas fa-envelope"> Send Email </SidebarLink>
+            <SidebarLink to="/viewUser" icon="fa-solid fa-users"> View User </SidebarLink>
+            <SidebarLink to="/createUser" icon="fas fa-user-plus"> Create User </SidebarLink>
+            <SidebarLink to="/viewWorkflow" icon="fas fa-briefcase"> View Workflow </SidebarLink>
+            <SidebarLink to="/createWorkflow" icon="fas fa-briefcase"> Create Workflow </SidebarLink>
+            <SidebarLink to="/" icon="fas fa-file-invoice"> View Form </SidebarLink>
+            <SidebarLink to="/createForm" icon="fas fa-file-invoice"> Create Form </SidebarLink>
+            <SidebarLink to="/login" icon="fas fa-right-from-bracket" @click="logout"> Logout </SidebarLink>
+        </div>
+
+        <div v-else-if="user.userType == 'ROLE_VENDOR'">
+            <SidebarLink to="./" icon="fa-solid fa-house"> Home </SidebarLink>
+            <SidebarLink to="/" icon="fas fa-briefcase"> View Workflow </SidebarLink>
+            <SidebarLink to="/" icon="fas fa-file-invoice"> View Form </SidebarLink>
+            <SidebarLink to="/login" icon="fas fa-right-from-bracket" @click="logout"> Logout </SidebarLink>
+        </div>
 
         <span
             class="collapse-icon" 

@@ -26,7 +26,8 @@
 
 
 <template>
-    <h1>Create a Form</h1>
+    <div style="margin-top: 1em;">
+        <h1>Create a Form</h1>
     <!-- <div class="btn-group" role="currentUser" >
         <button type="button" class="btn btn-secondary" @click="home">Home</button>
         <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
@@ -34,7 +35,7 @@
     <br><br>
 
     <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
-            <table class="table">
+        <table class="table table-borderless">
                 <tbody>
                     <tr>
                         <td>
@@ -173,6 +174,8 @@
             </div>
         </div>
         </div>
+    </div>
+    
 </template>
 
 

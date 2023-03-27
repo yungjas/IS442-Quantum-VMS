@@ -1,6 +1,6 @@
 <template>
   <!-- NOTE, this is temporary, nav bar should be coded into App.vue as a template across site -->
-  <div>
+  <div style="margin-top: 2em;">
     <h1>Welcome back, {{ username }}</h1>
     <!-- <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
       <div class="btn-group" role="currentUser" > -->

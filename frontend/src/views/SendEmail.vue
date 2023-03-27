@@ -1,5 +1,5 @@
 <template>
-    <div class="sendemail">
+    <div class="sendemail" style="margin-top: 2em;">
         <h1>Send Email</h1>
 
         <!-- <div class="btn-group" role="currentUser" >
@@ -10,7 +10,7 @@
         <br><br>
         <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
             <div>
-                <table class="table">
+                <table class="table table-borderless">
                     <tbody>
                         <tr>
                             <td><label>Receiver Email Address:</label></td>

@@ -13,17 +13,17 @@
 
                 <div>
                     
-                    <input type="password" placeholder="Password" v-model="password"/>
-                    <br>
+                    <input type="password" placeholder="Password" v-model="password" style="margin-bottom: 3em;"/>
+                    <!-- <br>
                     {{ email }} 
                     <br>
-                    {{  password }}
+                    {{  password }} -->
                 </div>
                 <button style="width: 200px" class="btn btn-primary">Login</button>
             
                 <br><br>
 
-                <button style="width: 200px" class="btn btn-secondary" @click="logout">Logout</button>
+                <!-- <button style="width: 200px" class="btn btn-secondary" @click="logout">Logout</button> -->
                 <br><br>
                 
             </form>
@@ -116,7 +116,7 @@ export default{
         width: 25%;
     }
     
-    #loginBtn{
-        margin-top: 2em;
-    }
+    /* #loginBtn{
+        margin-top: 3em;
+    } */
 </style>
