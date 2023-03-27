@@ -12,7 +12,7 @@
                     <tr>
                         <td>userType</td>
                         <td>
-                            <select style="width: 100%" name="selectRole" id="selectRole" @change="onChange($event)">
+                            <select style="width: 80%" name="selectRole" id="selectRole" @change="onChange($event)">
                                 <option v-for="item in dropdownData" :key="item" v-bind:value="item">{{item}}</option>
                             </select>                            
                         </td>    
@@ -20,10 +20,10 @@
                     <tr v-for="(v, k) in data" :key="k.userid">
                         <td v-if="v !== 'userId' && v !== 'userType'"><label>{{ v }}</label></td>
                         <td v-if="v !== 'userId' && v !== 'userType' && v !== 'password'">
-                            <input type=text v-bind:id="v" style="width: 100%">
+                            <input type=text v-bind:id="v" style="width: 80%">
                         </td>
                         <td v-else-if="v !== 'userId' && v !== 'userType'">
-                            <input type=password v-bind:id="v" style="width: 100%">
+                            <input type=password v-bind:id="v" style="width: 80%">
                         </td>
                     </tr>
                 </tbody>
@@ -34,9 +34,9 @@
             </div>
         </div>
     </div>
-    </template>
+</template>
     
-    <script>
+<script>
     import axios from "axios";
 
     export default {
@@ -102,10 +102,8 @@
                             })
                             .then((response_users) => {
                                 console.log(response_users);
-
-                                this.$router.push({name: 'Home'});
-                                        
-                                alert("Account created successfully");
+                                this.$router.push({name: 'Home'}); 
+                                alert("Account created successfully");               
                             })                          
                     }
                     else

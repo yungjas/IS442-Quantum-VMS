@@ -12,8 +12,8 @@
                     <tr v-for="(v, k) in data" :key="k.userid">
                         <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><label>{{ k.toUpperCase() }}</label></td>
                         <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password' && k !== 'userType'"><input type=text v-bind:id="k" v-bind:value="v" style="width: 80%"></td>                    
-                        <td v-else-if="k === 'userType'">
-                            <select class="form-control" v-model="selected" :required="true" @change="changeLocation">
+                        <td v-else-if="k === 'userType'" style="padding-left: 5em;">
+                            <select class="form-control" v-model="selected" :required="true" @change="changeLocation" style="width: 89%;">
                                 <option :selected="true" id="selectedUserType">{{editUserType}}</option>
                                 <option v-for="userType in userTypes" id="selectedUserType" v-bind:key="userType" v-bind:value="userType">{{ userType }}</option>
                             </select>
