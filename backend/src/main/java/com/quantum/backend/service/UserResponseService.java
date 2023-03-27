@@ -1,7 +1,11 @@
 package com.quantum.backend.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.quantum.backend.exception.RequestErrorException;
@@ -33,6 +37,7 @@ public class UserResponseService {
         return userResponseRepo.findAll();
     }
 
+    // just gets the data without mapping
     public Optional<UserResponse> getUserResponseById(String userResponseId) throws ResourceNotFoundException{
         Optional<UserResponse> userResponseData = userResponseRepo.findById(userResponseId);
         if(!userResponseData.isPresent()){
@@ -41,44 +46,117 @@ public class UserResponseService {
         return userResponseData;
     }
 
-    public Map<String, Object> getFormQuestionResponse(String userResponseId){
-        Optional<UserResponse> userResponseData = userResponseRepo.findById(userResponseId);
-        if(!userResponseData.isPresent()){
-            throw new ResourceNotFoundException("UserResponse", "userResponseId", userResponseId);
-        }
-        UserResponse userResponse = userResponseData.get();
+    // get a user's responses to a form
+    public Map<String, Object> getFormResponse(String userId, String formId){
+        List<UserResponse> userResponses = userResponseRepo.findFormResponse(userId, formId);
         
-        // create a map to store form data
+        Map<String, Object> result = new HashMap<>();
         Map<String, Object> formData = new HashMap<>();
+        Map<String, Object> userData = new HashMap<>();
+        List<Object> qnResponseInfoList = new ArrayList<>();
 
-        User user = userRepository.findById(userResponse.getUserId()).get();
-        Form form = formRepository.findById(userResponse.getFormId()).get();
-        Question question = formBuilderRepository.findById(userResponse.getQnId()).get();
+        for(UserResponse response: userResponses){
+            Map<String, Object> qnData = new HashMap<>();
+            User user = userRepository.findById(response.getUserId()).get();
+            Form form = formRepository.findById(response.getFormId()).get();
+            Question question = formBuilderRepository.findById(response.getQnId()).get();
+            
+            if(!result.containsKey("user")){
+                userData.put("userId", user.getUserId());
+                userData.put("username", user.getUsername());
+                userData.put("email", user.getEmail());
+                result.put("user", userData);
+            }
 
-        formData.put("userId", user.getUserId());
-        formData.put("username", user.getUsername());
-        formData.put("formId", form.getFormId());
-        formData.put("formNo", form.getFormNo());
-        formData.put("formName", form.getFormName());
-        formData.put("revisionNo", form.getRevisionNo());
-        formData.put("lastEdited", form.getLastEdited());
-        formData.put("dateSubmitted", form.getDateSubmitted());
-        formData.put("question", question);
-        formData.put("questionResponse", userResponse.getQuestionResponse());
+            if(!result.containsKey("form")){
+                formData.put("formId", form.getFormId());
+                formData.put("formNo", form.getFormNo());
+                formData.put("formName", form.getFormName());
+                formData.put("revisionNo", form.getRevisionNo());
+                formData.put("lastEdited", form.getLastEdited());
+                formData.put("dateSubmitted", form.getDateSubmitted());
+                result.put("form", formData);
+            }
 
-        return formData;
+            qnData.put("questionId", question.getQuestionId());
+            qnData.put("questionText", question.getQuestionText());
+            qnData.put("questionType", question.getQuestionType());
+            qnData.put("answerChoices", question.getAnswerChoices());
+            qnData.put("questionResponse", response.getQuestionResponse());
+            qnResponseInfoList.add(qnData);
+
+            result.put("questionResponseInfo", qnResponseInfoList);
+        }
+
+        return result;
     }
 
-    public UserResponse createUserResponse(UserResponse userResponse) throws RequestErrorException{
-        try{
-            userResponseRepo.save(userResponse);
+    // getting all forms and questions that the user has responded to
+    public List<Object> getFormQuestionResponses(String userId){
+        List<UserResponse> userResponses = userResponseRepo.findResponsesByUserId(userId);
+        List<Object> resultList = new ArrayList<>();
+        for(UserResponse response: userResponses){
+            // create a map to store form data
+            Map<String, Object> formData = new HashMap<>();
+
+            User user = userRepository.findById(response.getUserId()).get();
+            Form form = formRepository.findById(response.getFormId()).get();
+            Question question = formBuilderRepository.findById(response.getQnId()).get();
+
+            // just getting form information and the question that was answered
+            formData.put("userId", user.getUserId());
+            formData.put("username", user.getUsername());
+            formData.put("email", user.getEmail());
+            formData.put("formId", form.getFormId());
+            formData.put("formNo", form.getFormNo());
+            formData.put("formName", form.getFormName());
+            formData.put("revisionNo", form.getRevisionNo());
+            formData.put("lastEdited", form.getLastEdited());
+            formData.put("dateSubmitted", form.getDateSubmitted());
+            formData.put("question", question);
+            formData.put("questionResponse", response.getQuestionResponse());
+            resultList.add(formData);
         }
-        catch(Exception e){
-            throw new RequestErrorException("create", "UserResponse", e.getMessage());
+        return resultList;
+    }
+
+    // logs user responses to a question when user clicks on submit
+    public UserResponse createUserResponse(UserResponse userResponse) throws RequestErrorException, ResourceNotFoundException{
+        Optional<Form> formData = formRepository.findById(userResponse.getFormId());
+        if (formData.isPresent()) {
+            Form form = formData.get();
+            // only allow saving of form responses if form is not a template
+            if (form.isTemplate() == false) {
+                try {
+                    // get current logged in user so that we know who's submitting the response
+                    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                    String name = auth.getName();
+                    Optional<User> user = userRepository.findByUsername(name);
+                    userResponse.setUserId(user.get().getUserId());
+
+                    // set the submitted date
+                    DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    String currentDate = sourceFormat.format(new Date());
+                    form.setDateSubmitted(currentDate); 
+
+                    userResponseRepo.save(userResponse);
+                    formRepository.save(form);
+                    return userResponse;
+                } 
+                catch (Exception e) {
+                    throw new RequestErrorException("create", "UserResponse", e.getMessage());
+                }
+            } 
+            else {
+                throw new RequestErrorException("create", "UserResponse", "Cannot save form responses of a form template");
+            }
+        } 
+        else {
+            throw new ResourceNotFoundException("Form", "formId", userResponse.getFormId());
         }
-        return userResponse;
     }
     
+    // should only let the user update their responses for a question
     public UserResponse updateUserResponse(String userResponseId, UserResponse userResponseUpdate) throws ResourceNotFoundException, RequestErrorException{
         Optional<UserResponse> userResponse = userResponseRepo.findById(userResponseId);
         UserResponse userResponseData = null;
@@ -89,9 +167,6 @@ public class UserResponseService {
 
         try{
             userResponseData = userResponse.get();
-            userResponseData.setUserId(userResponseUpdate.getUserId());
-            userResponseData.setFormId(userResponseUpdate.getFormId());
-            userResponseData.setQnId(userResponseUpdate.getQnId());
             userResponseData.setQuestionResponse(userResponseUpdate.getQuestionResponse());
             userResponseRepo.save(userResponseData);
         }

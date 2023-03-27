@@ -19,10 +19,12 @@ public class Form {
     //private String formDescription;
     
     private int revisionNo;
-    
+    private boolean isApproved;
     private String lastEdited;
     
     private String dateSubmitted;
+
+    private boolean isTemplate;
     
     @DBRef
     private User approvedBy;

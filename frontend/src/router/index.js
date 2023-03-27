@@ -7,10 +7,14 @@ import ViewUser from '../views/ViewUser.vue'
 import EditUser from '../views/EditUser.vue'
 import CreateUser from '../views/CreateUser.vue'
 import SendEmail from '../views/SendEmail.vue'
+
 import ViewWorkflow from '../views/ViewWorkflow.vue'
 import CreateWorkflow from '../views/CreateWorkflow.vue'
 import EditWorkflow from '../views/EditWorkflow.vue'
 import ViewForm from '../views/ViewForm.vue'
+import CreateForm from '../views/CreateForm.vue'
+
+
 const routes = [
   {
     path: '/',
@@ -61,6 +65,7 @@ const routes = [
     component: SendEmail
   },
   {
+
     path: '/viewWorkflow',
     name: 'ViewWorkflow',
     component: ViewWorkflow
@@ -79,6 +84,12 @@ const routes = [
     path: '/viewForm',
     name: 'ViewForm',
     component: ViewForm
+    },
+  {
+    path: '/createForm',
+    name: 'CreateForm',
+    component: CreateForm
+
   }
 ]
 

@@ -7,7 +7,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
@@ -25,5 +24,8 @@ public class Question {
     private List<QuestionInput> answerChoices;
     
     private boolean isRequired;
+
+    // @DBRef
+    // private List<UserResponse> userResponses;
 }
 

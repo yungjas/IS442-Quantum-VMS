@@ -35,10 +35,7 @@ public class ScheduledService {
 
             if(diffDays <= 3 && wf.getAssignedUsers() != null){
                 String text = String.format("Reminder to complete %s by %s", wf.getWorkflowName(), wf.getDeadline());
-                for(User user: wf.getAssignedUsers()){
-                    SendEmailRequest emailReminder = new SendEmailRequest(user.getEmail(), subject, text);
-                    emailService.sendSimpleEmail(emailReminder);
-                }
+                processEmail(wf.getAssignedUsers(), subject, text);
             }
         }
     }
@@ -46,19 +43,21 @@ public class ScheduledService {
     public void sendApprovedEmail(){
         List<Workflow> allWorkflows = workflowService.getAllWorkflows();
         String subject = "Form Approved";
-        boolean test = true; // for testing purposes
 
         for(Workflow wf: allWorkflows){
-            if(test){ // must check if form is approved by getting approvedBy which holds a user object
-                //String text = String.format("%s has been approved", wf.getForm().getFormName());
-                String testText = String.format("%s has been approved", "form 1"); // for testing purposes
+            if(wf.getForm().getApprovedBy() != null){
+                String text = String.format("%s has been approved", wf.getForm().getFormName());
                 if(wf.getAssignedUsers() != null){
-                    for(User user: wf.getAssignedUsers()){
-                        SendEmailRequest emailReminder = new SendEmailRequest(user.getEmail(), subject, testText);
-                        emailService.sendSimpleEmail(emailReminder);
-                    }
+                    processEmail(wf.getAssignedUsers(), subject, text);
                 }
             }
+        }
+    }
+
+    private void processEmail(List<User> users, String subject, String text){
+        for(User user: users){
+            SendEmailRequest emailReminder = new SendEmailRequest(user.getEmail(), subject, text);
+            emailService.sendSimpleEmail(emailReminder);
         }
     }
 }

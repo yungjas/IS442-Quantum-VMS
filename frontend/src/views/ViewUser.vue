@@ -37,9 +37,11 @@
             </table>                 
         </div>
     </div>
-    </template>
+
+</template>
     
-    <script>
+<script>
+
     import axios from "axios";
 
     /*
@@ -159,5 +161,7 @@
             }
         },
     }
-    </script>
+
+</script>
+
     
