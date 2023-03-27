@@ -13,7 +13,7 @@ import CreateWorkflow from '../views/CreateWorkflow.vue'
 import EditWorkflow from '../views/EditWorkflow.vue'
 import ViewForm from '../views/ViewForm.vue'
 import CreateForm from '../views/CreateForm.vue'
-
+import ViewAssignedWorkflows from '../views/ViewAssignedWorkflows.vue'
 
 const routes = [
   {
@@ -90,6 +90,11 @@ const routes = [
     name: 'CreateForm',
     component: CreateForm
 
+  },
+  {
+    path: '/viewAssignedWorkflows',
+    name: 'ViewAssignedWorkflows',
+    component: ViewAssignedWorkflows
   }
 ]
 

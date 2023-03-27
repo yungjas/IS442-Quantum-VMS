@@ -17,7 +17,7 @@
                 <option v-for="item in dropdownData" :key="item" v-bind:value="item">{{item}}</option>
             </select> -->
 
-      <table class="table" id="showUserTable">
+      <table class="table" id="showTable">
         <thead>
           <tr>
             <th scope="col">ID</th>

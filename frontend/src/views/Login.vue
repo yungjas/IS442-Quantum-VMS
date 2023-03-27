@@ -82,7 +82,7 @@ export default{
                             localStorage.userType = response.data.userType;
 
                             localStorage.data = JSON.stringify(response.data);
-                            
+                            localStorage.userId = response.data.userId
                             this.$router.push({ name: 'Home'})      
 
                         }
