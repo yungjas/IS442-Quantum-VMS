@@ -53,11 +53,11 @@ export default {
 }
 
 .link:hover {
-    background-color: var(--sidebar-item-hover);
+    background-color: black;
 }
 
 .link.active {
-    background-color: var(--sidebar-item-active);
+    background-color: black;
 }
 
 .link .icon {

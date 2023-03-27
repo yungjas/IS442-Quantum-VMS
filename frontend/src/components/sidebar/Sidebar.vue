@@ -51,23 +51,23 @@ export default {
         </h1>
         
         <div v-if="user.userType === 'ROLE_ADMIN' || user.userType === 'ROLE_APPROVER'">
-            <SidebarLink to="./" icon="fa-solid fa-house"> Home </SidebarLink>
-            <SidebarLink to="/updateAccount" icon="fa-solid fa-user"> Update Account </SidebarLink>
-            <SidebarLink to="/sendEmail" icon="fas fa-envelope"> Send Email </SidebarLink>
-            <SidebarLink to="/viewUser" icon="fa-solid fa-users"> View User </SidebarLink>
-            <SidebarLink to="/createUser" icon="fas fa-user-plus"> Create User </SidebarLink>
-            <SidebarLink to="/viewWorkflow" icon="fas fa-briefcase"> View Workflow </SidebarLink>
-            <SidebarLink to="/createWorkflow" icon="fas fa-briefcase"> Create Workflow </SidebarLink>
-            <SidebarLink to="/" icon="fas fa-file-invoice"> View Form </SidebarLink>
-            <SidebarLink to="/createForm" icon="fas fa-file-invoice"> Create Form </SidebarLink>
-            <SidebarLink to="/login" icon="fas fa-right-from-bracket" @click="logout"> Logout </SidebarLink>
+            <!-- <SidebarLink to="./" icon="fa-solid fa-house"> Home </SidebarLink> -->
+            <SidebarLink to="/updateAccount" icon="fa-solid fa-user" style="margin: 4px;"> Update Account </SidebarLink>
+            <SidebarLink to="/sendEmail" icon="fas fa-envelope" style="margin: 4px;"> Send Email </SidebarLink>
+            <SidebarLink to="/viewUser" icon="fa-solid fa-users" style="margin: 4px;"> View User </SidebarLink>
+            <SidebarLink to="/createUser" icon="fas fa-user-plus" style="margin: 4px;"> Create User </SidebarLink>
+            <SidebarLink to="/viewWorkflow" icon="fas fa-briefcase" style="margin: 4px;"> View Workflows </SidebarLink>
+            <SidebarLink to="/createWorkflow" icon="fas fa-briefcase" style="margin: 4px;"> Create Workflow </SidebarLink>
+            <SidebarLink to="/" icon="fas fa-file-invoice" style="margin: 4px;"> View Form </SidebarLink>
+            <SidebarLink to="/createForm" icon="fas fa-file-invoice" style="margin: 4px;"> Create Form </SidebarLink>
+            <SidebarLink to="/login" icon="fas fa-right-from-bracket" @click="logout" style="margin: 4px;"> Logout </SidebarLink>
         </div>
 
         <div v-else-if="user.userType == 'ROLE_VENDOR'">
-            <SidebarLink to="./" icon="fa-solid fa-house"> Home </SidebarLink>
-            <SidebarLink to="/viewAssignedWorkflows" icon="fas fa-briefcase"> View Workflow </SidebarLink>
-            <SidebarLink to="/" icon="fas fa-file-invoice"> View Form </SidebarLink>
-            <SidebarLink to="/login" icon="fas fa-right-from-bracket" @click="logout"> Logout </SidebarLink>
+            <!-- <SidebarLink to="./" icon="fa-solid fa-house"> Home </SidebarLink> -->
+            <SidebarLink to="/viewAssignedWorkflows" icon="fas fa-briefcase" style="margin: 4px;"> View Workflow </SidebarLink>
+            <SidebarLink to="/" icon="fas fa-file-invoice" style="margin: 4px;"> View Form </SidebarLink>
+            <SidebarLink to="/login" icon="fas fa-right-from-bracket" @click="logout" style="margin: 4px;"> Logout </SidebarLink>
         </div>
 
         <span

@@ -83,7 +83,7 @@ export default{
 
                             localStorage.data = JSON.stringify(response.data);
                             localStorage.userId = response.data.userId
-                            this.$router.push({ name: 'Home'})      
+                            this.$router.push({ name: 'ViewWorkflow'})      
 
                         }
                     })
