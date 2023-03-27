@@ -22,13 +22,13 @@
                 <tr>
                     <td><label>PASSWORD</label></td>
                     <td>
-                        <input type="password" id="password" v-model="password" style="width: 80%" placeholder="Enter current password to confirm changes">
+                        <input type="password" id="password" style="width: 80%" placeholder="Enter current password to confirm changes">
                     </td>
                 </tr>
                 <tr>
                     <td><label>[Optional]<br>CHANGE PASSWORD</label></td>
                     <td>
-                        <input type="password" id="changePassword" v-model="changePassword" style="width: 80%" placeholder="Only enter password here if you want to change password">
+                        <input type="password" id="changePassword" style="width: 80%" placeholder="Only enter password here if you want to change password">
                     </td>
                 </tr>                        
             </tbody>
@@ -87,6 +87,9 @@ export default {
         },
         updateAccount()
         {
+            this.password = document.getElementById("password").value;
+            this.changePassword = document.getElementById("changePassword").value;
+            
             if(this.password === "")
             {
                 alert("Please enter your current password to confirm changes");
@@ -158,7 +161,7 @@ export default {
                     })
                     .then((response_users) => {
                         console.log(response_users);
-                        localStorage.clear();
+                        //localStorage.clear();
                         localStorage.token = response.data.token;
                         localStorage.userType = response_users.data.userType;
                         localStorage.data = JSON.stringify(response_users.data);
