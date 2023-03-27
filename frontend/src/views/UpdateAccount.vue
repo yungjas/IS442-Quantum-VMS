@@ -1,5 +1,5 @@
 <template>
-<div class="updateAccount">
+<div class="updateAccount" style="margin-top: 2em;">
     <h1>Update my account</h1>
     <!-- <div class="btn-group" role="currentUser" >
         <button type="button" class="btn btn-secondary" @click="home">Home</button>

@@ -1,5 +1,5 @@
 <template>
-    <div class="createUser">
+    <div class="createUser" style="margin-top: 2em;">
         <h1>Create an account</h1>
         <!-- <div class="btn-group" role="currentUser" >
             <button type="button" class="btn btn-secondary" @click="home">Home</button>
