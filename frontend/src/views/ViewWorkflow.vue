@@ -1,14 +1,14 @@
 <template>
   <div class="ViewWorkflow">
     <h1>Workflow Management</h1>
-    <div class="btn-group" role="currentUser">
+    <!-- <div class="btn-group" role="currentUser">
       <button type="button" class="btn btn-secondary" @click="home">
         Home
       </button>
       <button type="button" class="btn btn-secondary" @click="logout">
-        Logout
-      </button>
-    </div>
+        Logout -->
+      <!-- </button> -->
+    <!-- </div> -->
     <br /><br />
     <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
       <!-- <label for="role">Filter by roles:</label>
@@ -23,7 +23,8 @@
             <th scope="col">ID</th>
             <th scope="col">Name</th>
             <th scope="col">Form</th>
-            <th scope="col">Assigned</th>
+            <th scope="col">Assigned Admins</th>
+            <th scope="col">Assigned Vendor Staff</th>
             <th scope="col">Deadline</th>
             <th scope="col" colspan="2">Action</th>
           </tr>
@@ -32,8 +33,9 @@
           <tr v-for="item in data" :key="item.userId">
             <td>{{ item.workflowId }}</td>
             <td>{{ item.workflowName }}</td>
-            <td>form placeholder</td>
-            <td>assigned users placeholder</td>
+            <td>{{ item.form.formName }}</td>
+            <td><ul><li v-for="admin in item.assignedAdmins" :key=admin.username>{{ admin.username }}</li></ul></td>
+            <td><ul><li v-for="vendor in item.assignedVendors" :key=vendor.username>{{ vendor.username }}</li></ul></td>
             <td>{{ item.deadline }}</td>
             <td v-if="item.workflowId !== this.workflowId">
               <button
