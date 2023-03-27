@@ -50,7 +50,7 @@ export default {
             </a>
         </h1>
         
-        <div v-if="user.userType == 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
+        <div v-if="user.userType === 'ROLE_ADMIN' || user.userType === 'ROLE_APPROVER'">
             <SidebarLink to="./" icon="fa-solid fa-house"> Home </SidebarLink>
             <SidebarLink to="/updateAccount" icon="fa-solid fa-user"> Update Account </SidebarLink>
             <SidebarLink to="/sendEmail" icon="fas fa-envelope"> Send Email </SidebarLink>
