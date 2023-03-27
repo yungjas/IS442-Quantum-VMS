@@ -1,9 +1,11 @@
 <template>
     <div class="updateAccount">
+
         <h1>View my account</h1>
         <div class="btn-group" role="currentUser" >
             <!-- <button type="button" class="btn btn-secondary" @click="home">Home</button>
             <button type="button" class="btn btn-secondary" @click="logout">Logout</button> -->
+
         </div>
         <br><br>
 
@@ -11,17 +13,21 @@
             <table class="table">
                 <tbody>
                     <tr v-for="(v, k) in data" :key="k.userid">
+
                         <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><label>{{ k.toUpperCase() }}</label></td>
+
                         <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><input type=text v-bind:id="k" v-bind:value="v" style="width: 100%" readonly></td>                    
                     </tr>                       
                 </tbody>
             </table>
         </div>    
     </div>
+
 </template>
     
 <script>    
     export default {
+
         name: 'viewaccount',
         data () {
             return {

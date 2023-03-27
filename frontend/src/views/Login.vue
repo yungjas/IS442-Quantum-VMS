@@ -1,6 +1,6 @@
 <template>
     <div>
-   
+
             <form text-align="center" @submit.prevent="login()">
                 
                 <img style="width:300px;height:300px" src= "../assets/quantum-leap-incorporation.jpg">
@@ -68,7 +68,8 @@ export default{
                         headers:{
                             "Content-Type": "application/json",
                             "Access-Control-Allow-Origin": "*",
-                            "Authorization": "Bearer " + localStorage.token,
+
+                            "Authorization": "Bearer " + localStorage.token
                         },
                     }
                     )
@@ -79,6 +80,7 @@ export default{
                         {
                             // //Replace the following with router.push
                             localStorage.userType = response.data.userType;
+
                             localStorage.data = JSON.stringify(response.data);
                             
                             this.$router.push({ name: 'Home'})      
@@ -94,6 +96,7 @@ export default{
         },
         logout: function(){
             localStorage.clear();
+
         }
     }
 }

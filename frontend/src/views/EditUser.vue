@@ -1,6 +1,7 @@
 <template>
     <div class="createUser">
         <h1>Update my account</h1>
+
         <!-- <div class="btn-group" role="currentUser" >
             <button type="button" class="btn btn-secondary" @click="home">Home</button>
             <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
@@ -40,9 +41,11 @@
             </div>
         </div>
     </div>
+
 </template>
     
 <script>
+
     import axios from "axios";
         // @ is an alias to /src
         //import HelloWorld from '@/components/HelloWorld.vue'
@@ -50,6 +53,7 @@
         name: 'UpdateAccount',
         data () {
             return {
+
                 userTypes: ["ROLE_ADMIN", "ROLE_APPROVER", "ROLE_VENDOR"],
                 data: JSON.parse(localStorage.editUser),
                 userType: localStorage.userType,
@@ -59,6 +63,7 @@
                 changePassword: "",
                 selected: "",
                 
+
             }
         },
         methods: 
@@ -87,6 +92,7 @@
                 // reset the data
                 this.data = JSON.parse(localStorage.data);
             },
+
             changeLocation()
             {
                 // var a  = document.getElementById("selectedUserType").value;
@@ -124,7 +130,9 @@
                         {
                             console.log(v);
                             
+
                             if(v === "tokenType" || v === "token" || v ==="userId" || v === "password" || v === "userType")
+
                             {
                                 console.log("NO DATA BECAUSE THIS IS NOT REQUIRED IN BODY");
                                 console.log("====")
@@ -147,6 +155,7 @@
 
                         
                         data += '"userType":"' + this.selected + '",';
+
     
                         if(this.changePassword !== "")
                         {
@@ -221,7 +230,6 @@
             {
                 this.$router.push({name: 'Login'});
             }
-
             console.log(this.data.userType);
             this.editUserType = this.data.userType;
 
@@ -238,4 +246,5 @@
         },
     }
 </script>
+
     

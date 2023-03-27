@@ -34,6 +34,7 @@
      </div> -->
 
 
+
 </div>
 
 </template>
@@ -86,10 +87,24 @@ export default
     {
       this.$router.push({name: 'SendEmail'});
     },
+
+    viewWorkflow: function ()
+    {
+      this.$router.push({name: 'ViewWorkflow'})
+    },
+    createWorkflow: function ()
+    {
+      this.$router.push({name: 'CreateWorkflow'})
+    },
+    viewForm: function ()
+    {
+      this.$router.push({name: 'ViewForm'})
+    },
     createForm: function()
     {
       this.$router.push({name: 'CreateForm'});
-    }
+    },
+
     // initAdmin()
     // {
 
