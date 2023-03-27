@@ -11,7 +11,13 @@
             <tbody>
                 <tr v-for="(v, k) in data" :key="k.userid">
                     <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><label>{{ k.toUpperCase() }}</label></td>
-                    <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><input type=text v-bind:id="k" v-bind:value="v" style="width: 80%"></td>                    
+                    <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password' && k !== 'userType'"><input type=text v-bind:id="k" v-bind:value="v" style="width: 80%"></td>                    
+                    <td v-else-if="k === 'userType'">
+                            <select class="form-control" v-model="selected" :required="true" @change="changeLocation">
+                                <option :selected="true" id="selectedUserType">{{editUserType}}</option>
+                                <option v-for="userType in userTypes" id="selectedUserType" v-bind:key="userType" v-bind:value="userType">{{ userType }}</option>
+                            </select>
+                        </td>
                 </tr>
                 <tr>
                     <td><label>PASSWORD</label></td>
@@ -44,11 +50,14 @@ export default {
     name: 'UpdateAccount',
     data () {
         return {
+            userTypes: ["ROLE_ADMIN", "ROLE_APPROVER", "ROLE_VENDOR"],
             data: JSON.parse(localStorage.data),
             userType: localStorage.userType,
             email: "",
             password: "",
             changePassword: "",
+            editUserType: "",
+            selected: "",
         }
     },
     methods: 
@@ -105,7 +114,7 @@ export default {
                     {
                         console.log(v);
                         
-                        if(v === "tokenType" || v === "token" || v ==="userId")
+                        if(v === "tokenType" || v === "token" || v ==="userId" || v === "userType")
                         {
                             console.log("NO DATA BECAUSE THIS IS NOT REQUIRED IN BODY");
                             console.log("====")
@@ -125,6 +134,8 @@ export default {
                         console.log("====")
 
                     }
+
+                    data += '"userType":"' + this.selected + '",';
 
                     if(this.changePassword !== "")
                     {
@@ -167,6 +178,11 @@ export default {
                 }
             });
         },
+        changeLocation()
+            {
+                // var a  = document.getElementById("selectedUserType").value;
+                console.log(this.selected);
+            },
         // initApprover()
         // {
 
@@ -182,6 +198,19 @@ export default {
         {
             this.$router.push({name: 'Login'});
         }
+
+        this.editUserType = this.data.userType;
+
+        this.selected = this.editUserType;
+        //for i in userTypes
+        for(var i = 0; i < this.userTypes.length; i++)
+        {
+            if(this.userTypes[i] === this.editUserType)
+            {
+                this.userTypes.splice(i, 1);
+                break;
+            }
+        }        
         // else if(this.userType === 'ROLE_ADMIN')
         // {
         
