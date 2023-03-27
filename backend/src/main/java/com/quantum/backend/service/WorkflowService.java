@@ -3,6 +3,8 @@ package com.quantum.backend.service;
 import java.util.*;
 import java.util.Optional;
 
+import com.quantum.backend.exception.RequestErrorException;
+import com.quantum.backend.exception.ResourceNotFoundException;
 import com.quantum.backend.model.*;
 
 import org.springframework.security.core.Authentication;
@@ -65,6 +67,14 @@ public class WorkflowService {
         return workflowRepo.findAll();
     }
 
+    public Optional<Workflow> getWorkflowById(String workflowId){
+        Optional<Workflow> workflowData = workflowRepo.findById(workflowId);
+        if(! workflowData.isPresent()){
+            throw new ResourceNotFoundException("Workflow", "workflowId", workflowId);
+        }
+        return workflowData;
+    }
+
     public List<Workflow> getWorkflowsForUser(){
         // get current logged in user
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -87,8 +97,13 @@ public class WorkflowService {
         return userWorkflows;
     }
 
-    public Workflow createWorkflow(Workflow workflow){
-        workflowRepo.save(workflow);
+    public Workflow createWorkflow(Workflow workflow) throws RequestErrorException {
+        try {
+            workflowRepo.save(workflow);
+        } catch (Exception e) {
+            throw new RequestErrorException("create", "workflow", e.getMessage());
+        }
+
         return workflow;
     }
 
@@ -97,12 +112,16 @@ public class WorkflowService {
         if(workflow.isPresent()){
             Workflow workflowOriginal = workflow.get();
             
-           
             workflowOriginal.setWorkflowId(workflowUpdate.getWorkflowId());
             workflowOriginal.setWorkflowName(workflowUpdate.getWorkflowName());
             workflowOriginal.setDeadline(workflowUpdate.getDeadline());
             workflowOriginal.setAssignedUsers(workflowUpdate.getAssignedUsers());
+            workflowOriginal.setAssignedAdmins(workflowUpdate.getAssignedAdmins());
+            workflowOriginal.setAssignedVendors(workflowUpdate.getAssignedVendors());
             workflowOriginal.setForm(workflowUpdate.getForm());
+
+
+            
             // workflowOriginal.setAdminId(workflowUpdate.getAdminId());
             // workflowOriginal.setVendorId(workflowUpdate.getVendorId());
             workflowRepo.save(workflowOriginal);
@@ -120,4 +139,43 @@ public class WorkflowService {
         }
         return null;
     }
+
+//    private final WorkflowRepository workflowRepo;
+//
+//    public WorkflowService(WorkflowRepository workflowRepo){
+//        this.workflowRepo = workflowRepo;
+//    }
+//
+//    public List<Workflow> getAllWorkflows(){
+//        return workflowRepo.findAll();
+//    }
+//
+//    public Workflow createWorkflow(Workflow workflow){
+//        workflowRepo.save(workflow);
+//        return workflow;
+//    }
+//
+//    public Workflow updateWorkflow(String workflowId, Workflow workflowUpdate){
+//        Optional<Workflow> workflow = workflowRepo.findById(workflowId);
+//        if(workflow.isPresent()){
+//            Workflow workflowOriginal = workflow.get();
+////            workflowOriginal.setQuestionnaires(workflowUpdate.getQuestionnaires());
+//            workflowOriginal.setVendorId(workflowUpdate.getWorkflowId());
+//            workflowOriginal.setAdminId(workflowUpdate.getAdminId());
+//            workflowOriginal.setVendorId(workflowUpdate.getVendorId());
+//            workflowRepo.save(workflowOriginal);
+//            return workflowOriginal;
+//        }
+//        return null;
+//    }
+//    
+//    public Workflow deleteWorkflow(String workflowId){
+//        Optional<Workflow> workflow = workflowRepo.findByWorkflowID(workflowId);
+//        if(workflow.isPresent()){
+//            Workflow workflowData = workflow.get();
+//            workflowRepo.delete(workflowData);
+//            return workflowData;
+//        }
+//        return null;
+//    }
 }

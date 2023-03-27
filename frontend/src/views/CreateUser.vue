@@ -6,7 +6,7 @@
             <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
         </div> -->
         <br><br>
-        <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
+        <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">AD
             <table class="table table-borderless">
                 <tbody>
                     <tr>
