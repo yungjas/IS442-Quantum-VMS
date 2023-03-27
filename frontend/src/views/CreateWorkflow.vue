@@ -34,8 +34,8 @@
                 <label for="forms">Select Forms:</label>
               </td>
               <td>
-                <select v-model="displayedForms" id="form" style="width: 50%">
-                  <option v-for="form in this.allForms" :key="form.formId" :value="form">
+                <select v-model="selectedForms" id="form" style="width: 50%">
+                  <option v-for="form in this.displayedForms" :key="form.formId" :value="form">
                     {{ form.formName }}
                   </option>
                 </select>
@@ -205,7 +205,7 @@
             }).then((response) => {
               for (let form of response.data){
                 console.log(form);
-                if (form.isTemplate == true){
+                if (form.template == true){
                   this.displayedForms.push(form);
                 }
               }

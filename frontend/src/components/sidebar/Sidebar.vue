@@ -24,8 +24,8 @@ export default {
         <SidebarLink to="/sendEmail" icon="fas fa-envelope"> Send Email </SidebarLink>
         <SidebarLink to="/viewUser" icon="fa-solid fa-users"> View User </SidebarLink>
         <SidebarLink to="/createUser" icon="fas fa-user-plus"> Create User </SidebarLink>
-        <SidebarLink to="/" icon="fas fa-briefcase"> View Workflow </SidebarLink>
-        <SidebarLink to="/" icon="fas fa-briefcase"> Create Workflow </SidebarLink>
+        <SidebarLink to="/viewWorkflow" icon="fas fa-briefcase"> View Workflow </SidebarLink>
+        <SidebarLink to="/createWorkflow" icon="fas fa-briefcase"> Create Workflow </SidebarLink>
         <SidebarLink to="/" icon="fas fa-file-invoice"> View Form </SidebarLink>
         <SidebarLink to="/createForm" icon="fas fa-file-invoice"> Create Form </SidebarLink>
         <SidebarLink to="/login" icon="fas fa-right-from-bracket"> Logout </SidebarLink>
