@@ -19,6 +19,7 @@ export default {
                 this.loggedIn = true
                 // auto show side bar if logged in
                 this.collapsed = false
+                this.user = JSON.parse(localStorage.user)
             }
             else{
                 this.loggedIn = false
@@ -49,16 +50,25 @@ export default {
             </a>
         </h1>
         
-        <SidebarLink to="./" icon="fa-solid fa-house"> Home </SidebarLink>
-        <SidebarLink to="/updateAccount" icon="fa-solid fa-user"> Update Account </SidebarLink>
-        <SidebarLink to="/sendEmail" icon="fas fa-envelope"> Send Email </SidebarLink>
-        <SidebarLink to="/viewUser" icon="fa-solid fa-users"> View User </SidebarLink>
-        <SidebarLink to="/createUser" icon="fas fa-user-plus"> Create User </SidebarLink>
-        <SidebarLink to="/" icon="fas fa-briefcase"> View Workflow </SidebarLink>
-        <SidebarLink to="/" icon="fas fa-briefcase"> Create Workflow </SidebarLink>
-        <SidebarLink to="/" icon="fas fa-file-invoice"> View Form </SidebarLink>
-        <SidebarLink to="/createForm" icon="fas fa-file-invoice"> Create Form </SidebarLink>
-        <SidebarLink to="/login" icon="fas fa-right-from-bracket" @click="logout"> Logout </SidebarLink>
+        <div v-if="user.userType == 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
+            <SidebarLink to="./" icon="fa-solid fa-house"> Home </SidebarLink>
+            <SidebarLink to="/updateAccount" icon="fa-solid fa-user"> Update Account </SidebarLink>
+            <SidebarLink to="/sendEmail" icon="fas fa-envelope"> Send Email </SidebarLink>
+            <SidebarLink to="/viewUser" icon="fa-solid fa-users"> View User </SidebarLink>
+            <SidebarLink to="/createUser" icon="fas fa-user-plus"> Create User </SidebarLink>
+            <SidebarLink to="/" icon="fas fa-briefcase"> View Workflow </SidebarLink>
+            <SidebarLink to="/" icon="fas fa-briefcase"> Create Workflow </SidebarLink>
+            <SidebarLink to="/" icon="fas fa-file-invoice"> View Form </SidebarLink>
+            <SidebarLink to="/createForm" icon="fas fa-file-invoice"> Create Form </SidebarLink>
+            <SidebarLink to="/login" icon="fas fa-right-from-bracket" @click="logout"> Logout </SidebarLink>
+        </div>
+
+        <div v-else-if="user.userType == 'ROLE_VENDOR'">
+            <SidebarLink to="./" icon="fa-solid fa-house"> Home </SidebarLink>
+            <SidebarLink to="/" icon="fas fa-briefcase"> View Workflow </SidebarLink>
+            <SidebarLink to="/" icon="fas fa-file-invoice"> View Form </SidebarLink>
+            <SidebarLink to="/login" icon="fas fa-right-from-bracket" @click="logout"> Logout </SidebarLink>
+        </div>
 
         <span
             class="collapse-icon" 

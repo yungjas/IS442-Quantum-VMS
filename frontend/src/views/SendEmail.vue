@@ -8,7 +8,7 @@
         <br><br>
         <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
             <div>
-                <table class="table">
+                <table class="table table-borderless">
                     <tbody>
                         <tr>
                             <td><label>Receiver Email Address:</label></td>

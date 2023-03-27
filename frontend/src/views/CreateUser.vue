@@ -7,7 +7,7 @@
         </div> -->
         <br><br>
         <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
-            <table class="table">
+            <table class="table table-borderless">
                 <tbody>
                     <tr>
                         <td>userType</td>
