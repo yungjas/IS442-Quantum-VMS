@@ -57,10 +57,12 @@ public class WorkflowService {
     
     private final WorkflowRepository workflowRepo;
     private final UserRepository userRepo;
+    private final FormService formService;
     
-    public WorkflowService(WorkflowRepository workflowRepo, UserRepository userRepo){
+    public WorkflowService(WorkflowRepository workflowRepo, UserRepository userRepo, FormService formService){
         this.workflowRepo = workflowRepo;
         this.userRepo = userRepo;
+        this.formService = formService;
     }
 
     public List<Workflow> getAllWorkflows(){
@@ -99,6 +101,9 @@ public class WorkflowService {
 
     public Workflow createWorkflow(Workflow workflow) throws RequestErrorException {
         try {
+            Form form = workflow.getForm();
+            Form actualForm = formService.createForm(form);
+            workflow.setForm(actualForm);
             workflowRepo.save(workflow);
         } catch (Exception e) {
             throw new RequestErrorException("create", "workflow", e.getMessage());
