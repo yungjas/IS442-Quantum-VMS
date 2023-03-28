@@ -13,7 +13,7 @@
                     <tr v-for="(v, k) in data" :key="k.userid">
                         <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><label>{{ k.toUpperCase() }}</label></td>
                         <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password' && k !== 'userType'"><input type=text v-bind:id="k" v-bind:value="v" style="width: 80%"></td>                    
-                        <td v-else-if="k === 'userType'" style="padding-left: 5em;">
+                        <td v-else-if="k === 'userType'" style="padding-left: 4em;">
                             <select class="form-control" v-model="selected" :required="true" @change="changeLocation" style="width: 89%;">
                                 <option :selected="true" id="selectedUserType">{{editUserType}}</option>
                                 <option v-for="userType in userTypes" id="selectedUserType" v-bind:key="userType" v-bind:value="userType">{{ userType }}</option>
@@ -21,13 +21,13 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><label>PASSWORD</label></td>
+                        <td><label>VENDOR PASSWORD</label></td>
                         <td>
                             <input type="password" id="password" style="width: 80%" placeholder="Enter current password to confirm changes">
                         </td>
                     </tr>
                     <tr>
-                        <td><label>[Optional]<br>CHANGE PASSWORD</label></td>
+                        <td><label>[Optional]<br>CHANGE VENDOR PASSWORD</label></td>
                         <td>
                             <input type="password" id="changePassword" style="width: 80%" placeholder="Only enter password here if you want to change password">
                         </td>
