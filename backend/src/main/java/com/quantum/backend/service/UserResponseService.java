@@ -54,8 +54,8 @@ public class UserResponseService {
 
         // returns the form if user did not respond
         if(userResponses == null || userResponses.isEmpty()){
-            Form formData = formRepository.findById(formId).get();
-            result.put("form", formData);
+            Form formActual = formRepository.findById(formId).get();
+            result.put("form", formActual);
             return result;
         }
 
