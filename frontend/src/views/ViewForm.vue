@@ -8,9 +8,6 @@
       <button type="button" class="btn btn-secondary" @click="logout">
         Logout
       </button>
-      <button @click="viewForms">
-        view forms
-      </button>
     </div>
     <br /><br />
     <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
@@ -25,17 +22,15 @@
           <tr>
             <th scope="col">FormID</th>
             <th scope="col">Name</th>
-            <th scope="col">Description</th>
-            <th scope="col">Date Assigned</th>
+            <th scope="col">Last Edited</th>
             <th scope="col" colspan="2">Action</th>
           </tr>
         </thead>
        <tbody> 
-          <tr v-for="item in data" :key="item.formId">
+          <tr v-for="item in data" :key="item">
             <td>{{ item.formId }}</td>
             <td>{{ item.formName }}</td>
-            <td>{{ item.formDescription }}</td>
-            <td>{{ item.revisionDate.slice(0,10) }}</td>
+            <td>{{ item.lastEdited }}</td>
             <td v-if="item.formId !== this.formId">
               <button
                 class="btn btn-warning"
@@ -46,7 +41,6 @@
             <td v-if="item.formId !== this.formId">
               <button
                 class="btn btn-danger"
-                @click="deleteWorkflow(item.workflowId)"
               >
                 Delete
               </button> 
@@ -93,10 +87,21 @@ export default {
         })
         .then((response) => {
           this.data = response.data;
-          this.backupData = response.data;
           console.log(this.data);
         });
     },
+  },
+  created() {
+    try {
+      console.log("viewing forms");
+      this.viewForms();
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        this.$router.push({ name: "Login" });
+      } else {
+        console.log(e);
+      }
+    }
   },
 };
 </script>
