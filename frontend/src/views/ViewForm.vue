@@ -1,5 +1,5 @@
 <template>
-  <div class="ViewForm" style="margin-top: 2em;">
+  <div class="ViewForm" style="margin-top: 2em">
     <h1>Form Management</h1>
     <div class="btn-group" role="currentUser">
       <button type="button" class="btn btn-secondary" @click="home">
@@ -26,25 +26,18 @@
             <th scope="col" colspan="2">Action</th>
           </tr>
         </thead>
-       <tbody> 
+        <tbody>
           <tr v-for="item in data" :key="item">
             <td>{{ item.formId }}</td>
             <td>{{ item.formName }}</td>
             <td>{{ item.lastEdited }}</td>
             <td v-if="item.formId !== this.formId">
-              <button
-                class="btn btn-warning"
-              >
-                Edit
-              </button>
+              <button class="btn btn-warning"
+              @click="editForm(item.formId)">Edit</button>
             </td>
             <td v-if="item.formId !== this.formId">
-              <button
-                class="btn btn-danger"
-              >
-                Delete
-              </button> 
-          </td>
+              <button class="btn btn-danger">Delete</button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -54,11 +47,6 @@
 
 <script>
 import axios from "axios";
-
-/*
-    To user jquery for page length, example and sample in the following link
-    https://www.freakyjolly.com/how-to-use-jquery-datatables-in-vue-js-tutorial-by-example/
-*/
 
 export default {
   name: "viewForm",
@@ -88,6 +76,24 @@ export default {
         .then((response) => {
           this.data = response.data;
           console.log(this.data);
+        });
+    },
+    resetForm() {
+      this.data = JSON.parse(localStorage.editWorkflow);
+    },
+    editForm(formId) {
+      axios
+        .get("http://localhost:8080/api/forms/" + formId, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.token,
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          localStorage.editForm = JSON.stringify(response.data);
+          this.$router.push({ name: "EditForm" });
         });
     },
   },
