@@ -1,5 +1,5 @@
 <template>
-  <div class="ViewWorkflow">
+  <div class="ViewWorkflow" style="margin-top: 2em;">
     <h1>Workflow Management</h1>
     <!-- <div class="btn-group" role="currentUser">
       <button type="button" class="btn btn-secondary" @click="home">

@@ -6,11 +6,11 @@
             <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
         </div> -->
         <br><br>
-        <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">AD
+        <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
             <table class="table table-borderless">
                 <tbody>
                     <tr>
-                        <td>userType</td>
+                        <td>USERTYPE</td>
                         <td>
                             <select style="width: 80%" name="selectRole" id="selectRole" @change="onChange($event)">
                                 <option v-for="item in dropdownData" :key="item" v-bind:value="item">{{item}}</option>
@@ -18,7 +18,7 @@
                         </td>    
                     </tr>
                     <tr v-for="(v, k) in data" :key="k.userid">
-                        <td v-if="v !== 'userId' && v !== 'userType'"><label>{{ v }}</label></td>
+                        <td v-if="v !== 'userId' && v !== 'userType'"><label>{{ v.toUpperCase() }}</label></td>
                         <td v-if="v !== 'userId' && v !== 'userType' && v !== 'password'">
                             <input type=text v-bind:id="v" style="width: 80%">
                         </td>

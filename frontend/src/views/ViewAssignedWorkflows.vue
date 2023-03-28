@@ -1,47 +1,50 @@
 <template>
-  <table class="table" id="showWorkflowTable">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Name</th>
-        <th scope="col">Form</th>
-        <th scope="col">Assigned Admins</th>
-        <th scope="col">Assigned Vendor Staff</th>
-        <th scope="col">Deadline</th>
-        <th scope="col" colspan="2">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="item in assignedWorkflows" :key="item.workflowId">
-        <td>{{ item.workflowId }}</td>
-        <td>{{ item.workflowName }}</td>
-        <td>{{ item.form.formName }}</td>
-        <td>
-          <ul>
-            <li v-for="admin in item.assignedAdmins" :key="admin.username">
-              {{ admin.username }}
-            </li>
-          </ul>
-        </td>
-        <td>
-          <ul>
-            <li v-for="vendor in item.assignedVendors" :key="vendor.username">
-              {{ vendor.username }}
-            </li>
-          </ul>
-        </td>
-        <td>{{ item.deadline }}</td>
-        <td v-if="item.workflowId !== this.workflowId">
-          <button
-            class="btn btn-warning"
-            @click="editWorkflow(item.workflowId)"
-          >
-            Edit
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div style="margin-top: 2em;">
+    <h1>Assigned Workflows</h1>
+    <table class="table" id="showWorkflowTable" style="margin-top: 2em;">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Form</th>
+          <th scope="col">Assigned Admins</th>
+          <th scope="col">Assigned Vendor Staff</th>
+          <th scope="col">Deadline</th>
+          <th scope="col" colspan="2">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in assignedWorkflows" :key="item.workflowId">
+          <td>{{ item.workflowId }}</td>
+          <td>{{ item.workflowName }}</td>
+          <td>{{ item.form.formName }}</td>
+          <td>
+            <ul>
+              <li v-for="admin in item.assignedAdmins" :key="admin.username">
+                {{ admin.username }}
+              </li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li v-for="vendor in item.assignedVendors" :key="vendor.username">
+                {{ vendor.username }}
+              </li>
+            </ul>
+          </td>
+          <td>{{ item.deadline }}</td>
+          <td v-if="item.workflowId !== this.workflowId">
+            <button
+              class="btn btn-warning"
+              @click="editWorkflow(item.workflowId)"
+            >
+              Edit
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>

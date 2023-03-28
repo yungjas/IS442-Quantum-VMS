@@ -1,6 +1,6 @@
 <template>
-    <div class="createUser">
-        <h1>Update my account</h1>
+    <div class="createUser" style="margin-top: 2em;">
+        <h1>Edit user account</h1>
 
         <!-- <div class="btn-group" role="currentUser" >
             <button type="button" class="btn btn-secondary" @click="home">Home</button>
@@ -13,7 +13,7 @@
                     <tr v-for="(v, k) in data" :key="k.userid">
                         <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password'"><label>{{ k.toUpperCase() }}</label></td>
                         <td v-if="k !== 'token' && k !== 'tokenType' && k !== 'userId' && k !== 'password' && k !== 'userType'"><input type=text v-bind:id="k" v-bind:value="v" style="width: 80%"></td>                    
-                        <td v-else-if="k === 'userType'" style="padding-left: 5em;">
+                        <td v-else-if="k === 'userType'" style="padding-left: 4em;">
                             <select class="form-control" v-model="selected" :required="true" @change="changeLocation" style="width: 89%;">
                                 <option :selected="true" id="selectedUserType">{{editUserType}}</option>
                                 <option v-for="userType in userTypes" id="selectedUserType" v-bind:key="userType" v-bind:value="userType">{{ userType }}</option>
@@ -21,13 +21,13 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><label>PASSWORD</label></td>
+                        <td><label>VENDOR PASSWORD</label></td>
                         <td>
                             <input type="password" id="password" style="width: 80%" placeholder="Enter current password to confirm changes">
                         </td>
                     </tr>
                     <tr>
-                        <td><label>[Optional]<br>CHANGE PASSWORD</label></td>
+                        <td><label>[Optional]<br>CHANGE VENDOR PASSWORD</label></td>
                         <td>
                             <input type="password" id="changePassword" style="width: 80%" placeholder="Only enter password here if you want to change password">
                         </td>
@@ -176,37 +176,73 @@
 
                         if(this.changePassword !== "")
                         {
-                            axios.put("http://localhost:8080/api/users/update_user/" + this.data.userId, data, {
-                                headers:{
-                                    "Content-Type": "application/json",
-                                    "Authorization": "Bearer " + localStorage.token,
-                                    "Access-Control-Allow-Origin": "*",
-                                }
-                            })
-                            .then((response_users) => {
-                                console.log(response_users);
-                                localStorage.removeItem("editUser")
-                                this.$router.push({name: 'ViewUser'})
-        
-                                alert("Account updated successfully with new password");
-                            })                            
+                            if(this.data.userType === "ROLE_ADMIN" || this.data.userType === "ROLE_APPROVER"){
+                                axios.put("http://localhost:8080/api/users/update_user/" + this.data.userId, data, {
+                                    headers:{
+                                        "Content-Type": "application/json",
+                                        "Authorization": "Bearer " + localStorage.token,
+                                        "Access-Control-Allow-Origin": "*",
+                                    }
+                                })
+                                .then((response_users) => {
+                                    console.log(response_users);
+                                    localStorage.removeItem("editUser")
+                                    this.$router.push({name: 'ViewUser'})
+            
+                                    alert("Account updated successfully with new password");
+                                })                
+                            }
+                            else{
+                                axios.put("http://localhost:8080/api/users/update_vendor/" + this.data.userId, data, {
+                                    headers:{
+                                        "Content-Type": "application/json",
+                                        "Authorization": "Bearer " + localStorage.token,
+                                        "Access-Control-Allow-Origin": "*",
+                                    }
+                                })
+                                .then((response_users) => {
+                                    console.log(response_users);
+                                    localStorage.removeItem("editUser")
+                                    this.$router.push({name: 'ViewUser'})
+            
+                                    alert("Vendor Account updated successfully with new password");
+                                })                
+                            }    
                         }
                         else
                         {
-                            axios.put("http://localhost:8080/api/users/update_other_user/" + this.data.userId, data, {
-                                headers:{
-                                    "Content-Type": "application/json",
-                                    "Authorization": "Bearer " + localStorage.token,
-                                    "Access-Control-Allow-Origin": "*",
-                                }
-                            })
-                            .then((response_users) => {
-                                console.log(response_users);
-                                localStorage.removeItem("editUser")
-                                this.$router.push({name: 'ViewUser'})
-        
-                                alert("Account updated successfully");
-                            })                                
+                            if(this.data.userType == "ROLE_ADMIN" || this.data.userType == "ROLE_APPROVER"){
+                                axios.put("http://localhost:8080/api/users/update_other_user/" + this.data.userId, data, {
+                                    headers:{
+                                        "Content-Type": "application/json",
+                                        "Authorization": "Bearer " + localStorage.token,
+                                        "Access-Control-Allow-Origin": "*",
+                                    }
+                                })
+                                .then((response_users) => {
+                                    console.log(response_users);
+                                    localStorage.removeItem("editUser")
+                                    this.$router.push({name: 'ViewUser'})
+            
+                                    alert("Account updated successfully");
+                                })                                
+                            }
+                            else{
+                                axios.put("http://localhost:8080/api/users/update_other_vendor/" + this.data.userId, data, {
+                                    headers:{
+                                        "Content-Type": "application/json",
+                                        "Authorization": "Bearer " + localStorage.token,
+                                        "Access-Control-Allow-Origin": "*",
+                                    }
+                                })
+                                .then((response_users) => {
+                                    console.log(response_users);
+                                    localStorage.removeItem("editUser")
+                                    this.$router.push({name: 'ViewUser'})
+            
+                                    alert("Vendor Account updated successfully");
+                                })                                
+                            }
                         }                        
     
 
