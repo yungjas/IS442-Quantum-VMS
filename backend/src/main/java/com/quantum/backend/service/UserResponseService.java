@@ -73,7 +73,7 @@ public class UserResponseService {
                 userData.put("userId", user.getUserId());
                 userData.put("username", user.getUsername());
                 userData.put("email", user.getEmail());
-                result.put("user", userData);
+                formData.put("user", userData);
             }
 
             if(!result.containsKey("form")){
@@ -83,7 +83,6 @@ public class UserResponseService {
                 formData.put("revisionNo", form.getRevisionNo());
                 formData.put("lastEdited", form.getLastEdited());
                 formData.put("dateSubmitted", form.getDateSubmitted());
-                result.put("form", formData);
             }
 
             qnData.put("questionId", question.getQuestionId());
@@ -92,9 +91,12 @@ public class UserResponseService {
             qnData.put("questionSectionName", question.getQuestionSectionName());
             qnData.put("answerChoices", question.getAnswerChoices());
             qnData.put("questionResponse", response.getQuestionResponse());
+            
             qnResponseInfoList.add(qnData);
 
-            result.put("questionResponseInfo", qnResponseInfoList);
+            formData.put("questions", qnResponseInfoList);
+            
+            result.put("form", formData);
         }
 
         return result;
