@@ -1,5 +1,5 @@
 <template>
-  <div class="ViewForm" style="margin-top: 2em;">
+  <div class="ViewForm" style="margin-top: 2em">
     <h1>Form Management</h1>
     <div class="btn-group" role="currentUser">
       <button type="button" class="btn btn-secondary" @click="home">
@@ -32,7 +32,8 @@
             <td>{{ item.formName }}</td>
             <td>{{ item.lastEdited }}</td>
             <td v-if="item.formId !== this.formId">
-              <button class="btn btn-warning">Edit</button>
+              <button class="btn btn-warning"
+              @click="editForm(item.formId)">Edit</button>
             </td>
             <td v-if="item.formId !== this.formId">
               <button class="btn btn-danger">Delete</button>
@@ -46,11 +47,6 @@
 
 <script>
 import axios from "axios";
-
-/*
-    To user jquery for page length, example and sample in the following link
-    https://www.freakyjolly.com/how-to-use-jquery-datatables-in-vue-js-tutorial-by-example/
-*/
 
 export default {
   name: "viewForm",
@@ -82,9 +78,12 @@ export default {
           console.log(this.data);
         });
     },
+    resetForm() {
+      this.data = JSON.parse(localStorage.editWorkflow);
+    },
     editForm(formId) {
       axios
-        .get("http://localhost:8080/api/form/" + formId, {
+        .get("http://localhost:8080/api/forms/" + formId, {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + localStorage.token,
@@ -94,7 +93,7 @@ export default {
         .then((response) => {
           console.log(response.data);
           localStorage.editForm = JSON.stringify(response.data);
-          this.$router.push({ name: "EditWorkflow" });
+          this.$router.push({ name: "EditForm" });
         });
     },
   },
