@@ -6,6 +6,7 @@
       
     </div>   
     <button id="btnSubmitForm" @click="submitForm()" hidden>Submit Form</button>
+    <button id="btnGeneratePDF" @click="generatePDF()" hidden>Generate PDF</button>
   </div>
   
 </template>
@@ -13,7 +14,7 @@
 
 <script>
 import axios from "axios";
-
+import html2pdf from "html2pdf.js";
 
 export default {
   name: 'ShowWorkflowForm',
@@ -23,49 +24,66 @@ export default {
         userId: localStorage.userId,
         jsonData: null,        
         btnSubmitForm: null,
+        btnGeneratePDF: null,
         form: null,
+        approved: false,
       }
   },
   methods: 
   {
+    generatePDF()
+    {
+      console.log("generating pdf");
+      html2pdf(this.form, {
+        margin: 1,
+        filename: "form.pdf",
+      });
+    },
     submitForm()
     {
-      
+      console.log("submitting form");
     },
     showForm()
     {
         
-        console.log("populating form\n=========================")
-        console.log("adding answer");
+        // console.log("populating form\n=========================")
+        // console.log("adding answer");
 
         // console.log(this.jsonData);
 
         var formObj = this.jsonData.form;
 
-        console.log("=========================")
-        console.log("formObj:")
-        console.log(formObj);        
+        // console.log("=========================")
+        // console.log("formObj:")
+        // console.log(formObj);        
 
         if(formObj !== null)
         {
           this.btnSubmitForm.hidden = false;
 
-          var userObj = formObj.user;
+          this.approved = formObj.approved;
+          this.btnGeneratePDF.hidden = false;
+          if(this.approved)
+          {
+            this.btnGeneratePDF.hidden = false;
+          }
+
+          // var userObj = formObj.user;
           var questions = formObj.questions;
 
-          console.log("=========================")
-          console.log("userObj:")
-          console.log(userObj);
-          console.log("=========================")
-          console.log("questions:")
-          console.log(questions);
-          console.log("=========================")
-          console.log(this.form);
+          // console.log("=========================")
+          // console.log("userObj:")
+          // console.log(userObj);
+          // console.log("=========================")
+          // console.log("questions:")
+          // console.log(questions);
+          // console.log("=========================")
+          // console.log(this.form);
 
           for(var i in questions)
           {
             var questionsObj = questions[i];
-            console.log(questionsObj);
+            // console.log(questionsObj);
             var questionType = questionsObj.questionType;
 
             if(questionType.toLowerCase() === "text")
@@ -90,7 +108,7 @@ export default {
             }
             else if(questionType.toLowerCase() === "radio")
             {
-              console.log("radio");
+              // console.log("radio");
               //Creating Label for Questions
               var inputNameField2 = document.createElement('label');
               inputNameField2.innerHTML = questionsObj.questionText;
@@ -133,7 +151,7 @@ export default {
             }
             else if(questionType.toLowerCase() === "checkbox")
             {
-              console.log("checkbox");
+              // console.log("checkbox");
               var inputNameField4 = document.createElement('label');
               
               inputNameField4.setAttribute('class', "checkbox-label");     
@@ -185,15 +203,9 @@ export default {
             this.form.appendChild(document.createElement('br'));
 
           }          
-          
-        
-        
-        
-        
-        
         }
 
-        
+
 
         // if(formObj !== null)
         // {
@@ -330,7 +342,8 @@ export default {
   {
 
     this.form = document.getElementById('forms');
-    this.btnSubmitForm = document.getElementById('btnSubmitForm');      
+    this.btnSubmitForm = document.getElementById('btnSubmitForm');
+    this.btnGeneratePDF = document.getElementById('btnGeneratePDF');
     this.retrieveForm();
   },
   created()

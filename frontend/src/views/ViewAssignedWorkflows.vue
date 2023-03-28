@@ -10,7 +10,7 @@
           <th scope="col">Assigned Admins</th>
           <th scope="col">Assigned Vendor Staff</th>
           <th scope="col">Deadline</th>
-          <th scope="col" colspan="2">Action</th>
+          <th scope="col" colspan="2">Assigned Form</th>
         </tr>
       </thead>
       <tbody>
