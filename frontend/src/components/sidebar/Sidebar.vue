@@ -58,7 +58,7 @@ export default {
             <SidebarLink to="/createUser" icon="fas fa-user-plus" style="margin: 4px;"> Create User </SidebarLink>
             <SidebarLink to="/viewWorkflow" icon="fas fa-briefcase" style="margin: 4px;"> View Workflows </SidebarLink>
             <SidebarLink to="/createWorkflow" icon="fas fa-briefcase" style="margin: 4px;"> Create Workflow </SidebarLink>
-            <SidebarLink to="/" icon="fas fa-file-invoice" style="margin: 4px;"> View Form </SidebarLink>
+            <SidebarLink to="/viewForm" icon="fas fa-file-invoice" style="margin: 4px;"> View Form </SidebarLink>
             <SidebarLink to="/createForm" icon="fas fa-file-invoice" style="margin: 4px;"> Create Form </SidebarLink>
             <SidebarLink to="/login" icon="fas fa-right-from-bracket" @click="logout" style="margin: 4px;"> Logout </SidebarLink>
         </div>
