@@ -51,6 +51,14 @@ public class UserResponseService {
         List<UserResponse> userResponses = userResponseRepo.findFormResponse(userId, formId);
         
         Map<String, Object> result = new HashMap<>();
+
+        // returns the form if user did not respond
+        if(userResponses == null || userResponses.isEmpty()){
+            Form formData = formRepository.findById(formId).get();
+            result.put("form", formData);
+            return result;
+        }
+
         Map<String, Object> formData = new HashMap<>();
         Map<String, Object> userData = new HashMap<>();
         List<Object> qnResponseInfoList = new ArrayList<>();
