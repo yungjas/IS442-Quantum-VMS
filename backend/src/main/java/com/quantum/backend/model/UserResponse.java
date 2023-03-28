@@ -16,5 +16,5 @@ public class UserResponse {
     private String userId;
     private String formId;
     private String qnId;
-    private Map<String, String> questionResponse;
+    private List<Map<String, String>> questionResponse;
 }

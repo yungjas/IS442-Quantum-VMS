@@ -81,6 +81,7 @@ public class UserResponseService {
             qnData.put("questionId", question.getQuestionId());
             qnData.put("questionText", question.getQuestionText());
             qnData.put("questionType", question.getQuestionType());
+            qnData.put("questionSectionName", question.getQuestionSectionName());
             qnData.put("answerChoices", question.getAnswerChoices());
             qnData.put("questionResponse", response.getQuestionResponse());
             qnResponseInfoList.add(qnData);
