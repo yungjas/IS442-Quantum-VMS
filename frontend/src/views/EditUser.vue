@@ -1,6 +1,6 @@
 <template>
-    <div class="createUser">
-        <h1>Update my account</h1>
+    <div class="createUser" style="margin-top: 2em;">
+        <h1>Edit user account</h1>
 
         <!-- <div class="btn-group" role="currentUser" >
             <button type="button" class="btn btn-secondary" @click="home">Home</button>
@@ -176,37 +176,73 @@
 
                         if(this.changePassword !== "")
                         {
-                            axios.put("http://localhost:8080/api/users/update_user/" + this.data.userId, data, {
-                                headers:{
-                                    "Content-Type": "application/json",
-                                    "Authorization": "Bearer " + localStorage.token,
-                                    "Access-Control-Allow-Origin": "*",
-                                }
-                            })
-                            .then((response_users) => {
-                                console.log(response_users);
-                                localStorage.removeItem("editUser")
-                                this.$router.push({name: 'ViewUser'})
-        
-                                alert("Account updated successfully with new password");
-                            })                            
+                            if(this.data.userType === "ROLE_ADMIN" || this.data.userType === "ROLE_APPROVER"){
+                                axios.put("http://localhost:8080/api/users/update_user/" + this.data.userId, data, {
+                                    headers:{
+                                        "Content-Type": "application/json",
+                                        "Authorization": "Bearer " + localStorage.token,
+                                        "Access-Control-Allow-Origin": "*",
+                                    }
+                                })
+                                .then((response_users) => {
+                                    console.log(response_users);
+                                    localStorage.removeItem("editUser")
+                                    this.$router.push({name: 'ViewUser'})
+            
+                                    alert("Account updated successfully with new password");
+                                })                
+                            }
+                            else{
+                                axios.put("http://localhost:8080/api/users/update_vendor/" + this.data.userId, data, {
+                                    headers:{
+                                        "Content-Type": "application/json",
+                                        "Authorization": "Bearer " + localStorage.token,
+                                        "Access-Control-Allow-Origin": "*",
+                                    }
+                                })
+                                .then((response_users) => {
+                                    console.log(response_users);
+                                    localStorage.removeItem("editUser")
+                                    this.$router.push({name: 'ViewUser'})
+            
+                                    alert("Vendor Account updated successfully with new password");
+                                })                
+                            }    
                         }
                         else
                         {
-                            axios.put("http://localhost:8080/api/users/update_other_user/" + this.data.userId, data, {
-                                headers:{
-                                    "Content-Type": "application/json",
-                                    "Authorization": "Bearer " + localStorage.token,
-                                    "Access-Control-Allow-Origin": "*",
-                                }
-                            })
-                            .then((response_users) => {
-                                console.log(response_users);
-                                localStorage.removeItem("editUser")
-                                this.$router.push({name: 'ViewUser'})
-        
-                                alert("Account updated successfully");
-                            })                                
+                            if(this.data.userType == "ROLE_ADMIN" || this.data.userType == "ROLE_APPROVER"){
+                                axios.put("http://localhost:8080/api/users/update_other_user/" + this.data.userId, data, {
+                                    headers:{
+                                        "Content-Type": "application/json",
+                                        "Authorization": "Bearer " + localStorage.token,
+                                        "Access-Control-Allow-Origin": "*",
+                                    }
+                                })
+                                .then((response_users) => {
+                                    console.log(response_users);
+                                    localStorage.removeItem("editUser")
+                                    this.$router.push({name: 'ViewUser'})
+            
+                                    alert("Account updated successfully");
+                                })                                
+                            }
+                            else{
+                                axios.put("http://localhost:8080/api/users/update_other_vendor/" + this.data.userId, data, {
+                                    headers:{
+                                        "Content-Type": "application/json",
+                                        "Authorization": "Bearer " + localStorage.token,
+                                        "Access-Control-Allow-Origin": "*",
+                                    }
+                                })
+                                .then((response_users) => {
+                                    console.log(response_users);
+                                    localStorage.removeItem("editUser")
+                                    this.$router.push({name: 'ViewUser'})
+            
+                                    alert("Vendor Account updated successfully");
+                                })                                
+                            }
                         }                        
     
 
