@@ -41,7 +41,7 @@
                 </select>
               </td>
             </tr>
-            <tr>
+            <!-- <tr>
               <td>
                 <label for="users">Select Assigned Users:</label>
               </td>
@@ -52,7 +52,7 @@
                   </option>
                 </select>
               </td>
-            </tr>
+            </tr> -->
             <tr>
               <td>
                 <label for="forms">Select Assigned Vendors:</label>

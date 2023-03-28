@@ -36,9 +36,9 @@
           <td v-if="item.workflowId !== this.workflowId">
             <button
               class="btn btn-warning"
-              @click="editWorkflow(item.workflowId)"
+              @click="viewWorkFlowForm(item.form.formId)"
             >
-              Edit
+              View
             </button>
           </td>
         </tr>
@@ -55,7 +55,6 @@ export default {
       data: [],
       assignedWorkflows: [],
       userType: localStorage.userType,
-      workflowId: JSON.parse(localStorage.data).workflowId,
       // dropdownData: ['ALL', 'ROLE_ADMIN','ROLE_APPROVER','ROLE_VENDOR'],
       // role: 'ALL',
       backupData: [],
@@ -69,7 +68,11 @@ export default {
       localStorage.clear();
       this.$router.push({ name: "Login" });
     },
-
+    viewWorkFlowForm(formId)
+    {
+      localStorage.setItem("formId", formId);
+      this.$router.push({ name: "ShowWorkflowForm" });
+    },
     viewWorkflows() {
       axios
         .get("http://localhost:8080/api/workflow/all", {
