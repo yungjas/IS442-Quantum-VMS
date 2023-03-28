@@ -1,11 +1,11 @@
 <template>
-    <div class="ViewUser">
+    <div class="ViewUser" style="margin-top: 2em;">
         <h1>User Management</h1>
-        <div class="btn-group" role="currentUser" >
+        <!-- <div class="btn-group" role="currentUser" >
             <button type="button" class="btn btn-secondary" @click="home">Home</button>
             <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
         </div>
-        <br><br>
+        <br><br> -->
         <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
 
             <label for="role">Filter by roles:</label>

@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,11 @@ public class ScheduledService {
             long diff = deadline.getTime() - currDate.getTime();
             long diffDays = diff / (24 * 60 * 60 * 1000);
 
-            if(diffDays <= 3 && wf.getAssignedUsers() != null){
+            if(diffDays <= 3 && wf.getAssignedUsers() != null && wf.getAssignedAdmins() != null && wf.getAssignedVendors() != null){
                 String text = String.format("Reminder to complete %s by %s", wf.getWorkflowName(), wf.getDeadline());
-                processEmail(wf.getAssignedUsers(), subject, text);
+                HashSet<String> emailList = processEmailList(wf.getAssignedUsers(), wf.getAssignedAdmins(), wf.getAssignedVendors());
+                processEmail(emailList, subject, text);
+                emailList.clear();
             }
         }
     }
@@ -47,16 +50,32 @@ public class ScheduledService {
         for(Workflow wf: allWorkflows){
             if(wf.getForm().getApprovedBy() != null){
                 String text = String.format("%s has been approved", wf.getForm().getFormName());
-                if(wf.getAssignedUsers() != null){
-                    processEmail(wf.getAssignedUsers(), subject, text);
+                if(wf.getAssignedUsers() != null && wf.getAssignedAdmins() != null && wf.getAssignedVendors() != null){
+                    HashSet<String> emailList = processEmailList(wf.getAssignedUsers(), wf.getAssignedAdmins(), wf.getAssignedVendors());
+                    processEmail(emailList, subject, text);
+                    emailList.clear();
                 }
             }
         }
     }
 
-    private void processEmail(List<User> users, String subject, String text){
+    private HashSet<String> processEmailList(List<User> users, List<User> assignedAdmins, List<User> assignedVendors){
+        HashSet<String> emails = new HashSet<>();
         for(User user: users){
-            SendEmailRequest emailReminder = new SendEmailRequest(user.getEmail(), subject, text);
+            emails.add(user.getEmail());
+        }
+        for(User user: assignedAdmins){
+            emails.add(user.getEmail());
+        }
+        for(User user: assignedVendors){
+            emails.add(user.getEmail());
+        }
+        return emails;
+    }
+
+    private void processEmail(HashSet<String> emailList, String subject, String text){
+        for(String email: emailList){
+            SendEmailRequest emailReminder = new SendEmailRequest(email, subject, text);
             emailService.sendSimpleEmail(emailReminder);
         }
     }

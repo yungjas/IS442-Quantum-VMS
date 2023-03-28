@@ -50,7 +50,7 @@ public class RoleController {
     public ResponseEntity<List<String>> getAdminAttribute()
     {
     	List<String> vendorAttribute = getUserAttribute();
-        vendorAttribute.addAll(roleService.getFields(new Vendor(null, null, null, null)));
+        vendorAttribute.addAll(roleService.getFields(new Vendor(null, null, null, null, null, null, null, null, null)));
         
         if(vendorAttribute.size() == 0){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
