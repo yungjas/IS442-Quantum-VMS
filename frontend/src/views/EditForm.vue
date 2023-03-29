@@ -1,6 +1,6 @@
 <template>
   <div style="margin-top: 2em">
-    <h1>Edit a Form Template</h1>
+    <h1>Edit a Form</h1>
     <!-- <div class="btn-group" role="currentUser" >
         <button type="button" class="btn btn-secondary" @click="home">Home</button>
         <button type="button" class="btn btn-secondary" @click="logout">Logout</button>
@@ -20,7 +20,7 @@
           </tr>
           <tr>
             <td>
-              <label>formName</label>
+              <label>Form Name</label>
             </td>
             <td>
               <input type="text" v-model="data.formName" style="width: 100%" />
@@ -28,7 +28,7 @@
           </tr>
           <tr>
             <td>
-              <label>revisionNo</label>
+              <label>Revision Number</label>
             </td>
             <td>
               <input
@@ -40,7 +40,15 @@
           </tr>
           <tr>
             <td>
-              <label>LastEdited</label>
+              <label>Is Template</label>
+            </td>
+            <td style="text-align: left">
+              <input type="checkbox" v-model="data.template"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label>Last Edited</label>
             </td>
             <td>
               <input type="date" v-model="lastEdited" style="width: 100%" />
