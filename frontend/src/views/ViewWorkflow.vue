@@ -1,5 +1,5 @@
 <template>
-  <div class="ViewWorkflow" style="margin-top: 2em;">
+  <div class="ViewWorkflow" style="margin-top: 2em">
     <h1>Workflow Management</h1>
     <!-- <div class="btn-group" role="currentUser">
       <button type="button" class="btn btn-secondary" @click="home">
@@ -7,15 +7,21 @@
       </button>
       <button type="button" class="btn btn-secondary" @click="logout">
         Logout -->
-      <!-- </button> -->
+    <!-- </button> -->
     <!-- </div> -->
     <br /><br />
     <div v-if="userType === 'ROLE_ADMIN' || userType === 'ROLE_APPROVER'">
-      <!-- <label for="role">Filter by roles:</label>
-            <br>
-            <select name="selectRole" id="selectRole" @change="onChange($event)">
-                <option v-for="item in dropdownData" :key="item" v-bind:value="item">{{item}}</option>
-            </select> -->
+      <label for="role">Sort by deadline:</label>
+      <br />
+      <select
+        name="selectTemplate"
+        id="selectTemplate"
+        @change="onChange($event)"
+      >
+        <option v-for="item in dropdownData" :key="item" v-bind:value="item">
+          {{ item }}
+        </option>
+      </select>
 
       <table class="table" id="showTable">
         <thead>
@@ -34,17 +40,38 @@
             <td>{{ item.workflowId }}</td>
             <td>{{ item.workflowName }}</td>
             <td>{{ item.form.formName }}</td>
-            <td><ul><li v-for="admin in item.assignedAdmins" :key=admin.username>{{ admin.username }}</li></ul></td>
-            <td><ul><li v-for="vendor in item.assignedVendors" :key=vendor.username>{{ vendor.username }}</li></ul></td>
+            <td>
+              <ul>
+                <li v-for="admin in item.assignedAdmins" :key="admin.username">
+                  {{ admin.username }}
+                </li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li
+                  v-for="vendor in item.assignedVendors"
+                  :key="vendor.username"
+                >
+                  {{ vendor.username }}
+                </li>
+              </ul>
+            </td>
             <td>{{ item.deadline }}</td>
             <td v-if="item.workflowId !== this.workflowId">
               <button
                 class="btn btn-warning"
-                @click="viewWorkFlowForm(item.form.formId, item.assignedVendors, item.workflowId)"
+                @click="
+                  viewWorkFlowForm(
+                    item.form.formId,
+                    item.assignedVendors,
+                    item.workflowId
+                  )
+                "
               >
                 View Workflow Form
               </button>
-            </td>            
+            </td>
             <td v-if="item.workflowId !== this.workflowId">
               <button
                 class="btn btn-warning"
@@ -86,6 +113,7 @@ export default {
       // dropdownData: ['ALL', 'ROLE_ADMIN','ROLE_APPROVER','ROLE_VENDOR'],
       // role: 'ALL',
       backupData: [],
+      dropdownData: ["None", "Latest", "Earliest"],
     };
   },
   methods: {
@@ -96,18 +124,14 @@ export default {
       localStorage.clear();
       this.$router.push({ name: "Login" });
     },
-    viewWorkFlowForm(formId, assignedVendors, workflowId)
-    {
+    viewWorkFlowForm(formId, assignedVendors, workflowId) {
       console.log(assignedVendors);
       localStorage.setItem("formId", formId);
       localStorage.setItem("workflowId", workflowId);
-      if(assignedVendors.length > 0)
-      {
+      if (assignedVendors.length > 0) {
         localStorage.setItem("assignVendorId", assignedVendors[0].userId);
         this.$router.push({ name: "ShowWorkflowForm" });
-      }
-      else
-      {
+      } else {
         alert("No user assigned to this workflow yet");
       }
     },
@@ -123,9 +147,10 @@ export default {
         .then((response) => {
           this.data = response.data;
           this.backupData = response.data;
+          console.log(this.data);
         });
     },
-    deleteWorkflow (workflowId) {
+    deleteWorkflow(workflowId) {
       console.log(workflowId);
       axios
         .delete("http://localhost:8080/api/workflow/delete/" + workflowId, {
@@ -145,32 +170,40 @@ export default {
           }
         });
     },
-    editWorkflow (workflowId) {
-        console.log(workflowId);
+    editWorkflow(workflowId) {
+      console.log(workflowId);
 
-        axios.get("http://localhost:8080/api/workflow/" + workflowId, {
-                    headers:{
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer " + localStorage.token,
-                        "Access-Control-Allow-Origin": "*",
-                    }
-                })
-                .then((response) => {
-                    console.log(response.data);
-                    localStorage.editWorkflow = JSON.stringify(response.data);
-                    this.$router.push({name: 'EditWorkflow'});
-                })
-    }
-    // onChange(event)
-    // {
-    //     console.log(event.target.value)
-    //     this.data = this.backupData;
-    //     if(event.target.value != 'ALL')
-    //     {
-    //         this.data = this.data.filter((item) => item.userType == event.target.value);
-    //     }
-
-    // }
+      axios
+        .get("http://localhost:8080/api/workflow/" + workflowId, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.token,
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          localStorage.editWorkflow = JSON.stringify(response.data);
+          this.$router.push({ name: "EditWorkflow" });
+        });
+    },
+    onChange(event) {
+      this.data = this.backupData.slice()
+      if (event.target.value == "Latest") {
+        this.data = this.data.sort((a, b) => {
+          var aa = a.deadline.split("/").reverse().join();
+          var bb = b.deadline.split("/").reverse().join();
+          return aa > bb ? -1 : aa < bb ? 1 : 0;
+        });
+      }
+      if (event.target.value == "Earliest") {
+        this.data = this.data.sort((a, b) => {
+          var aa = a.deadline.split("/").reverse().join();
+          var bb = b.deadline.split("/").reverse().join();
+          return aa < bb ? -1 : aa > bb ? 1 : 0;
+        });
+      }
+    },
   },
   created() {
     try {
