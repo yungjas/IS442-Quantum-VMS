@@ -382,9 +382,9 @@ export default {
     },
     retrieveForm()
     {
-      console.log("http://localhost:8080/api/response/form_response/"+this.userId+"/"+ this.formId);
+      console.log("http://localhost:8080/api/response/form_response/"+this.userId+"/"+ this.formId + "/" + localStorage.workflowId);
 
-      axios.get("http://localhost:8080/api/response/form_response/"+this.userId+"/"+ this.formId, {
+      axios.get("http://localhost:8080/api/response/form_response/"+this.userId+"/"+ this.formId + "/" + localStorage.workflowId, {
                     headers:{
                         "Content-Type": "application/json",
                         "Authorization": "Bearer " + localStorage.token,

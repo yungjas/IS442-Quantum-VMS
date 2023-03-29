@@ -36,7 +36,7 @@
           <td v-if="item.workflowId !== this.workflowId">
             <button
               class="btn btn-warning"
-              @click="viewWorkFlowForm(item.form.formId)"
+              @click="viewWorkFlowForm(item.form.formId, item.workflowId)"
             >
               View
             </button>
@@ -68,9 +68,10 @@ export default {
       localStorage.clear();
       this.$router.push({ name: "Login" });
     },
-    viewWorkFlowForm(formId)
+    viewWorkFlowForm(formId, workflowId)
     {
       localStorage.setItem("formId", formId);
+      localStorage.setItem("workflowId", workflowId);
       this.$router.push({ name: "ShowWorkflowForm" });
     },
     viewWorkflows() {
@@ -84,6 +85,7 @@ export default {
         })
         .then((response) => {
           console.log(localStorage.userId);
+          console.log(response.data);
           for (let workflow of response.data) {
             let assignedVendors = workflow.assignedVendors;
             if (assignedVendors != null) {

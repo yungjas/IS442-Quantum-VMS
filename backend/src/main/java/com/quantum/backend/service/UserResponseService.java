@@ -14,10 +14,12 @@ import com.quantum.backend.model.Form;
 import com.quantum.backend.model.Question;
 import com.quantum.backend.model.User;
 import com.quantum.backend.model.UserResponse;
+import com.quantum.backend.model.Workflow;
 import com.quantum.backend.repository.FormBuilderRepository;
 import com.quantum.backend.repository.FormRepository;
 import com.quantum.backend.repository.UserRepository;
 import com.quantum.backend.repository.UserResponseRepository;
+import com.quantum.backend.repository.WorkflowRepository;
 
 @Service
 public class UserResponseService {
@@ -25,12 +27,14 @@ public class UserResponseService {
     private final FormRepository formRepository;
     private final FormBuilderRepository formBuilderRepository;
     private final UserRepository userRepository;
+    private final WorkflowRepository workflowRepository;
 
-    public UserResponseService(UserResponseRepository userResponseRepo, FormRepository formRepository, FormBuilderRepository formBuilderRepository, UserRepository userRepository){
+    public UserResponseService(UserResponseRepository userResponseRepo, FormRepository formRepository, FormBuilderRepository formBuilderRepository, UserRepository userRepository, WorkflowRepository workflowRepository){
         this.userResponseRepo = userResponseRepo;
         this.formRepository = formRepository;
         this.formBuilderRepository = formBuilderRepository;
         this.userRepository = userRepository;
+        this.workflowRepository = workflowRepository;
     }
 
     public List<UserResponse> getAllUserResponse(){
@@ -47,11 +51,43 @@ public class UserResponseService {
     }
 
     // get a user's responses to a form
-    public Map<String, Object> getFormResponse(String userId, String formId){
-        List<UserResponse> userResponses = userResponseRepo.findFormResponse(userId, formId);
-        
-        Map<String, Object> result = new HashMap<>();
+    public Map<String, Object> getFormResponse(String userId, String formId, String workflowId)
+    {
+		Optional<Workflow> workflowResponses = workflowRepository.findByWorkflowId(workflowId);
+		
+		List<User> assignedVendors = workflowResponses.get().getAssignedVendors();		
+		List<List<UserResponse>> listUserResponses = new ArrayList<List<UserResponse>>();
+		List<UserResponse> userResponses = null;
+		boolean isAssignedVendor = false;
+		
+		
+		for(User u : assignedVendors)
+		{			
+			String vendorId = u.getUserId();
+			
+			List<UserResponse> tempResponses = userResponseRepo.findFormResponse(vendorId, formId);	
+			if(!tempResponses.isEmpty()) {
+				listUserResponses.add(tempResponses);
+			}
 
+			if(vendorId.equals(userId))
+			{
+				isAssignedVendor = true;
+			}
+		}
+		
+		if(isAssignedVendor)
+		{
+			for(List<UserResponse> lus: listUserResponses)
+			{
+				if(!lus.isEmpty()) {
+					userResponses = lus;
+					break;
+				}
+			}
+		}
+        Map<String, Object> result = new HashMap<>();
+        
         // returns the form if user did not respond
         if(userResponses == null || userResponses.isEmpty()){
             Form formActual = formRepository.findById(formId).get();

@@ -62,13 +62,16 @@ public class UserResponseController {
         return new ResponseEntity<>(userResponses, HttpStatus.OK);
     }
 
-    @GetMapping("form_response/{userId}/{formId}")
-    public ResponseEntity<Object> getFormResponse(@PathVariable String userId, @PathVariable String formId){
+    @GetMapping("form_response/{userId}/{formId}/{workflowId}")
+    public ResponseEntity<Object> getFormResponse(@PathVariable String userId, @PathVariable String formId, @PathVariable String workflowId)
+    {
         Map<String, Object> userResponses = null;
-        try{
-            userResponses = userResponseService.getFormResponse(userId, formId);
+        try
+        {
+            userResponses = userResponseService.getFormResponse(userId, formId, workflowId);
         }
-        catch(Exception e){
+        catch(Exception e)
+        {
             new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(userResponses, HttpStatus.OK);
