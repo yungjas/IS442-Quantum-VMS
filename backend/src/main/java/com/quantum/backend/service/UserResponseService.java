@@ -69,6 +69,8 @@ public class UserResponseService {
             Form form = formRepository.findById(response.getFormId()).get();
             Question question = formBuilderRepository.findById(response.getQnId()).get();
             
+            formData.put("userResponseId", response.getUserResponseId());
+
             if(!result.containsKey("user")){
                 userData.put("userId", user.getUserId());
                 userData.put("username", user.getUsername());
