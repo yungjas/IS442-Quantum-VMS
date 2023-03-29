@@ -35,7 +35,7 @@ public class ScheduledService {
             long diffDays = diff / (24 * 60 * 60 * 1000);
 
             if(diffDays <= 3 && wf.getAssignedUsers() != null && wf.getAssignedAdmins() != null && wf.getAssignedVendors() != null){
-                String text = String.format("Reminder to complete %s by %s", wf.getWorkflowName(), wf.getDeadline());
+                String text = String.format("Reminder to complete %s by %s if you have not done so. Please ignore this email if you have already responded.", wf.getWorkflowName(), wf.getDeadline());
                 HashSet<String> emailList = processEmailList(wf.getAssignedUsers(), wf.getAssignedAdmins(), wf.getAssignedVendors());
                 processEmail(emailList, subject, text);
                 emailList.clear();
