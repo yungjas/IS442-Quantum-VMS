@@ -83,8 +83,12 @@ export default{
 
                             localStorage.data = JSON.stringify(response.data);
                             localStorage.userId = response.data.userId
-                            this.$router.push({ name: 'ViewWorkflow'})      
-
+                            if(localStorage.userType == "ROLE_ADMIN" || localStorage.userType == "ROLE_APPROVER"){
+                                this.$router.push({ name: 'ViewWorkflow'})
+                            }
+                            else{
+                                this.$router.push({name: 'ViewAssignedWorkflows'})
+                            }      
                         }
                     })
                 }

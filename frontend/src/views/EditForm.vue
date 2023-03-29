@@ -43,7 +43,7 @@
               <label>Is Template</label>
             </td>
             <td style="text-align: left">
-              <input type="checkbox" v-model="data.template"/>
+              <input type="checkbox" disabled v-model="data.template"/>
             </td>
           </tr>
           <tr>
