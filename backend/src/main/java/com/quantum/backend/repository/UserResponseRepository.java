@@ -16,4 +16,7 @@ public interface UserResponseRepository extends MongoRepository<UserResponse, St
 
     @Query("{'userId':?0, 'formId':?1}")
     List<UserResponse> findFormResponse(String userId, String formId);
+
+    @Query("{'formId':?0, 'qnId':?1}")
+    Optional<UserResponse> findByFormIdAndQnID(String formId, String qnId);
 }

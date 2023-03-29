@@ -86,11 +86,11 @@ public class UserResponseController {
         return new ResponseEntity<>(createdResponse, HttpStatus.OK) ;
     }
 
-    @PutMapping("update/{userResponseId}")
-    public ResponseEntity<Object> updateUserResponse(@PathVariable String userResponseId, @RequestBody UserResponse userResponse){
+    @PutMapping("update/{formId}/{qnId}")
+    public ResponseEntity<Object> updateUserResponse(@PathVariable String formId, @PathVariable String qnId, @RequestBody UserResponse userResponse){
         UserResponse userResponseUpdate = null;
         try{
-            userResponseUpdate = userResponseService.updateUserResponse(userResponseId, userResponse);
+            userResponseUpdate = userResponseService.updateUserResponse(formId, qnId, userResponse);
         }
         catch(ResourceNotFoundException re){
             return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);

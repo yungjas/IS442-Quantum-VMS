@@ -170,12 +170,12 @@ public class UserResponseService {
     }
     
     // should only let the user update their responses for a question
-    public UserResponse updateUserResponse(String userResponseId, UserResponse userResponseUpdate) throws ResourceNotFoundException, RequestErrorException{
-        Optional<UserResponse> userResponse = userResponseRepo.findById(userResponseId);
+    public UserResponse updateUserResponse(String formId, String qnId, UserResponse userResponseUpdate) throws ResourceNotFoundException, RequestErrorException{
+        Optional<UserResponse> userResponse = userResponseRepo.findByFormIdAndQnID(formId, qnId);
         UserResponse userResponseData = null;
 
         if(!userResponse.isPresent()){
-            throw new ResourceNotFoundException("UserResponse", "userResponseId", userResponseId);
+            throw new ResourceNotFoundException("UserResponse", "userResponseId", userResponse.get().getUserResponseId());
         }
 
         try{
