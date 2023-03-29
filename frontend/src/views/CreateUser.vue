@@ -102,7 +102,7 @@
                             })
                             .then((response_users) => {
                                 console.log(response_users);
-                                this.$router.push({name: 'Home'}); 
+                                this.$router.push({name: 'ViewWorkflow'}); 
                                 alert("Account created successfully");               
                             })                          
                     }
@@ -141,7 +141,7 @@
                             .then((response_users) => {
                                 console.log(response_users);
 
-                                this.$router.push({name: 'Home'});
+                                this.$router.push({name: 'ViewWorkflow'});
                                         
                                 alert("Account created successfully");
                             })                               
