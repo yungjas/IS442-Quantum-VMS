@@ -85,6 +85,7 @@ public class UserResponseService {
                 formData.put("revisionNo", form.getRevisionNo());
                 formData.put("lastEdited", form.getLastEdited());
                 formData.put("dateSubmitted", form.getDateSubmitted());
+                formData.put("approvedBy", form.getApprovedBy());
             }
 
             qnData.put("questionId", question.getQuestionId());
