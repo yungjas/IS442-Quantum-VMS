@@ -26,7 +26,7 @@
             <th scope="col">Assigned Admins</th>
             <th scope="col">Assigned Vendor Staff</th>
             <th scope="col">Deadline</th>
-            <th scope="col" colspan="2">Action</th>
+            <th scope="col" colspan="3">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -37,6 +37,14 @@
             <td><ul><li v-for="admin in item.assignedAdmins" :key=admin.username>{{ admin.username }}</li></ul></td>
             <td><ul><li v-for="vendor in item.assignedVendors" :key=vendor.username>{{ vendor.username }}</li></ul></td>
             <td>{{ item.deadline }}</td>
+            <td v-if="item.workflowId !== this.workflowId">
+              <button
+                class="btn btn-warning"
+                @click="viewWorkFlowForm(item.form.formId, item.assignedVendors)"
+              >
+                View Workflow Form
+              </button>
+            </td>            
             <td v-if="item.workflowId !== this.workflowId">
               <button
                 class="btn btn-warning"
@@ -88,7 +96,20 @@ export default {
       localStorage.clear();
       this.$router.push({ name: "Login" });
     },
-
+    viewWorkFlowForm(formId, assignedVendors)
+    {
+      console.log(assignedVendors);
+      localStorage.setItem("formId", formId);
+      if(assignedVendors.length > 0)
+      {
+        localStorage.setItem("assignVendorId", assignedVendors[0].userId);
+        this.$router.push({ name: "ShowWorkflowForm" });
+      }
+      else
+      {
+        alert("No user assigned to this workflow yet");
+      }
+    },
     viewWorkflows() {
       axios
         .get("http://localhost:8080/api/workflow/all", {
