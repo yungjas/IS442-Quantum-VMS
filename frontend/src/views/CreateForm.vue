@@ -40,94 +40,200 @@
             <td>
               <label>Form No</label>
             </td>
+
             <td>
               <input type="text" v-model="formNo" style="width: 100%" />
             </td>
+
           </tr>
+
           <tr>
             <td>
-              <label>formName</label>
+              <label>Form Name</label>
             </td>
+
             <td>
               <input type="text" v-model="formName" style="width: 100%" />
             </td>
+
           </tr>
+
           <tr>
             <td>
-              <label>revisionNo</label>
+              <label>Revision No.</label>
             </td>
+
             <td>
               <input type="text" v-model="revisionNo" style="width: 100%" />
             </td>
+
           </tr>
+
           <tr>
             <td>
-              <label>LastEdited</label>
+              <label>Last Edited</label>
             </td>
+
             <td>
               <input type="date" v-model="lastEdited" style="width: 100%" />
             </td>
+
           </tr>
           <!-- <tr>
-                        <td>
-                            <label>Date Submitted</label>
-                        </td>
-                        <td>
-                            <input type=date v-model="dateSubmitted" style="width: 100%">
-                        </td>
-                    </tr> -->
-                    <tr>
-                        <td>
-                            <label>Questions</label>
-                        </td>
-                        <td style="text-align: left;">
+                <td>
+                    <label>Date Submitted</label>
+                </td>
+                <td>
+                    <input type=date v-model="dateSubmitted" style="width: 100%">
+                </td>
+            </tr> -->
+            <tr style="width: 100%" > 
+            <td>
 
-                            
-                            <div v-for="question in paginatedQuestionData" :key="question.questionId" class="card" style="margin-top:20px;">
-                                <div class="cardbody">
-                                    <input type="checkbox" v-model="selectedQuestion" :value="question"/> &nbsp;
-                                    <b>Question Text:</b> <label>{{ question.questionText }}</label><br> &emsp;&nbsp;
-                                    <b>Question Type:</b> <label>{{ question.questionType }}</label><br> &emsp;&nbsp;
-                                    <b>Question Section Name:</b> <label>{{ question.questionSectionName }}</label><br> &emsp;&nbsp;
-                                    <b>Answer Choices:</b> <br><label v-for="choices in question.answerChoices" :key="choices">
-                                        <label v-for="v,k in choices" :key="k">
-                                            &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br>
-                                        </label>
-                                        </label><br> &emsp;&nbsp;
-                                    <b>Required:</b> <label>{{ question.required }}</label><br>
-                                    <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)" style="margin-left: 20px;">Delete</button>
-                                    <br><br>
-                                </div>
-                            </div>
-                            
+            </td>
+                <td>
+                    <input type="text" class="input" v-model="input" @change="handleSearch" @keyup="handleSearch" style="width: 100%" placeholder="Search Question"/>
+                </td>
+            </tr>
+          <tr>
+            <td>
+              <label>Questions</label>
+            </td>
+            <td style="text-align:left;">   
+                <div v-for="question in paginatedQuestionData" :key="question.questionId" class="card" style="margin-top: 20px">
 
-                            <button type="button" class="btn btn-danger" @click="addQuestion" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Question</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <button
-              type="button"
-              @click="this.showSelected = !this.showSelected">
-              Show Selected Questions
-              </button>
-              <ul class="list-group" v-if="this.showSelected==true">
-                <li  class="list-group-item" v-for="question of this.selectedQuestion" :key="question">{{question.questionText }}</li>
-              </ul>
-            
-            <div>
-                <div class="font-weight-bold">
-                    <button type="button" class="btn btn-secondary" v-if="hasPrevPage" @click="prevPage">Prev</button>
-                    Page {{ currentPage }} of {{ totalPages }}
-                    <button type="button" class="btn btn-secondary" v-if="hasNextPage" @click="nextPage">Next</button>
+                <div class="cardbody" style=" padding:10px">
+                    <input type="checkbox" v-model="selectedQuestion" :value="question"/>
+                    &nbsp; <b>Question Text:</b>
+                    <label>{{ question.questionText }}</label>
+                    <br />
+
+                    &emsp;&nbsp; <b>Question Type:</b>
+                    <label>{{ question.questionType }}</label>
+                    <br />
+
+                    &emsp;&nbsp; <b>Question Section Name:</b>
+                    <label>{{ question.questionSectionName }}</label>
+                    <br />
+
+                    &emsp;&nbsp; <b>Answer Choices:</b> <br /><label v-for="choices in question.answerChoices" :key="choices">
+                    
+                    <label v-for="(v, k) in choices" :key="k">
+                        &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br />
+                    </label> 
+                    </label><br />
+                    &emsp;&nbsp; <b>Required:</b>
+                    <label>{{ question.required }}</label>
+
+                    <br />
+
+                    <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)" style="margin-left: 20px">
+                    Delete
+                    </button>
+
+                    <br /><br />
                 </div>
             </div>
-            
-            <br><br>
-            <div class="btn-group justify-content-end align-items-end" role="submitChange">
-                <button type="button" class="btn btn-secondary" @click="createForm">Create</button>
-            </div>
+
+            </td>
+
+            <td>
+              
+
+              <br />
+              <br />
+
+              <div style="text-align: left" class="item qn" v-for="question in filteredList" :key="question.questionId">
+                <input type="checkbox" v-model="selectedQuestion" :value="question"/>
+
+                &nbsp; <b>Question Text:</b>
+                <label>{{ question.questionText }}</label><br />
+
+                &emsp;&nbsp; <b>Question Type:</b>
+                <label>{{ question.questionType }}</label><br />
+
+                &emsp;&nbsp; <b>Question Section Name:</b>
+                <label>{{ question.questionSectionName }}</label><br />
+
+                &emsp;&nbsp; <b>Answer Choices:</b> <br />
+                <label v-for="choices in question.answerChoices" :key="choices">
+                  <label v-for="(v, k) in choices" :key="k">
+                    &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br />
+                  </label> </label><br />
+                &emsp;&nbsp; <b>Required:</b>
+                <label>{{ question.required }}</label><br />
+                
+                <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)">
+                  Delete
+                </button>
+
+                <br /><br />
+                ================================
+              </div>
+              <!-- <div class="item error" v-if="input">
+                                <p>No such question!</p>
+                            </div> -->
+
+              <!-- <div style="text-align: left;" v-for="question in questionData" :key="question.questionId">
+                                <input type="checkbox" v-model="selectedQuestion" :value="question"/> &nbsp;
+                                <b>Question Text:</b> <label>{{ question.questionText }}</label><br> &emsp;&nbsp;
+                                <b>Question Type:</b> <label>{{ question.questionType }}</label><br> &emsp;&nbsp;
+                                <b>Question Section Name:</b> <label>{{ question.questionSectionName }}</label><br> &emsp;&nbsp;
+                                <b>Answer Choices:</b> <br><label v-for="choices in question.answerChoices" :key="choices">
+                                    <label v-for="v,k in choices" :key="k">
+                                        &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br>
+                                    </label>
+                                    </label><br> &emsp;&nbsp;
+                                <b>Required:</b> <label>{{ question.required }}</label><br>
+                                <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)">Delete</button>
+                                <br><br>
+                                ================================
+                            </div> -->
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    <div>
+        <button type="button" class="btn btn-danger" @click="addQuestion" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Question</button>
+    </div>
+
+    <div>
+      <button class="btn btn-primary" type="button" @click="this.showSelected">
+        Show Selected Questions
+      </button>
+
+      <ul class="list-group" v-if="this.showSelected == true">
+        <li class="list-group-item" v-for="question of this.selectedQuestion" :key="question">
+          {{ question.questionText }}
+        </li>
+      </ul>
+
+    </div>
+
+      <div>
+        <div class="font-weight-bold">
+          <button type="button" class="btn btn-secondary" v-if="hasPrevPage" @click="prevPage">
+            Prev
+          </button>
+
+          Page {{ currentPage }} of {{ totalPages }}
+
+          <button type="button" class="btn btn-secondary" v-if="hasNextPage" @click="nextPage">
+            Next
+          </button>
+
         </div>
+      </div>
+
+      <br /><br />
+
+      <div class="btn-group justify-content-end align-items-end" role="submitChange">
+        <button type="button" class="btn btn-secondary" @click="createForm">
+          Create
+        </button>
+      </div>
+    </div>
 
     <!-- Modal to Add Question -->
     <div
@@ -141,12 +247,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Add Question</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <!-- 
@@ -166,74 +267,59 @@
               <tr>
                 <td>Question Type:</td>
                 <td>
-                  <select
-                    style="width: 100%"
-                    name="selectRole"
-                    id="selectRole"
-                    @change="onChange($event)"
-                  >
-                    <option
-                      v-for="item in questionTypeArr"
-                      :key="item"
-                      v-bind:value="item"
-                    >
+                  <select style="width: 100%" name="selectRole" id="selectRole" @change="onChange($event)">
+                    
+                    <option v-for="item in questionTypeArr" :key="item" v-bind:value="item">
                       {{ item }}
                     </option>
+
                   </select>
                 </td>
               </tr>
+
               <tr>
                 <td>Question Selection Name (Group):</td>
                 <td><input type="text" v-model="questionSectionName" /></td>
               </tr>
+
               <tr>
                 <td v-if="questionType !== 'text'" class="controls">
                   Answer Choices:
                 </td>
+
                 <td>
                   <div id="answers"></div>
                   <div v-if="questionType !== 'text'" class="controls">
-                    <button
-                      type="button"
-                      id="add_more_fields"
-                      class="btn btn-primary"
-                      @click="addAnswer"
-                    >
+                    <button type="button" id="add_more_fields" class="btn btn-primary" @click="addAnswer">
                       Add Answers
                     </button>
-                    <button
-                      type="button"
-                      id="remove_fields"
-                      class="btn btn-warning"
-                      @click="removeAnswer"
-                    >
+
+                    <button type="button" id="remove_fields" class="btn btn-warning" @click="removeAnswer">
                       Remove Answers
                     </button>
+
                   </div>
                 </td>
               </tr>
               <tr>
                 <td>Required:</td>
+
                 <td><input type="checkbox" v-model="required" /></td>
+
               </tr>
             </table>
+
           </div>
+
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              id="closeModal"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" id="closeModal" data-bs-dismiss="modal">
               Close
             </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              @click="addNewQuestion"
-            >
+
+            <button type="button" class="btn btn-primary" @click="addNewQuestion" >
               Add
             </button>
+
           </div>
         </div>
       </div>
@@ -248,24 +334,27 @@ export default {
   name: "CreateForm",
   data() {
     return {
-      questionData: [],
-      userType: localStorage.userType,
-      selectedQuestion: [],
-      formNo: "",
-      formName: "",
-      revisionNo: "",
-      lastEdited: "",
-      dateSubmitted: "",
-      answerArray: null,
-      questionText: "",
-      questionType: "text",
-      questionSectionName: "",
-      answerChoices: [],
-      required: false,
-      questionTypeArr: ["text", "radio", "checkbox"],
-            pageSize: 5, // number of items per page
-            currentPage: 1 // current page number
-        }
+        questionData: [],
+        userType: localStorage.userType,
+        selectedQuestion: [],
+        formNo: "",
+        formName: "",
+        revisionNo: "",
+        lastEdited: "",
+        dateSubmitted: "",
+        answerArray: null,
+        questionText: "",
+        questionType: "text",
+        questionSectionName: "",
+        answerChoices: [],
+        required: false,
+        questionTypeArr: ["text", "radio", "checkbox"],
+        pageSize: 5, // number of items per page
+        currentPage: 1,
+        filteredList: [],
+        input: '', // current page number
+
+    }
     },
     computed: {
         paginatedQuestionData() {
@@ -382,23 +471,54 @@ export default {
           });
       }
     },
-    getQuestionsData() {
-      axios
-        .get("http://localhost:8080/api/form-builder/all", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.token,
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .then((response) => {
-          this.questionData = response.data;
-          console.log(this.questionData);
-        });
+    // getQuestionsData() {
+    //   axios
+    //     .get("http://localhost:8080/api/form-builder/all", {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: "Bearer " + localStorage.token,
+    //         "Access-Control-Allow-Origin": "*",
+    //       },
+    //     })
+    //     .then((response) => {
+    //       this.questionData = response.data;
+    //       console.log(this.questionData);
+    //     });
+    // },
+    handleSearch() {
+        console.log(this.input);
+        if (this.input && this.input.length > 0) {
+            this.filteredList = this.questionData.filter(question => {
+                const input = this.input.toLowerCase();
+                const questionName = question.questionText.toLowerCase();
+                if (input && questionName.indexOf(input) !== -1) {
+                    console.log(this.filteredList);
+                    return this.filteredList;
+                }
+
+            })
+        } else {
+            this.filteredList = this.questionData;
+            return this.filteredList;
+        }
     },
+    getQuestionsData()
+        {
+            axios.get("http://localhost:8080/api/form-builder/all",
+            {
+                headers:{
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + localStorage.token,
+                    "Access-Control-Allow-Origin": "*",
+                }
+                })
+                .then((response) => {
+                    this.questionData = response.data;
+                    console.log(this.questionData);
+                })
+            },
     addAnswer() {
       console.log("adding answer");
-
       var inputNameField = document.createElement("input");
       inputNameField.setAttribute("type", "text");
       inputNameField.setAttribute("name", "answersArray[]");
@@ -415,7 +535,8 @@ export default {
 
       this.answerArray.appendChild(document.createElement("br"));
       this.answerArray.appendChild(document.createElement("br"));
-    },
+
+},
     removeAnswer() {
       console.log("remove answer");
       var input_tags = this.answerArray.getElementsByTagName("input");
@@ -466,17 +587,18 @@ export default {
 
       this.answerChoices = [];
 
-      for (var x = 0; x < tempAnswerArray2.length; x += 2) {
-        var tempObject = "{";
-        tempObject += '"' + "inputName" + '": "' + tempAnswerArray2[x] + '",';
-        tempObject +=
-          '"' + "inputValue" + '": "' + tempAnswerArray2[x + 1] + '"';
-        tempObject += "}";
-
-        if (x < tempAnswerArray2.length) {
-          this.answerChoices.push(tempObject);
-        }
-      }
+      for(var x = 0; x < tempAnswerArray2.length; x+=2)
+            {
+                var tempObject = "{";
+                tempObject += "\"" + "inputName" + "\": \"" + tempAnswerArray2[x] + "\",";
+                tempObject += "\"" + "inputValue" + "\": \"" + tempAnswerArray2[x+1] + "\"";
+                tempObject += "}";
+                
+                if(x < tempAnswerArray2.length)
+                {
+                    this.answerChoices.push(tempObject);
+                }
+            }
 
       /*
                     {
@@ -574,3 +696,16 @@ export default {
   },
 };
 </script>
+
+<style>
+.input {
+  padding: 10px 45px;
+  background: white url("../assets/search.svg") no-repeat 15px center;
+  background-size: 15px 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+</style>
