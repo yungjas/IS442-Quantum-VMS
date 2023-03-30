@@ -109,6 +109,14 @@
                   <br /><br />
                 </div>
               </div>
+              <button
+              type="button"
+              @click="this.showSelected = !this.showSelected">
+              Show Selected Questions
+              </button>
+              <ul class="list-group" v-if="this.showSelected==true">
+                <li  class="list-group-item" v-for="question of this.selectedQuestion" :key="question">{{question.questionText }}</li>
+              </ul>
 
               <button
                 type="button"
@@ -264,6 +272,7 @@ export default {
       answerChoices: [],
       required: false,
       questionTypeArr: ["text", "radio", "checkbox"],
+      showSelected: false,
     };
   },
   methods: {
