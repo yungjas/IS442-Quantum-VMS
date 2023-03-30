@@ -52,6 +52,7 @@ export default {
                                   }
                               })
                               .then((response) => {
+                                  alert("Form has been approved")
                                   console.log(response);
                               })
     },
