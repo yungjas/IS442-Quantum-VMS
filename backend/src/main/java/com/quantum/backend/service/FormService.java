@@ -94,7 +94,7 @@ public class FormService {
         return actualForm;
     }
 
-    public Form approveForm(String formId, Form form) throws RequestErrorException, RequestErrorException{
+    public Form approveForm(String formId, Form form) throws RequestErrorException{
         Optional<Form> currentForm = formRepo.findById(formId);
         Form currentFormData = null;
 
@@ -113,6 +113,26 @@ public class FormService {
                 currentFormData.setApprovedBy(user.get());
                 formRepo.save(currentFormData);
             }
+        }
+        catch(Exception e){
+            throw new RequestErrorException("approve", "Form", e.getMessage());
+        }
+        
+        return currentFormData;
+    }
+
+    public Form unapproveForm(String formId, Form form) throws RequestErrorException{
+        Optional<Form> currentForm = formRepo.findById(formId);
+        Form currentFormData = null;
+
+        if(!currentForm.isPresent()){
+            throw new ResourceNotFoundException("Form", "formId", formId);
+        }
+        
+        try{
+            currentFormData = currentForm.get();
+            currentFormData.setApprovedBy(null);
+            formRepo.save(currentFormData);
         }
         catch(Exception e){
             throw new RequestErrorException("approve", "Form", e.getMessage());
