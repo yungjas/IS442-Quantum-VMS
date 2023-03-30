@@ -25,6 +25,8 @@ public class Question {
     
     private boolean isRequired;
 
+    private boolean isTemplate;
+
     // @DBRef
     // private List<UserResponse> userResponses;
 }
