@@ -46,7 +46,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <label>formName</label>
+                            <label>Form Name</label>
                         </td>
                         <td>
                             <input type=text v-model="formName" style="width: 100%">
@@ -54,7 +54,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <label>revisionNo</label>
+                            <label>Revision No.</label>
                         </td>
                         <td>
                             <input type=text v-model="revisionNo" style="width: 100%">
@@ -62,7 +62,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <label>LastEdited</label>
+                            <label>Last Edited</label>
                         </td>
                         <td>
                             <input type=date v-model="lastEdited" style="width: 100%">
@@ -79,11 +79,15 @@
                     <tr>
                         <td>
                             <label>Questions</label>
+                            
                         </td>
-                        <td style="text-align: left;">
 
-
-                            <div v-for="question in questionData" :key="question.questionId">
+                        <td> 
+                            <input type="text" class="input" v-model="input" @change="handleSearch" @keyup="handleSearch" style="width: 100%" placeholder="Search Question" />
+                          
+                            <br> <br>
+                            
+                            <div style="text-align: left;" class="item qn" v-for="question in filteredList" :key="question.questionId">
                                 <input type="checkbox" v-model="selectedQuestion" :value="question"/> &nbsp;
                                 <b>Question Text:</b> <label>{{ question.questionText }}</label><br> &emsp;&nbsp;
                                 <b>Question Type:</b> <label>{{ question.questionType }}</label><br> &emsp;&nbsp;
@@ -97,7 +101,26 @@
                                 <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)">Delete</button>
                                 <br><br>
                                 ================================
-                            </div>
+                            </div> 
+                            <!-- <div class="item error" v-if="input">
+                                <p>No such question!</p>
+                            </div> -->
+
+                            <!-- <div style="text-align: left;" v-for="question in questionData" :key="question.questionId">
+                                <input type="checkbox" v-model="selectedQuestion" :value="question"/> &nbsp;
+                                <b>Question Text:</b> <label>{{ question.questionText }}</label><br> &emsp;&nbsp;
+                                <b>Question Type:</b> <label>{{ question.questionType }}</label><br> &emsp;&nbsp;
+                                <b>Question Section Name:</b> <label>{{ question.questionSectionName }}</label><br> &emsp;&nbsp;
+                                <b>Answer Choices:</b> <br><label v-for="choices in question.answerChoices" :key="choices">
+                                    <label v-for="v,k in choices" :key="k">
+                                        &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br>
+                                    </label>
+                                    </label><br> &emsp;&nbsp;
+                                <b>Required:</b> <label>{{ question.required }}</label><br>
+                                <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)">Delete</button>
+                                <br><br>
+                                ================================
+                            </div> -->
                             
 
                             <button type="button" class="btn btn-danger" @click="addQuestion" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Question</button>
@@ -198,6 +221,8 @@ export default {
             answerChoices: [],
             required: false,
             questionTypeArr: ['text', 'radio', 'checkbox'],
+            filteredList: [],
+            input: '',
         }
     },
     methods: 
@@ -297,6 +322,24 @@ export default {
                             })                                          
 
 
+            }
+        },
+       
+        handleSearch() {
+            console.log(this.input);
+            if (this.input && this.input.length > 0) {
+                this.filteredList = this.questionData.filter(question => {
+                    const input = this.input.toLowerCase();
+                    const questionName = question.questionText.toLowerCase();
+                    if (input && questionName.indexOf(input) !== -1) {
+                        console.log(this.filteredList);
+                        return this.filteredList;
+                    }
+                   
+                })
+            } else {
+                this.filteredList = this.questionData; 
+                return this.filteredList;
             }
         },
         getQuestionsData()
@@ -501,3 +544,17 @@ export default {
     },
 }
 </script>
+
+<style>
+.input  {
+    padding: 10px 45px;
+    background: white url("../assets/search.svg") no-repeat 15px center;
+    background-size: 15px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+      rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  }
+
+</style>
