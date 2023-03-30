@@ -38,7 +38,8 @@
               @click="editForm(item.formId)">Edit</button>
             </td>
             <td v-if="item.formId !== this.formId">
-              <button class="btn btn-danger">Delete</button>
+              <button class="btn btn-danger" 
+              @click="deleteForm(item.formId)">Delete</button>
             </td>
           </tr>
         </tbody>
@@ -100,6 +101,28 @@ export default {
           localStorage.editForm = JSON.stringify(response.data);
           this.$router.push({ name: "EditForm" });
         });
+    },
+    deleteForm(formId)
+    {
+      axios.delete("http://localhost:8080/api/forms/delete/" + formId, {
+                    headers:{
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + localStorage.token,
+                        "Access-Control-Allow-Origin": "*",
+                    }
+                })
+                .then((response) => {
+                    console.log(response.status);
+                    if(response.status == 200)
+                    {
+                        alert("Form deleted successfully");
+                        this.viewForms();
+                    }
+                    else
+                    {
+                        alert("Err: form deletion failed");
+                    }
+                })
     },
     onChange(event) {
       console.log(event.target.value)
