@@ -106,7 +106,14 @@
                     </tr>
                 </tbody>
             </table>
-    
+            <button
+              type="button"
+              @click="this.showSelected = !this.showSelected">
+              Show Selected Questions
+              </button>
+              <ul class="list-group" v-if="this.showSelected==true">
+                <li  class="list-group-item" v-for="question of this.selectedQuestion" :key="question">{{question.questionText }}</li>
+              </ul>
             
             <div>
                 <div class="font-weight-bold">
@@ -115,6 +122,7 @@
                     <button type="button" class="btn btn-secondary" v-if="hasNextPage" @click="nextPage">Next</button>
                 </div>
             </div>
+            
             <br><br>
             <div class="btn-group justify-content-end align-items-end" role="submitChange">
                 <button type="button" class="btn btn-secondary" @click="createForm">Create</button>
