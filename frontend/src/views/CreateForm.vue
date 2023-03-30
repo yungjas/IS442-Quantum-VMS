@@ -89,6 +89,7 @@
                                     <b>Question Text:</b> <label>{{ question.questionText }}</label><br> &emsp;&nbsp;
                                     <b>Question Type:</b> <label>{{ question.questionType }}</label><br> &emsp;&nbsp;
                                     <b>Question Section Name:</b> <label>{{ question.questionSectionName }}</label><br> &emsp;&nbsp;
+                                    <b>Is template:</b> <label>{{ question.template }}</label><br> &emsp;&nbsp;
                                     <b>Answer Choices:</b> <br><label v-for="choices in question.answerChoices" :key="choices">
                                         <label v-for="v,k in choices" :key="k">
                                             &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br>
@@ -384,7 +385,7 @@ export default {
     },
     getQuestionsData() {
       axios
-        .get("http://localhost:8080/api/form-builder/all", {
+        .get("http://localhost:8080/api/form-builder/all_templates", {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + localStorage.token,
