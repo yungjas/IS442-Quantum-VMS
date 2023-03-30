@@ -84,21 +84,21 @@
                         <td style="text-align: left;">
 
                             
-                            <div v-for="question in questionData" :key="question.questionId" class="card" style="margin-top:20px;">
+                            <div v-for="question in paginatedQuestionData" :key="question.questionId" class="card" style="margin-top:20px;">
                                 <div class="cardbody">
-                                <input type="checkbox" v-model="selectedQuestion" :value="question"/> &nbsp;
-                                <b>Question Text:</b> <label>{{ question.questionText }}</label><br> &emsp;&nbsp;
-                                <b>Question Type:</b> <label>{{ question.questionType }}</label><br> &emsp;&nbsp;
-                                <b>Question Section Name:</b> <label>{{ question.questionSectionName }}</label><br> &emsp;&nbsp;
-                                <b>Answer Choices:</b> <br><label v-for="choices in question.answerChoices" :key="choices">
-                                    <label v-for="v,k in choices" :key="k">
-                                        &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br>
-                                    </label>
-                                    </label><br> &emsp;&nbsp;
-                                <b>Required:</b> <label>{{ question.required }}</label><br>
-                                <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)" style="margin-left: 20px;">Delete</button>
-                                <br><br>
-                            </div>
+                                    <input type="checkbox" v-model="selectedQuestion" :value="question"/> &nbsp;
+                                    <b>Question Text:</b> <label>{{ question.questionText }}</label><br> &emsp;&nbsp;
+                                    <b>Question Type:</b> <label>{{ question.questionType }}</label><br> &emsp;&nbsp;
+                                    <b>Question Section Name:</b> <label>{{ question.questionSectionName }}</label><br> &emsp;&nbsp;
+                                    <b>Answer Choices:</b> <br><label v-for="choices in question.answerChoices" :key="choices">
+                                        <label v-for="v,k in choices" :key="k">
+                                            &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br>
+                                        </label>
+                                        </label><br> &emsp;&nbsp;
+                                    <b>Required:</b> <label>{{ question.required }}</label><br>
+                                    <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)" style="margin-left: 20px;">Delete</button>
+                                    <br><br>
+                                </div>
                             </div>
                             
 
@@ -108,7 +108,16 @@
                 </tbody>
             </table>
     
-            <div class="btn-group" role="submitChange">
+            
+            <div>
+                <div class="font-weight-bold">
+                    <button type="button" class="btn btn-secondary" v-if="hasPrevPage" @click="prevPage">Prev</button>
+                    Page {{ currentPage }} of {{ totalPages }}
+                    <button type="button" class="btn btn-secondary" v-if="hasNextPage" @click="nextPage">Next</button>
+                </div>
+            </div>
+            <br><br>
+            <div class="btn-group justify-content-end align-items-end" role="submitChange">
                 <button type="button" class="btn btn-secondary" @click="createForm">Create</button>
             </div>
         </div>
@@ -202,6 +211,30 @@ export default {
             answerChoices: [],
             required: false,
             questionTypeArr: ['text', 'radio', 'checkbox'],
+            pageSize: 5, // number of items per page
+            currentPage: 1 // current page number
+        }
+    },
+    computed: {
+        paginatedQuestionData() {
+        // calculate start and end index of current page
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        console.log(this.questionData.slice(startIndex, endIndex));
+        // return items for current page
+        return this.questionData.slice(startIndex, endIndex);
+        },
+        totalPages() {
+        // calculate total number of pages
+        return Math.ceil(this.questionData.length / this.pageSize);
+        },
+        hasPrevPage() {
+        // return true if current page is not the first page
+        return this.currentPage > 1;
+        },
+        hasNextPage() {
+        // return true if current page is not the last page
+        return this.currentPage < this.totalPages;
         }
     },
     methods: 
@@ -492,6 +525,14 @@ export default {
             this.questionType = event.target.value;
 
         },
+        prevPage() {
+        // move to previous page
+        this.currentPage--;
+        },
+        nextPage() {
+        // move to next page
+        this.currentPage++;
+        }
     },
     created()
     {
