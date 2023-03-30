@@ -8,6 +8,8 @@
     <button id="btnSubmitForm" @click="submitForm()" hidden>Submit Form</button> &nbsp;
     <button id="btnGeneratePDF" @click="generatePDF()" hidden>Generate PDF</button> &nbsp;
     <button id="btnApproveForm" @click="approveForm()" hidden>Approve Form</button>
+    <button id="btnUnapproveForm" @click="unapproveForm()" hidden>Unapprove Form</button>
+    <p id="formStatus"></p>
   </div>
   
 </template>
@@ -27,6 +29,8 @@ export default {
         btnSubmitForm: null,
         btnGeneratePDF: null,
         btnApprove: null,
+        btnUnapprove: null,
+        formStatus: null,
         form: null,
         approved: false,
         placeholderID: 0,
@@ -54,6 +58,22 @@ export default {
                               .then((response) => {
                                   alert("Form has been approved")
                                   console.log(response);
+                                  this.$router.push("/viewWorkflow");
+                              })
+    },
+    unapproveForm()
+    {
+      var approveFormObj = this.jsonData.form;
+      axios.put("http://localhost:8080/api/forms/unapprove/" + approveFormObj.formId, approveFormObj, {
+                                  headers:{
+                                      "Content-Type": "application/json",
+                                      "Authorization": "Bearer " + localStorage.token,
+                                      "Access-Control-Allow-Origin": "*",
+                                  }
+                              })
+                              .then((response) => {
+                                  console.log(response);
+                                  this.$router.push("/viewWorkflow");
                               })
     },
     generatePDF()
@@ -159,6 +179,7 @@ export default {
                               })
                               .then((response) => {
                                   console.log(response);
+                                  this.formStatus.innerHTML = "Submitted";
                               })
 
       }
@@ -178,6 +199,8 @@ export default {
                               })
                               .then((response) => {
                                   console.log(response);
+                                  console.log(this.formStatus);
+                                  this.formStatus.innerHTML = "Update Successfully";
                               })                
       }
 
@@ -207,6 +230,10 @@ export default {
         if(this.approved)
         {
           this.btnGeneratePDF.hidden = false;
+          if(localStorage.userType === "ROLE_APPROVER")
+          {
+            this.btnUnapprove.hidden = false;
+          }
         }
 
         // var userObj = formObj.user;
@@ -378,6 +405,12 @@ export default {
         console.log("APPROVED");
         this.btnSubmitForm.hidden = true;
         this.btnApprove.hidden = true;
+        
+        if(localStorage.userType === "ROLE_APPROVER")
+          {
+            this.btnUnapprove.hidden = false;
+          }
+
         this.btnGeneratePDF.hidden = false;
       }
     },
@@ -440,10 +473,13 @@ export default {
       this.userId = localStorage.assignVendorId;
     }
     this.retrieveForm();
+    this.formStatus = document.getElementById('formStatus');
     this.btnApprove = document.getElementById('btnApproveForm');
+    this.btnUnapprove = document.getElementById('btnUnapproveForm');
     if(localStorage.userType === "ROLE_APPROVER")
     {
       this.btnApprove.hidden = false;
+      this.btnUnapprove.hidden = true;
     }
   },
   created()
