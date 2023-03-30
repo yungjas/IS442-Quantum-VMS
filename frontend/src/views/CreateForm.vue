@@ -279,7 +279,7 @@ export default {
         hasNextPage() {
         // return true if current page is not the last page
         return this.currentPage < this.totalPages;
-    };
+    },
   },
   methods: {
     home: function () {
