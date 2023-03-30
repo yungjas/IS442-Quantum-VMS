@@ -83,8 +83,9 @@
                         </td>
                         <td style="text-align: left;">
 
-
-                            <div v-for="question in questionData" :key="question.questionId">
+                            
+                            <div v-for="question in questionData" :key="question.questionId" class="card" style="margin-top:20px;">
+                                <div class="cardbody">
                                 <input type="checkbox" v-model="selectedQuestion" :value="question"/> &nbsp;
                                 <b>Question Text:</b> <label>{{ question.questionText }}</label><br> &emsp;&nbsp;
                                 <b>Question Type:</b> <label>{{ question.questionType }}</label><br> &emsp;&nbsp;
@@ -95,9 +96,9 @@
                                     </label>
                                     </label><br> &emsp;&nbsp;
                                 <b>Required:</b> <label>{{ question.required }}</label><br>
-                                <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)">Delete</button>
+                                <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)" style="margin-left: 20px;">Delete</button>
                                 <br><br>
-                                ================================
+                            </div>
                             </div>
                             
 
