@@ -36,6 +36,15 @@ public class FormBuilderController {
         return new ResponseEntity<>(allQns, HttpStatus.OK);
     }
 
+    @GetMapping("/all_templates")
+    public ResponseEntity<List<Question>> getAllQuestionTemplates(){
+        List<Question> allTemplateQns = formBuilderService.getAllTemplateQuestions();
+        if(allTemplateQns.size() == 0){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(allTemplateQns, HttpStatus.OK);
+    }
+
     @PostMapping("/add-question")
     public ResponseEntity<Object> createQuestion(@RequestBody Question question) {
         Question questionCreated = null;
