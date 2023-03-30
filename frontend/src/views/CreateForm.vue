@@ -88,19 +88,49 @@
                 </td>
             </tr> -->
             <tr style="width: 100%" > 
-            <td>
+                <td>
 
-            </td>
+                </td>
                 <td>
                     <input type="text" class="input" v-model="input" @change="handleSearch" @keyup="handleSearch" style="width: 100%" placeholder="Search Question"/>
                 </td>
             </tr>
-          <tr>
-            <td>
-              <label>Questions</label>
-            </td>
-            <td style="text-align:left;">   
-                <div v-for="question in paginatedQuestionData" :key="question.questionId" class="card" style="margin-top: 20px">
+            <tr>
+              <td>
+                <label>Questions</label>
+              </td>
+
+            <td style="text-align:left;"> 
+               <div style="text-align: left" class="item qn" v-for="question in filteredList" :key="question.questionId">
+                <input type="checkbox" v-model="selectedQuestion" :value="question"/>
+
+                &nbsp; <b>Question Text:</b>
+                <label>{{ question.questionText }}</label><br />
+
+                &emsp;&nbsp; <b>Question Type:</b>
+                <label>{{ question.questionType }}</label><br />
+
+                &emsp;&nbsp; <b>Question Section Name:</b>
+                <label>{{ question.questionSectionName }}</label><br />
+
+                &emsp;&nbsp; <b>Answer Choices:</b> <br />
+                <label v-for="choices in question.answerChoices" :key="choices">
+                  <label v-for="(v, k) in choices" :key="k">
+                    &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br />
+                  </label> 
+                </label><br />
+
+                &emsp;&nbsp; <b>Required:</b>
+                <label>{{ question.required }}</label><br />
+
+                    <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)" style="margin-left: 20px">
+                    Delete
+                    </button>
+
+                    <br /><br />
+              </div>
+              
+                <div  v-for="question in paginatedQuestionData" :key="question.questionId" class="card" style="margin-top: 20px">
 
                 <div class="cardbody" style=" padding:10px">
                     <input type="checkbox" v-model="selectedQuestion" :value="question"/>
@@ -125,92 +155,46 @@
                     &emsp;&nbsp; <b>Required:</b>
                     <label>{{ question.required }}</label>
 
-                    <br />
+                    <br><br>
 
                     <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)" style="margin-left: 20px">
                     Delete
                     </button>
 
                     <br /><br />
-                </div>
-            </div>
-
-            </td>
-
-            <td>
-              
-
-              <br />
-              <br />
-
-              <div style="text-align: left" class="item qn" v-for="question in filteredList" :key="question.questionId">
-                <input type="checkbox" v-model="selectedQuestion" :value="question"/>
-
-                &nbsp; <b>Question Text:</b>
-                <label>{{ question.questionText }}</label><br />
-
-                &emsp;&nbsp; <b>Question Type:</b>
-                <label>{{ question.questionType }}</label><br />
-
-                &emsp;&nbsp; <b>Question Section Name:</b>
-                <label>{{ question.questionSectionName }}</label><br />
-
-                &emsp;&nbsp; <b>Answer Choices:</b> <br />
-                <label v-for="choices in question.answerChoices" :key="choices">
-                  <label v-for="(v, k) in choices" :key="k">
-                    &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br />
-                  </label> </label><br />
-                &emsp;&nbsp; <b>Required:</b>
-                <label>{{ question.required }}</label><br />
+                  
+                  </div>
                 
-                <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)">
-                  Delete
-                </button>
-
-                <br /><br />
-                ================================
               </div>
-              <!-- <div class="item error" v-if="input">
-                                <p>No such question!</p>
-                            </div> -->
-
-              <!-- <div style="text-align: left;" v-for="question in questionData" :key="question.questionId">
-                                <input type="checkbox" v-model="selectedQuestion" :value="question"/> &nbsp;
-                                <b>Question Text:</b> <label>{{ question.questionText }}</label><br> &emsp;&nbsp;
-                                <b>Question Type:</b> <label>{{ question.questionType }}</label><br> &emsp;&nbsp;
-                                <b>Question Section Name:</b> <label>{{ question.questionSectionName }}</label><br> &emsp;&nbsp;
-                                <b>Answer Choices:</b> <br><label v-for="choices in question.answerChoices" :key="choices">
-                                    <label v-for="v,k in choices" :key="k">
-                                        &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br>
-                                    </label>
-                                    </label><br> &emsp;&nbsp;
-                                <b>Required:</b> <label>{{ question.required }}</label><br>
-                                <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)">Delete</button>
-                                <br><br>
-                                ================================
-                            </div> -->
-
+            
             </td>
           </tr>
         </tbody>
       </table>
+
     <div>
         <button type="button" class="btn btn-danger" @click="addQuestion" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Question</button>
     </div>
 
+    <br>
+     
     <div>
-      <button class="btn btn-primary" type="button" @click="this.showSelected">
+      <button class="btn btn-primary" type="button" @click="this.showSelected = !this.showSelected">
         Show Selected Questions
       </button>
-
-      <ul class="list-group" v-if="this.showSelected == true">
-        <li class="list-group-item" v-for="question of this.selectedQuestion" :key="question">
-          {{ question.questionText }}
-        </li>
-      </ul>
-
     </div>
 
+      <div v-if="this.showSelected == true">
+        <ul>
+          <li class="list-group-item" v-for="question in this.selectedQuestion" :key="question.questionId">
+            {{ question.questionText }}
+          </li>
+        </ul>
+      </div>
+
+    
+
+    <br> 
       <div>
         <div class="font-weight-bold">
           <button type="button" class="btn btn-secondary" v-if="hasPrevPage" @click="prevPage">
@@ -347,7 +331,7 @@ export default {
         currentPage: 1,
         filteredList: [],
         input: '', // current page number
-
+        showSelected: false,
     }
     },
     computed: {
@@ -465,20 +449,7 @@ export default {
           });
       }
     },
-    // getQuestionsData() {
-    //   axios
-    //     .get("http://localhost:8080/api/form-builder/all", {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Authorization: "Bearer " + localStorage.token,
-    //         "Access-Control-Allow-Origin": "*",
-    //       },
-    //     })
-    //     .then((response) => {
-    //       this.questionData = response.data;
-    //       console.log(this.questionData);
-    //     });
-    // },
+    
     handleSearch() {
         console.log(this.input);
         if (this.input && this.input.length > 0) {
