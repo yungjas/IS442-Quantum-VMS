@@ -45,6 +45,15 @@ public class FormBuilderController {
         return new ResponseEntity<>(allTemplateQns, HttpStatus.OK);
     }
 
+    @GetMapping("/form_edit_qns/{formId}")
+    public ResponseEntity<List<Question>> getCurrentFormQnsAndTemplateQns(@PathVariable String formId){
+        List<Question> resultQns = formBuilderService.getCurrentFormQnsAndTemplateQns(formId);
+        if(resultQns.size() == 0){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(resultQns, HttpStatus.OK);
+    }
+
     @PostMapping("/add-question")
     public ResponseEntity<Object> createQuestion(@RequestBody Question question) {
         Question questionCreated = null;

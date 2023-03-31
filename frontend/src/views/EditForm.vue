@@ -62,9 +62,15 @@
                             <input type=date v-model="dateSubmitted" style="width: 100%">
                         </td>
                     </tr> -->
+          <!-- <div v-if="data.template">
+            hello
+          </div>
+          <div v-else>
+            
+          </div> -->
           <tr>
             <td>
-              <label>Questions</label>
+              <label>Template Questions</label>
             </td>
             <td style="text-align: left">
               <div
@@ -77,6 +83,7 @@
                   <input
                     type="checkbox"
                     v-model="selectedQuestion"
+                    :disabled="isQuestionDisabled"
                     :value="question"
                   />
                   &nbsp; <b>Question Text:</b>
@@ -88,6 +95,9 @@
                   &emsp;&nbsp; <b>Question Section Name:</b>
                   <label>{{ question.questionSectionName }}</label
                   ><br />
+                  &emsp;&nbsp; <b>Is template:</b>
+                  <label>{{ question.template }}</label>
+                  <br />
                   &emsp;&nbsp; <b>Answer Choices:</b> <br /><label
                     v-for="choices in question.answerChoices"
                     :key="choices"
@@ -273,6 +283,7 @@ export default {
       required: false,
       questionTypeArr: ["text", "radio", "checkbox"],
       showSelected: false,
+      isQuestionDisabled: false,
     };
   },
   methods: {
@@ -366,8 +377,9 @@ export default {
       }
     },
     getQuestionsData() {
-      axios
-        .get("http://localhost:8080/api/form-builder/all", {
+      if(this.data.template){
+        axios
+        .get("http://localhost:8080/api/form-builder/all_templates", {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + localStorage.token,
@@ -376,8 +388,26 @@ export default {
         })
         .then((response) => {
           this.allQuestions = response.data;
+          //this.isQuestionDisabled = false;
           console.log(this.allQuestions);
         });
+      }
+      else{
+        axios
+        .get("http://localhost:8080/api/form-builder/form_edit_qns/" + this.data.formId, {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.token,
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .then((response) => {
+          this.allQuestions = response.data;
+          
+          // disable checkbox for questions that are already linked to workflow
+          this.isQuestionDisabled = true;
+        });
+      }
     },
     addAnswer() {
       console.log("adding answer");

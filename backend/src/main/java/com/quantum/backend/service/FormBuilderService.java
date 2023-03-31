@@ -1,4 +1,5 @@
 package com.quantum.backend.service;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,15 +11,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.quantum.backend.exception.RequestErrorException;
 import com.quantum.backend.exception.ResourceNotFoundException;
+import com.quantum.backend.model.Form;
 import com.quantum.backend.model.Question;
 import com.quantum.backend.repository.*;
 
 @Service
 public class FormBuilderService {
     private final FormBuilderRepository formBuilderRepo;
+    private final FormRepository formRepo;
 
-    public FormBuilderService(FormBuilderRepository formBuilderRepo){
+    public FormBuilderService(FormBuilderRepository formBuilderRepo, FormRepository formRepo){
         this.formBuilderRepo = formBuilderRepo;
+        this.formRepo = formRepo;
     }
 
     public List<Question> getAllQuestions(){
@@ -27,6 +31,26 @@ public class FormBuilderService {
 
     public List<Question> getAllTemplateQuestions(){
         return formBuilderRepo.findAllQnTemplates();
+    }
+
+    // filter remaining template questions for admin to add
+    public List<Question> getCurrentFormQnsAndTemplateQns(String formId){
+        List<Question> resultList = new ArrayList<>();
+        List<String> tempList = new ArrayList<>();
+        Form form = formRepo.findById(formId).get();
+        List<Question> templateQns = formBuilderRepo.findAllQnTemplates();
+
+        for(Question qn: form.getQuestions()){
+            tempList.add(qn.getQuestionText());
+        }
+
+        for(Question templateQn: templateQns){
+            if(!tempList.contains(templateQn.getQuestionText())){
+                resultList.add(templateQn);
+            }
+        }
+
+        return resultList;
     }
 
     public Question addQuestion(@RequestBody Question question) throws IllegalArgumentException{
