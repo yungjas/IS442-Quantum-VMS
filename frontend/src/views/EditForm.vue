@@ -83,7 +83,6 @@
                   <input
                     type="checkbox"
                     v-model="selectedQuestion"
-                    :disabled="isQuestionDisabled"
                     :value="question"
                   />
                   &nbsp; <b>Question Text:</b>
@@ -283,7 +282,6 @@ export default {
       required: false,
       questionTypeArr: ["text", "radio", "checkbox"],
       showSelected: false,
-      isQuestionDisabled: false,
     };
   },
   methods: {
