@@ -74,6 +74,7 @@ public class FormBuilderService {
         return question;
     }
 
+    // since we are only listing template questions, this means only template questions wil get updated
     public Question updateQuestion(String questionId, Question questionUpdate) throws IllegalArgumentException{
         Optional<Question> question = formBuilderRepo.findById(questionId);
         Question questionData = null;
@@ -87,7 +88,7 @@ public class FormBuilderService {
             questionData.setQuestionType(questionUpdate.getQuestionType());
             questionData.setQuestionSectionName(questionUpdate.getQuestionSectionName());
             questionData.setAnswerChoices(questionUpdate.getAnswerChoices());
-            questionData.setTemplate(questionUpdate.isTemplate());
+            questionData.setTemplate(true);
             questionData.setRequired(questionUpdate.isRequired());
             formBuilderRepo.save(questionData);
         } catch(Exception e){
