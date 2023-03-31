@@ -320,15 +320,6 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <!-- 
-                    {
-                        "questionText": "Some safety questions 1",
-                        "questionType": "textbox",
-                        "questionSectionName": "Safety",
-                        "answerChoices" : [{"inputName": "True", "inputValue": "1"}, {"inputName": "False", "inputValue": "0"}],
-                        "required": true
-                    }
-                -->
             <table>
               <tr>
                 <td>Question Text:</td>
@@ -386,8 +377,8 @@
               Close
             </button>
 
-            <button type="button" class="btn btn-primary" @click="addNewQuestion" >
-              Add
+            <button type="button" class="btn btn-primary" @click="updateNewQuestion" >
+              Update
             </button>
 
           </div>
