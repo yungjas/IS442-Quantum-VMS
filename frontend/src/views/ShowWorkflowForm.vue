@@ -1,8 +1,8 @@
 <template>
  
   <div>
+    <h1>Form</h1>
     <div id="forms">
-      
       
     </div>   
     <button id="btnSubmitForm" @click="submitForm()" hidden>Submit Form</button> &nbsp;
@@ -190,7 +190,6 @@ export default {
       // console.log("adding answer");
 
       // console.log(this.jsonData);
-
       var formObj = this.jsonData.form;
 
       // console.log("=========================")
@@ -200,6 +199,8 @@ export default {
       if(formObj !== null)
       {
         this.btnSubmitForm.hidden = false;
+
+        var table = document.createElement("table");
 
         console.log(this.jsonData)
         this.approved = formObj.approved;
@@ -247,7 +248,7 @@ export default {
             var inputNameField = document.createElement('label');
             inputNameField.innerHTML = questionsObj.questionText;
             inputNameField.setAttribute('class', this.placeholderID);
-            this.form.appendChild(inputNameField);
+            // this.form.appendChild(inputNameField);
 
             var inputValueField = document.createElement('input');
             inputValueField.setAttribute('type','text');
@@ -263,24 +264,35 @@ export default {
             inputValueField.setAttribute('id', questionsObj.questionId);
             inputValueField.setAttribute('class', this.placeholderID + " " + hasQnsResponseClass);
             
-            this.form.appendChild(inputValueField);
+            // this.form.appendChild(inputValueField);
+            let tr = document.createElement("tr");
+            let td1 = document.createElement("td");
+            td1.appendChild(inputNameField)
+            tr.appendChild(td1);
+            
+            let td2 = document.createElement("td");
+            td2.setAttribute('colspan','2');
+            td2.appendChild(inputValueField);
+            tr.appendChild(td2);
+            table.appendChild(tr);
+            // this.form.appendChild(table);
           }
           else if(questionType.toLowerCase() === "radio")
           {
-            // console.log("radio");
-            //Creating Label for Questions
+            let tr = document.createElement("tr");
+            let td1 = document.createElement("td");
+
             var inputNameField2 = document.createElement('label');
             inputNameField2.innerHTML = questionsObj.questionText;
             inputNameField2.setAttribute('class', this.placeholderID);
-            this.form.appendChild(inputNameField2);
 
-            this.form.innerHTML += "&emsp;&emsp;";
+            td1.appendChild(inputNameField2);
+            tr.appendChild(td1);
 
             var answerChoices = questionsObj.answerChoices;
             for(var j in answerChoices)
             {
               //Creating Radio BUTTON for Answers
-              this.form.innerHTML += "&nbsp;";
               var answerChoice = answerChoices[j];
               var inputValueField2 = document.createElement('input');
               inputValueField2.setAttribute('type','radio');
@@ -300,26 +312,34 @@ export default {
                     inputValueField2.setAttribute('checked', true);
                   }
                 }
-              }                
+              } 
 
-              this.form.appendChild(inputValueField2);
-
-              //Creating Radio text
+              // Creating Radio text
               var inputNameField3 = document.createElement('label');
               inputNameField3.innerHTML = answerChoice.inputName;
-              inputNameField3.setAttribute('class', this.placeholderID + " " + hasQnsResponseClass);         
+              inputNameField3.setAttribute('class', this.placeholderID + " " + hasQnsResponseClass + " .justify-content-end ");         
 
-              this.form.appendChild(inputNameField3);
+              let td2 = document.createElement("td");
+              td2.appendChild(inputValueField2);
+              td2.appendChild(inputNameField3);
+              tr.appendChild(td2);
+
+              table.appendChild(tr);
             }
-
           }
           else if(questionType.toLowerCase() === "checkbox")
           {
+            let tr = document.createElement("tr");
+            let td1 = document.createElement("td");
+
+
             // console.log("checkbox");
             var inputNameField4 = document.createElement('label');
             inputNameField4.setAttribute('class', this.placeholderID);      
             inputNameField4.innerHTML = questionsObj.questionText;
-            this.form.appendChild(inputNameField4);
+
+            td1.appendChild(inputNameField4);
+            tr.appendChild(td1);
 
             this.form.innerHTML += "&emsp;&emsp;";
 
@@ -349,16 +369,18 @@ export default {
                   }
                 }
               }
-
-              this.form.appendChild(inputValueField4);
+              let td2 = document.createElement("td");
 
               //Creating Radio text
               var inputNameField5 = document.createElement('label');
               inputNameField5.setAttribute('class', this.placeholderID + " " + hasQnsResponseClass);    
               inputNameField5.innerHTML = answerChoice2.inputName;
-              this.form.appendChild(inputNameField5);
+              td2.appendChild(inputValueField4);
+              td2.appendChild(inputNameField5);
+              tr.appendChild(td2);
+
+              table.appendChild(tr);
             }
-          
           }
           else
           {
@@ -366,10 +388,11 @@ export default {
             console.log(questions[i])
           }
           
-          this.form.appendChild(document.createElement('br'));
-          this.form.appendChild(document.createElement('br'));
+          // this.form.appendChild(document.createElement('br'));
+          // this.form.appendChild(document.createElement('br'));
           this.placeholderID++;
         } 
+        this.form.appendChild(table)
       }
 
       if(this.isApprove)
@@ -406,7 +429,7 @@ export default {
                         this.isApprove = true;
                       }
                     }
-                    if(this.jsonData.form.user !== undefined)
+                    if(this.jsonData.form.user !== null)
                     {
                       // console.log("userObj:");
                       this.userObj = this.jsonData.form.user;
