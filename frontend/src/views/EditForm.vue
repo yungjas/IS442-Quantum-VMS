@@ -109,7 +109,7 @@
                   <label>{{ question.required }}</label
                   ><br />
                   <button type="button" class="btn btn-success" @click="updateQuestion(question)" data-bs-toggle="modal" data-bs-target="#updateModal" style="margin-left: 20px">
-                    Update1
+                    Update
                   </button>
                   <button
                     type="button"
@@ -329,7 +329,7 @@
             </button>
 
             <button type="button" class="btn btn-primary" @click="updateNewQuestion" >
-              Update2
+              Update
             </button>
 
           </div>
