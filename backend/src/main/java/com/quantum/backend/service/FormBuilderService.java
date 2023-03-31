@@ -79,8 +79,8 @@ public class FormBuilderService {
             questionData.setQuestionType(questionUpdate.getQuestionType());
             questionData.setQuestionSectionName(questionUpdate.getQuestionSectionName());
             questionData.setAnswerChoices(questionUpdate.getAnswerChoices());
+            questionData.setTemplate(questionUpdate.isTemplate());
             questionData.setRequired(questionUpdate.isRequired());
-            questionData.setAnswerChoices(questionUpdate.getAnswerChoices());
             formBuilderRepo.save(questionData);
         } catch(Exception e){
             throw new RequestErrorException("update", "Question", e.getMessage());

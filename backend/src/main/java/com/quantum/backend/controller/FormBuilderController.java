@@ -67,7 +67,6 @@ public class FormBuilderController {
         return new ResponseEntity<>(questionCreated, HttpStatus.CREATED);
     }
 
-    // status 201 BUT doesnt update question
     @PutMapping("/edit-question/{questionId}")
     public ResponseEntity<Object> updateQuestion(@PathVariable String questionId, @RequestBody Question question) {
         Question questionUpdated = null;
