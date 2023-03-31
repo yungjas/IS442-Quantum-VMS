@@ -34,7 +34,7 @@ public class FormBuilderService {
     }
 
     // filter remaining template questions for admin to add
-    public List<Question> getCurrentFormQnsAndTemplateQns(String formId){
+    public List<Question> getRemainingTemplateQns(String formId){
         List<Question> resultList = new ArrayList<>();
         List<String> tempList = new ArrayList<>();
         Form form = formRepo.findById(formId).get();

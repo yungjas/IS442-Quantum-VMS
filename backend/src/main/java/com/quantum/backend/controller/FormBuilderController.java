@@ -47,7 +47,7 @@ public class FormBuilderController {
 
     @GetMapping("/form_edit_qns/{formId}")
     public ResponseEntity<List<Question>> getCurrentFormQnsAndTemplateQns(@PathVariable String formId){
-        List<Question> resultQns = formBuilderService.getCurrentFormQnsAndTemplateQns(formId);
+        List<Question> resultQns = formBuilderService.getRemainingTemplateQns(formId);
         if(resultQns.size() == 0){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
