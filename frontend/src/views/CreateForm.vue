@@ -95,41 +95,67 @@
                     <input type="text" class="input" v-model="input" @change="handleSearch" @keyup="handleSearch" style="width: 100%" placeholder="Search Question"/>
                 </td>
             </tr>
+
+            <tr style="width: 100%" > 
+                <td>
+
+                </td>
+                <td style="text-align:left;">
+                    <div>
+                      <p> {{ noQuestion }} </p>
+                    </div>
+                </td>
+            </tr>
+
             <tr>
               <td>
                 <label>Questions</label>
               </td>
 
             <td style="text-align:left;"> 
-               <div style="text-align: left" class="item qn" v-for="question in filteredList" :key="question.questionId">
-                <input type="checkbox" v-model="selectedQuestion" :value="question"/>
+              <div v-if="filteredList&&input">
+               <div style="text-align: left;margin-top: 20px" class="card" v-for="question in paginatedFilteredData" :key="question.questionId">
+                
+                <div class="cardbody" style=" padding:10px">
+                    <input type="checkbox" v-model="selectedQuestion" :value="question"/>
 
-                &nbsp; <b>Question Text:</b>
-                <label>{{ question.questionText }}</label><br />
+                    &nbsp; <b>Question Text:</b>
+                    <label>{{ question.questionText }}</label><br />
 
-                &emsp;&nbsp; <b>Question Type:</b>
-                <label>{{ question.questionType }}</label><br />
+                    &emsp;&nbsp; <b>Question Type:</b>
+                    <label>{{ question.questionType }}</label><br />
 
-                &emsp;&nbsp; <b>Question Section Name:</b>
-                <label>{{ question.questionSectionName }}</label><br />
+                    &emsp;&nbsp; <b>Question Section Name:</b>
+                    <label>{{ question.questionSectionName }}</label><br />
 
-                &emsp;&nbsp; <b>Answer Choices:</b> <br />
-                <label v-for="choices in question.answerChoices" :key="choices">
-                  <label v-for="(v, k) in choices" :key="k">
-                    &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br />
-                  </label> 
-                </label><br />
+                    &emsp;&nbsp; <b>Answer Choices:</b> <br />
+                    <label v-for="choices in question.answerChoices" :key="choices">
+                      <label v-for="(v, k) in choices" :key="k">
+                        &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br />
+                      </label> 
+                    </label><br />
 
-                &emsp;&nbsp; <b>Required:</b>
-                <label>{{ question.required }}</label><br />
+                    &emsp;&nbsp; <b>Required:</b>
+                    <label>{{ question.required }}</label><br />
+
+                    <br>
+
+                    <button type="button" class="btn btn-success" @click="updateQuestion(question)" data-bs-toggle="modal" data-bs-target="#updateModal" style="margin-left: 20px">
+                    Update
+                    </button>
 
                     <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)" style="margin-left: 20px">
                     Delete
                     </button>
 
-                    <br /><br />
+                    <br>
+                </div>
+                
               </div>
-              
+            </div>
+
+           
+            <div v-else>
                 <div  v-for="question in paginatedQuestionData" :key="question.questionId" class="card" style="margin-top: 20px">
 
                 <div class="cardbody" style=" padding:10px">
@@ -159,7 +185,7 @@
                     &emsp;&nbsp; <b>Required:</b>
                     <label>{{ question.required }}</label>
 
-                    <br><br>
+                    <br>
 
                     <button type="button" class="btn btn-success" @click="updateQuestion(question)" data-bs-toggle="modal" data-bs-target="#updateModal" style="margin-left: 20px">
                     Update
@@ -169,12 +195,13 @@
                     Delete
                     </button>
 
-                    <br /><br />
+                    <br>
                   
                   </div>
                 
               </div>
-            
+            </div>
+
             </td>
           </tr>
         </tbody>
@@ -203,7 +230,23 @@
     
 
     <br> 
-      <div>
+
+    <div v-if = "filteredList&&input">
+        <div class="font-weight-bold">
+          <button type="button" class="btn btn-secondary" v-if="filteredPrevPage" @click="prevPage">
+            Prev
+          </button>
+
+          Page {{ currentPage }} of {{ filteredPages }}
+
+          <button type="button" class="btn btn-secondary" v-if="filteredNextPage" @click="nextPage">
+            Next
+          </button>
+
+        </div>
+      </div>
+
+      <div v-else>
         <div class="font-weight-bold">
           <button type="button" class="btn btn-secondary" v-if="hasPrevPage" @click="prevPage">
             Prev
@@ -415,10 +458,11 @@ export default {
         required: false,
         questionTypeArr: ["text", "radio", "checkbox"],
         pageSize: 5, // number of items per page
-        currentPage: 1,
+        currentPage: 1,// current page number
         filteredList: [],
-        input: '', // current page number
+        input: '', 
         showSelected: false,
+        noQuestion: "",
     }
     },
     computed: {
@@ -439,6 +483,26 @@ export default {
         return this.currentPage > 1;
         },
         hasNextPage() {
+        // return true if current page is not the last page
+        return this.currentPage < this.totalPages;
+    },
+    paginatedFilteredData() {
+        // calculate start and end index of current page
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        console.log(this.filteredList.slice(startIndex, endIndex));
+        // return items for current page
+        return this.filteredList.slice(startIndex, endIndex);
+        },
+        filteredPages() {
+        // calculate total number of pages
+        return Math.ceil(this.filteredList.length / this.pageSize);
+        },
+        filteredPrevPage() {
+        // return true if current page is not the first page
+        return this.currentPage > 1;
+        },
+        filteredNextPage() {
         // return true if current page is not the last page
         return this.currentPage < this.totalPages;
     },
@@ -547,12 +611,11 @@ export default {
                     console.log(this.filteredList);
                     return this.filteredList;
                 }
-
+               else {
+                  this.noQuestion = "No Such Question";
+               }
             })
-        } else {
-            this.filteredList = this.questionData;
-            return this.filteredList;
-        }
+        } 
     },
     getQuestionsData()
         {
