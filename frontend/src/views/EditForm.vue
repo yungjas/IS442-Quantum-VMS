@@ -43,7 +43,7 @@
               <label>Is Template</label>
             </td>
             <td style="text-align: left">
-              <input type="checkbox" disabled v-model="data.template"/>
+              <input type="checkbox" disabled v-model="data.template" />
             </td>
           </tr>
           <tr>
@@ -67,42 +67,56 @@
               <label>Questions</label>
             </td>
             <td style="text-align: left">
-              <div v-for="question in allQuestions" :key="question.questionId">
-                <input
-                  type="checkbox"
-                  v-model="selectedQuestion"
-                  :value="question"
-                />
-                &nbsp; <b>Question Text:</b>
-                <label>{{ question.questionText }}</label
-                ><br />
-                &emsp;&nbsp; <b>Question Type:</b>
-                <label>{{ question.questionType }}</label
-                ><br />
-                &emsp;&nbsp; <b>Question Section Name:</b>
-                <label>{{ question.questionSectionName }}</label
-                ><br />
-                &emsp;&nbsp; <b>Answer Choices:</b> <br /><label
-                  v-for="choices in question.answerChoices"
-                  :key="choices"
-                >
-                  <label v-for="(v, k) in choices" :key="k">
-                    &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br />
-                  </label> </label
-                ><br />
-                &emsp;&nbsp; <b>Required:</b>
-                <label>{{ question.required }}</label
-                ><br />
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  @click="deleteQuestion(question.questionId)"
-                >
-                  Delete
-                </button>
-                <br /><br />
-                ================================
+              <div
+                v-for="question in allQuestions"
+                :key="question.questionId"
+                class="card"
+                style="margin-top: 20px"
+              >
+                <div class="cardbody">
+                  <input
+                    type="checkbox"
+                    v-model="selectedQuestion"
+                    :value="question"
+                  />
+                  &nbsp; <b>Question Text:</b>
+                  <label>{{ question.questionText }}</label
+                  ><br />
+                  &emsp;&nbsp; <b>Question Type:</b>
+                  <label>{{ question.questionType }}</label
+                  ><br />
+                  &emsp;&nbsp; <b>Question Section Name:</b>
+                  <label>{{ question.questionSectionName }}</label
+                  ><br />
+                  &emsp;&nbsp; <b>Answer Choices:</b> <br /><label
+                    v-for="choices in question.answerChoices"
+                    :key="choices"
+                  >
+                    <label v-for="(v, k) in choices" :key="k">
+                      &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br />
+                    </label> </label
+                  ><br />
+                  &emsp;&nbsp; <b>Required:</b>
+                  <label>{{ question.required }}</label
+                  ><br />
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    @click="deleteQuestion(question.questionId)"
+                  >
+                    Delete
+                  </button>
+                  <br /><br />
+                </div>
               </div>
+              <button
+              type="button"
+              @click="this.showSelected = !this.showSelected">
+              Show Selected Questions
+              </button>
+              <ul class="list-group" v-if="this.showSelected==true">
+                <li  class="list-group-item" v-for="question of this.selectedQuestion" :key="question">{{question.questionText }}</li>
+              </ul>
 
               <button
                 type="button"
@@ -258,6 +272,7 @@ export default {
       answerChoices: [],
       required: false,
       questionTypeArr: ["text", "radio", "checkbox"],
+      showSelected: false,
     };
   },
   methods: {
@@ -298,7 +313,8 @@ export default {
         json += '"formNo": "' + this.data.formNo + '",';
         json += '"formName": "' + this.data.formName + '",';
         json += '"revisionNo": "' + this.data.revisionNo + '",';
-        json += '"lastEdited": "' + this.formatDate(this.data.lastEdited) + '",';
+        json +=
+          '"lastEdited": "' + this.formatDate(this.data.lastEdited) + '",';
         json += '"template": ' + true + ",";
 
         json += '"questions": [';

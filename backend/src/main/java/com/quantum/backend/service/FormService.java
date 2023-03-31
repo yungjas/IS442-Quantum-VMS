@@ -82,10 +82,12 @@ public class FormService {
             actualForm.setTemplate(false);
             // since this form is just created, shouldn't have anyone to approve yet
             actualForm.setApprovedBy(null); 
-            // get predefined questions from form template
+            // duplicate questions
             actualForm.setQuestions(formTemplate.getQuestions());
-            // create a new set of questions in addition to predefined ones in the template
-            saveFormQuestions(actualForm);
+            List<Question> duplicateQns = duplicateQuestion(actualForm);
+            // set the questions to the ones that are duplicated
+            actualForm.setQuestions(duplicateQns);
+            
             formRepo.save(actualForm);
         }
         catch(Exception e){
@@ -94,7 +96,7 @@ public class FormService {
         return actualForm;
     }
 
-    public Form approveForm(String formId, Form form) throws RequestErrorException, RequestErrorException{
+    public Form approveForm(String formId, Form form) throws RequestErrorException{
         Optional<Form> currentForm = formRepo.findById(formId);
         Form currentFormData = null;
 
@@ -113,6 +115,26 @@ public class FormService {
                 currentFormData.setApprovedBy(user.get());
                 formRepo.save(currentFormData);
             }
+        }
+        catch(Exception e){
+            throw new RequestErrorException("approve", "Form", e.getMessage());
+        }
+        
+        return currentFormData;
+    }
+
+    public Form unapproveForm(String formId, Form form) throws RequestErrorException{
+        Optional<Form> currentForm = formRepo.findById(formId);
+        Form currentFormData = null;
+
+        if(!currentForm.isPresent()){
+            throw new ResourceNotFoundException("Form", "formId", formId);
+        }
+        
+        try{
+            currentFormData = currentForm.get();
+            currentFormData.setApprovedBy(null);
+            formRepo.save(currentFormData);
         }
         catch(Exception e){
             throw new RequestErrorException("approve", "Form", e.getMessage());
@@ -162,6 +184,23 @@ public class FormService {
         catch(Exception e){
             throw new RequestErrorException("delete", "Form", e.getMessage());
         }       
+    }
+
+    private List<Question> duplicateQuestion(Form form){
+        List<Question> questions = new ArrayList<>();
+        for(Question qn: form.getQuestions()){
+            Question newQuestion = new Question();
+            newQuestion.setQuestionText(qn.getQuestionText());
+            newQuestion.setQuestionType(qn.getQuestionType());
+            newQuestion.setQuestionSectionName(qn.getQuestionSectionName());
+            newQuestion.setAnswerChoices(qn.getAnswerChoices());
+            newQuestion.setRequired(qn.isRequired());
+            newQuestion.setTemplate(false);
+            formBuilderRepo.save(newQuestion);
+            questions.add(newQuestion);
+        }
+
+        return questions;
     }
 
     private void saveFormQuestions(Form form){

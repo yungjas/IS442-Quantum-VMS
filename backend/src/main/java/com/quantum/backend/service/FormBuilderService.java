@@ -25,6 +25,10 @@ public class FormBuilderService {
         return formBuilderRepo.findAll();
     }
 
+    public List<Question> getAllTemplateQuestions(){
+        return formBuilderRepo.findAllQnTemplates();
+    }
+
     public Question addQuestion(@RequestBody Question question) throws IllegalArgumentException{
         // Add code to save the question to the database
         // if(formBuilderRepo.existsById(question.getQuestionId())){
