@@ -33,6 +33,14 @@ public class FormBuilderService {
         return formBuilderRepo.findAllQnTemplates();
     }
 
+    public Optional<Question> getQuestionById(String questionId) throws ResourceNotFoundException{
+        Optional<Question> questionData = formBuilderRepo.findById(questionId);
+        if(!questionData.isPresent()){
+            throw new ResourceNotFoundException("Question", "questionId", questionId);
+        }
+        return questionData;
+    }
+
     // filter remaining template questions for admin to add
     public List<Question> getRemainingTemplateQns(String formId){
         List<Question> resultList = new ArrayList<>();
