@@ -161,6 +161,10 @@
 
                     <br><br>
 
+                    <button type="button" class="btn btn-success" @click="updateQuestion(question.questionId)" data-bs-toggle="modal" data-bs-target="#updateModal" style="margin-left: 20px">
+                    Update
+                    </button>
+
                     <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)" style="margin-left: 20px">
                     Delete
                     </button>
@@ -306,6 +310,91 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal to Edit Question -->
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="updateModalLabel">Update Question</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- 
+                    {
+                        "questionText": "Some safety questions 1",
+                        "questionType": "textbox",
+                        "questionSectionName": "Safety",
+                        "answerChoices" : [{"inputName": "True", "inputValue": "1"}, {"inputName": "False", "inputValue": "0"}],
+                        "required": true
+                    }
+                -->
+            <table>
+              <tr>
+                <td>Question Text:</td>
+                <td><input type="text" v-model="questionText" /></td>
+              </tr>
+              <tr>
+                <td>Question Type:</td>
+                <td>
+                  <select style="width: 100%" name="selectRole" id="selectRole" @change="onChange($event)">
+                    
+                    <option v-for="item in questionTypeArr" :key="item" v-bind:value="item">
+                      {{ item }}
+                    </option>
+
+                  </select>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Question Selection Name (Group):</td>
+                <td><input type="text" v-model="questionSectionName" /></td>
+              </tr>
+
+              <tr>
+                <td v-if="questionType !== 'text'" class="controls">
+                  Answer Choices:
+                </td>
+
+                <!-- <td>
+                  <div id="answers"></div>
+                  <div v-if="questionType !== 'text'" class="controls">
+                    <button type="button" id="add_more_fields" class="btn btn-primary" @click="addAnswer">
+                      Add Answers
+                    </button>
+
+                    <button type="button" id="remove_fields" class="btn btn-warning" @click="removeAnswer">
+                      Remove Answers
+                    </button>
+
+                  </div>
+                </td> -->
+              </tr>
+              <tr>
+                <td>Required:</td>
+
+                <td><input type="checkbox" v-model="required" /></td>
+
+              </tr>
+            </table>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="closeModal" data-bs-dismiss="modal">
+              Close
+            </button>
+
+            <button type="button" class="btn btn-primary" @click="addNewQuestion" >
+              Add
+            </button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -505,7 +594,7 @@ export default {
       this.answerArray.appendChild(document.createElement("br"));
       this.answerArray.appendChild(document.createElement("br"));
 
-},
+    },
     removeAnswer() {
       console.log("remove answer");
       var input_tags = this.answerArray.getElementsByTagName("input");
@@ -523,6 +612,11 @@ export default {
       console.log("add question");
       this.answerArray = document.getElementById("answers");
       console.log(this.answerArray);
+    },
+    updateQuestion(questionId) {
+      console.log("update question: " + questionId);
+
+      axios.put("http://localhost:8080/api/form-builder/edit-question/" + questionId, )
     },
     deleteQuestion(questionId) {
       console.log("delete question: " + questionId);
