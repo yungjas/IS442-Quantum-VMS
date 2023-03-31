@@ -146,6 +146,10 @@
                     <label>{{ question.questionSectionName }}</label>
                     <br />
 
+                    &emsp;&nbsp; <b>Is template:</b>
+                    <label>{{ question.template }}</label>
+                    <br />
+
                     &emsp;&nbsp; <b>Answer Choices:</b> <br /><label v-for="choices in question.answerChoices" :key="choices">
                     
                     <label v-for="(v, k) in choices" :key="k">
@@ -469,7 +473,7 @@ export default {
     },
     getQuestionsData()
         {
-            axios.get("http://localhost:8080/api/form-builder/all",
+            axios.get("http://localhost:8080/api/form-builder/all_templates",
             {
                 headers:{
                     "Content-Type": "application/json",
