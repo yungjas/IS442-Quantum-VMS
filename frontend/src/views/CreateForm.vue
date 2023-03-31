@@ -96,7 +96,7 @@
                 </td>
             </tr>
 
-            <tr style="width: 100%" > 
+            <!-- <tr style="width: 100%" > 
                 <td>
 
                 </td>
@@ -105,7 +105,7 @@
                       <p> {{ noQuestion }} </p>
                     </div>
                 </td>
-            </tr>
+            </tr> -->
 
             <tr>
               <td>
@@ -462,7 +462,7 @@ export default {
         filteredList: [],
         input: '', 
         showSelected: false,
-        noQuestion: "",
+        // noQuestion: "",
     }
     },
     computed: {
@@ -504,7 +504,7 @@ export default {
         },
         filteredNextPage() {
         // return true if current page is not the last page
-        return this.currentPage < this.totalPages;
+        return this.currentPage < this.filteredPages;
     },
   },
   methods: {
@@ -611,9 +611,9 @@ export default {
                     console.log(this.filteredList);
                     return this.filteredList;
                 }
-               else {
-                  this.noQuestion = "No Such Question";
-               }
+              //  else {
+              //     this.noQuestion = "No Such Question";
+              //  }
             })
         } 
     },
