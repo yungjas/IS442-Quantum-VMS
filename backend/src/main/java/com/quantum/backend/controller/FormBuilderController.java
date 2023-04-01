@@ -3,6 +3,7 @@ import com.quantum.backend.exception.ResourceNotFoundException;
 import com.quantum.backend.model.*;
 import com.quantum.backend.service.*;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +37,18 @@ public class FormBuilderController {
         return new ResponseEntity<>(allQns, HttpStatus.OK);
     }
 
+    @GetMapping("/{questionId}")
+    public ResponseEntity<Object> getQuestionById(@PathVariable String questionId){
+        Optional<Question> questionData = null;
+        try{
+            questionData = formBuilderService.getQuestionById(questionId);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(questionData.get(), HttpStatus.OK);
+    }   
+
     @GetMapping("/all_templates")
     public ResponseEntity<List<Question>> getAllQuestionTemplates(){
         List<Question> allTemplateQns = formBuilderService.getAllTemplateQuestions();
@@ -43,6 +56,15 @@ public class FormBuilderController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(allTemplateQns, HttpStatus.OK);
+    }
+
+    @GetMapping("/form_edit_qns/{formId}")
+    public ResponseEntity<List<Question>> getCurrentFormQnsAndTemplateQns(@PathVariable String formId){
+        List<Question> resultQns = formBuilderService.getRemainingTemplateQns(formId);
+        if(resultQns.size() == 0){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(resultQns, HttpStatus.OK);
     }
 
     @PostMapping("/add-question")
@@ -58,7 +80,6 @@ public class FormBuilderController {
         return new ResponseEntity<>(questionCreated, HttpStatus.CREATED);
     }
 
-    // status 201 BUT doesnt update question
     @PutMapping("/edit-question/{questionId}")
     public ResponseEntity<Object> updateQuestion(@PathVariable String questionId, @RequestBody Question question) {
         Question questionUpdated = null;
@@ -68,7 +89,7 @@ public class FormBuilderController {
             return new ResponseEntity<>(ill.getMessage(), HttpStatus.CONFLICT);
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        }        
         return new ResponseEntity<>(questionUpdated, HttpStatus.CREATED);
     }
 

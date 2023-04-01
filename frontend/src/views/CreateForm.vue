@@ -95,41 +95,67 @@
                     <input type="text" class="input" v-model="input" @change="handleSearch" @keyup="handleSearch" style="width: 100%" placeholder="Search Question"/>
                 </td>
             </tr>
+
+            <!-- <tr style="width: 100%" > 
+                <td>
+
+                </td>
+                <td style="text-align:left;">
+                    <div>
+                      <p> {{ noQuestion }} </p>
+                    </div>
+                </td>
+            </tr> -->
+
             <tr>
               <td>
                 <label>Questions</label>
               </td>
 
             <td style="text-align:left;"> 
-               <div style="text-align: left" class="item qn" v-for="question in filteredList" :key="question.questionId">
-                <input type="checkbox" v-model="selectedQuestion" :value="question"/>
+              <div v-if="filteredList&&input">
+               <div style="text-align: left;margin-top: 20px" class="card" v-for="question in paginatedFilteredData" :key="question.questionId">
+                
+                <div class="cardbody" style=" padding:10px">
+                    <input type="checkbox" v-model="selectedQuestion" :value="question"/>
 
-                &nbsp; <b>Question Text:</b>
-                <label>{{ question.questionText }}</label><br />
+                    &nbsp; <b>Question Text:</b>
+                    <label>{{ question.questionText }}</label><br />
 
-                &emsp;&nbsp; <b>Question Type:</b>
-                <label>{{ question.questionType }}</label><br />
+                    &emsp;&nbsp; <b>Question Type:</b>
+                    <label>{{ question.questionType }}</label><br />
 
-                &emsp;&nbsp; <b>Question Section Name:</b>
-                <label>{{ question.questionSectionName }}</label><br />
+                    &emsp;&nbsp; <b>Question Section Name:</b>
+                    <label>{{ question.questionSectionName }}</label><br />
 
-                &emsp;&nbsp; <b>Answer Choices:</b> <br />
-                <label v-for="choices in question.answerChoices" :key="choices">
-                  <label v-for="(v, k) in choices" :key="k">
-                    &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br />
-                  </label> 
-                </label><br />
+                    &emsp;&nbsp; <b>Answer Choices:</b> <br />
+                    <label v-for="choices in question.answerChoices" :key="choices">
+                      <label v-for="(v, k) in choices" :key="k">
+                        &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br />
+                      </label> 
+                    </label><br />
 
-                &emsp;&nbsp; <b>Required:</b>
-                <label>{{ question.required }}</label><br />
+                    &emsp;&nbsp; <b>Required:</b>
+                    <label>{{ question.required }}</label><br />
+
+                    <br>
+
+                    <button type="button" class="btn btn-success" @click="updateQuestion(question)" data-bs-toggle="modal" data-bs-target="#updateModal" style="margin-left: 20px">
+                    Update
+                    </button>
 
                     <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)" style="margin-left: 20px">
                     Delete
                     </button>
 
-                    <br /><br />
+                    <br>
+                </div>
+                
               </div>
-              
+            </div>
+
+           
+            <div v-else>
                 <div  v-for="question in paginatedQuestionData" :key="question.questionId" class="card" style="margin-top: 20px">
 
                 <div class="cardbody" style=" padding:10px">
@@ -146,6 +172,10 @@
                     <label>{{ question.questionSectionName }}</label>
                     <br />
 
+                    &emsp;&nbsp; <b>Is template:</b>
+                    <label>{{ question.template }}</label>
+                    <br />
+
                     &emsp;&nbsp; <b>Answer Choices:</b> <br /><label v-for="choices in question.answerChoices" :key="choices">
                     
                     <label v-for="(v, k) in choices" :key="k">
@@ -155,18 +185,23 @@
                     &emsp;&nbsp; <b>Required:</b>
                     <label>{{ question.required }}</label>
 
-                    <br><br>
+                    <br>
+
+                    <button type="button" class="btn btn-success" @click="updateQuestion(question)" data-bs-toggle="modal" data-bs-target="#updateModal" style="margin-left: 20px">
+                    Update
+                    </button>
 
                     <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)" style="margin-left: 20px">
                     Delete
                     </button>
 
-                    <br /><br />
+                    <br>
                   
                   </div>
                 
               </div>
-            
+            </div>
+
             </td>
           </tr>
         </tbody>
@@ -195,7 +230,23 @@
     
 
     <br> 
-      <div>
+
+    <div v-if = "filteredList&&input">
+        <div class="font-weight-bold">
+          <button type="button" class="btn btn-secondary" v-if="filteredPrevPage" @click="prevPage">
+            Prev
+          </button>
+
+          Page {{ currentPage }} of {{ filteredPages }}
+
+          <button type="button" class="btn btn-secondary" v-if="filteredNextPage" @click="nextPage">
+            Next
+          </button>
+
+        </div>
+      </div>
+
+      <div v-else>
         <div class="font-weight-bold">
           <button type="button" class="btn btn-secondary" v-if="hasPrevPage" @click="prevPage">
             Prev
@@ -302,6 +353,82 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal to Edit Question -->
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="updateModalLabel">Update Question</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table>
+              <tr>
+                <td>Question Text:</td>
+                <td><input type="text" v-model="questionText" /></td>
+              </tr>
+              <tr>
+                <td>Question Type:</td>
+                <td>
+                  <select style="width: 100%" name="selectRole" id="selectRole2" @change="onUpdateChange($event)">
+                    
+                    <option v-for="item in questionTypeArr" :key="item" v-bind:value="item">
+                      {{ item }}
+                    </option>
+
+                  </select>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Question Selection Name (Group):</td>
+                <td><input type="text" v-model="questionSectionName" /></td>
+              </tr>
+
+              <tr>
+                <td v-if="updateQuestionType !== 'text'" class="controls">
+                  Answer Choices:
+                </td>
+
+                <td>
+                  <div id="answers2"></div>
+                  <div v-if="updateQuestionType !== 'text'" class="controls">
+                    <button type="button" id="add_more_fields" class="btn btn-primary" @click="addAnswer2">
+                      Add Answers
+                    </button>
+
+                    <button type="button" id="remove_fields" class="btn btn-warning" @click="removeAnswer2">
+                      Remove Answers
+                    </button>
+
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Required:</td>
+
+                <td><input type="checkbox" v-model="required" /></td>
+
+              </tr>
+            </table>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="closeModal2" data-bs-dismiss="modal">
+              Close
+            </button>
+
+            <button type="button" class="btn btn-primary" @click="updateNewQuestion" >
+              Update
+            </button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -313,6 +440,7 @@ export default {
   data() {
     return {
         questionData: [],
+        updateQuestionId: "",
         userType: localStorage.userType,
         selectedQuestion: [],
         formNo: "",
@@ -321,17 +449,20 @@ export default {
         lastEdited: "",
         dateSubmitted: "",
         answerArray: null,
+        answerArray2: null,
         questionText: "",
         questionType: "text",
+        updateQuestionType: "text",
         questionSectionName: "",
         answerChoices: [],
         required: false,
         questionTypeArr: ["text", "radio", "checkbox"],
         pageSize: 5, // number of items per page
-        currentPage: 1,
+        currentPage: 1,// current page number
         filteredList: [],
-        input: '', // current page number
+        input: '', 
         showSelected: false,
+        // noQuestion: "",
     }
     },
     computed: {
@@ -354,6 +485,26 @@ export default {
         hasNextPage() {
         // return true if current page is not the last page
         return this.currentPage < this.totalPages;
+    },
+    paginatedFilteredData() {
+        // calculate start and end index of current page
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        console.log(this.filteredList.slice(startIndex, endIndex));
+        // return items for current page
+        return this.filteredList.slice(startIndex, endIndex);
+        },
+        filteredPages() {
+        // calculate total number of pages
+        return Math.ceil(this.filteredList.length / this.pageSize);
+        },
+        filteredPrevPage() {
+        // return true if current page is not the first page
+        return this.currentPage > 1;
+        },
+        filteredNextPage() {
+        // return true if current page is not the last page
+        return this.currentPage < this.filteredPages;
     },
   },
   methods: {
@@ -460,16 +611,15 @@ export default {
                     console.log(this.filteredList);
                     return this.filteredList;
                 }
-
+              //  else {
+              //     this.noQuestion = "No Such Question";
+              //  }
             })
-        } else {
-            this.filteredList = this.questionData;
-            return this.filteredList;
-        }
+        } 
     },
     getQuestionsData()
         {
-            axios.get("http://localhost:8080/api/form-builder/all",
+            axios.get("http://localhost:8080/api/form-builder/all_templates",
             {
                 headers:{
                     "Content-Type": "application/json",
@@ -501,7 +651,7 @@ export default {
       this.answerArray.appendChild(document.createElement("br"));
       this.answerArray.appendChild(document.createElement("br"));
 
-},
+    },
     removeAnswer() {
       console.log("remove answer");
       var input_tags = this.answerArray.getElementsByTagName("input");
@@ -515,10 +665,174 @@ export default {
         this.answerArray.removeChild(br_tags[br_tags.length - 1]);
       }
     },
+    addAnswer2() {
+      console.log("adding answer2");
+      var inputNameField = document.createElement("input");
+      inputNameField.setAttribute("type", "text");
+      inputNameField.setAttribute("name", "answersArray2[]");
+      inputNameField.setAttribute("siz", 50);
+      inputNameField.setAttribute("placeholder", "Input Name");
+      this.answerArray2.appendChild(inputNameField);
+
+      var inputValueField = document.createElement("input");
+      inputValueField.setAttribute("type", "text");
+      inputValueField.setAttribute("name", "answersArray2[]");
+      inputValueField.setAttribute("siz", 50);
+      inputValueField.setAttribute("placeholder", "Input Value");
+      this.answerArray2.appendChild(inputValueField);
+
+      this.answerArray2.appendChild(document.createElement("br"));
+      this.answerArray2.appendChild(document.createElement("br"));
+
+    },
+    removeAnswer2() {
+      console.log("remove answer2");
+      var input_tags = this.answerArray2.getElementsByTagName("input");
+
+      var br_tags = this.answerArray2.getElementsByTagName("br");
+      if (input_tags.length > 0) {
+        this.answerArray2.removeChild(input_tags[input_tags.length - 1]);
+        this.answerArray2.removeChild(input_tags[input_tags.length - 1]);
+
+        this.answerArray2.removeChild(br_tags[br_tags.length - 1]);
+        this.answerArray2.removeChild(br_tags[br_tags.length - 1]);
+      }
+    },
     addQuestion() {
       console.log("add question");
       this.answerArray = document.getElementById("answers");
       console.log(this.answerArray);
+      this.questionText = null;
+      this.questionSectionName = null;
+      this.required = false;      
+    },
+    updateQuestion(question) {
+      console.log(question);
+      this.answerArray2 = document.getElementById("answers2");
+      this.updateQuestionId = question.questionId;
+      this.questionText = question.questionText;
+      this.questionSectionName = question.questionSectionName;
+      document.getElementById("selectRole2").value = question.questionType;
+      this.updateQuestionType = question.questionType;
+      this.required = question.required;
+
+      for(var i in question.answerChoices)
+      {
+        var answerObj = question.answerChoices[i];
+        console.log(answerObj);
+
+        var inputNameField = document.createElement("input");
+        inputNameField.setAttribute("type", "text");
+        inputNameField.setAttribute("name", "answersArray2[]");
+        inputNameField.setAttribute("siz", 50);
+        inputNameField.setAttribute("placeholder", "Input Name");
+        inputNameField.setAttribute("value", answerObj.inputName);
+        this.answerArray2.appendChild(inputNameField);
+
+        var inputValueField = document.createElement("input");
+        inputValueField.setAttribute("type", "text");
+        inputValueField.setAttribute("name", "answersArray2[]");
+        inputValueField.setAttribute("siz", 50);
+        inputValueField.setAttribute("placeholder", "Input Value");
+        inputValueField.setAttribute("value", answerObj.inputValue);
+        this.answerArray2.appendChild(inputValueField);
+
+        this.answerArray2.appendChild(document.createElement("br"));
+        this.answerArray2.appendChild(document.createElement("br"));        
+      }
+    },
+    updateNewQuestion()
+    {
+      console.log("Updating new question");
+
+      var questionId = this.updateQuestionId;
+
+      //the following is a document.html tag
+      var tempAnswerArray = document.getElementsByName("answersArray2[]");
+
+      var tempAnswerArray2 = [];
+      for (var i = 0; i < tempAnswerArray.length; i++) {
+        tempAnswerArray2.push(tempAnswerArray[i].value);
+      }
+
+      this.answerChoices = [];
+
+      for(var x = 0; x < tempAnswerArray2.length; x+=2)
+            {
+                var tempObject = "{";
+                tempObject += "\"" + "inputName" + "\": \"" + tempAnswerArray2[x] + "\",";
+                tempObject += "\"" + "inputValue" + "\": \"" + tempAnswerArray2[x+1] + "\"";
+                tempObject += "}";
+                
+                if(x < tempAnswerArray2.length)
+                {
+                    this.answerChoices.push(tempObject);
+                }
+            }
+
+      /*
+                    {
+                        "questionText": "Some safety questions 1",
+                        "questionType": "textbox",
+                        "questionSectionName": "Safety",
+                        "answerChoices" : [{"inputName": "True", "inputValue": "1"}, {"inputName": "False", "inputValue": "0"}],
+                        "required": true
+                    }
+            */
+
+      if (this.answerChoices.length == 0) {
+        this.answerChoices = null;
+      }
+
+      var tempChoices = "";
+      if (this.answerChoices == null) {
+        tempChoices = '"answerChoices": ' + this.answerChoices + ",";
+      } else {
+        tempChoices = '"answerChoices": [' + this.answerChoices + "],";
+      }
+
+      var createQuestion = "{";
+      createQuestion += '"questionText": "' + this.questionText + '",';
+      createQuestion += '"questionType": "' + this.updateQuestionType + '",';
+      createQuestion +=
+        '"questionSectionName": "' + this.questionSectionName + '",';
+      createQuestion += tempChoices;
+      createQuestion += '"required": ' + this.required;
+      createQuestion += "}";
+
+      console.log("THIS IS UPDATING QUESTIONS");
+      createQuestion = JSON.parse(createQuestion);
+      console.log(createQuestion);
+
+      axios
+        .put(
+          "http://localhost:8080/api/form-builder/edit-question/" + questionId,
+          createQuestion,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.token,
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        )
+        .then((response_question) => {
+          console.log(response_question);
+
+          this.questionData = [];
+          this.getQuestionsData();
+          document.getElementById("closeModal2").click();
+        });
+
+
+
+
+
+
+
+
+
+
     },
     deleteQuestion(questionId) {
       console.log("delete question: " + questionId);
@@ -643,14 +957,18 @@ export default {
       console.log(event.target.value);
       this.questionType = event.target.value;
     },
-        prevPage() {
-        // move to previous page
-        this.currentPage--;
-        },
-        nextPage() {
-        // move to next page
-        this.currentPage++;
-        }
+    onUpdateChange(event) {
+      console.log(event.target.value);
+      this.updateQuestionType = event.target.value;
+    },
+    prevPage() {
+      // move to previous page
+      this.currentPage--;
+    },
+    nextPage() {
+      // move to next page
+      this.currentPage++;
+    }
   },
   created() {
     this.getQuestionsData();

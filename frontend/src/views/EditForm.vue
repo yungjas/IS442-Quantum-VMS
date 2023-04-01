@@ -62,9 +62,15 @@
                             <input type=date v-model="dateSubmitted" style="width: 100%">
                         </td>
                     </tr> -->
+          <!-- <div v-if="data.template">
+            hello
+          </div>
+          <div v-else>
+            
+          </div> -->
           <tr>
             <td>
-              <label>Questions</label>
+              <label>Template Questions</label>
             </td>
             <td style="text-align: left">
               <div
@@ -88,6 +94,9 @@
                   &emsp;&nbsp; <b>Question Section Name:</b>
                   <label>{{ question.questionSectionName }}</label
                   ><br />
+                  &emsp;&nbsp; <b>Is template:</b>
+                  <label>{{ question.template }}</label>
+                  <br />
                   &emsp;&nbsp; <b>Answer Choices:</b> <br /><label
                     v-for="choices in question.answerChoices"
                     :key="choices"
@@ -99,10 +108,14 @@
                   &emsp;&nbsp; <b>Required:</b>
                   <label>{{ question.required }}</label
                   ><br />
+                  <button type="button" class="btn btn-success" @click="updateQuestion(question)" data-bs-toggle="modal" data-bs-target="#updateModal" style="margin-left: 20px">
+                    Update
+                  </button>
                   <button
                     type="button"
                     class="btn btn-danger"
                     @click="deleteQuestion(question.questionId)"
+                    style="margin-left: 20px"
                   >
                     Delete
                   </button>
@@ -248,6 +261,82 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal to Edit Question -->
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="updateModalLabel">Update Question</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table>
+              <tr>
+                <td>Question Text:</td>
+                <td><input type="text" v-model="questionText" /></td>
+              </tr>
+              <tr>
+                <td>Question Type:</td>
+                <td>
+                  <select style="width: 100%" name="selectRole" id="selectRole2" @change="onUpdateChange($event)">
+                    
+                    <option v-for="item in questionTypeArr" :key="item" v-bind:value="item">
+                      {{ item }}
+                    </option>
+
+                  </select>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Question Selection Name (Group):</td>
+                <td><input type="text" v-model="questionSectionName" /></td>
+              </tr>
+
+              <tr>
+                <td v-if="updateQuestionType !== 'text'" class="controls">
+                  Answer Choices:
+                </td>
+
+                <td>
+                  <div id="answers2"></div>
+                  <div v-if="updateQuestionType !== 'text'" class="controls">
+                    <button type="button" id="add_more_fields" class="btn btn-primary" @click="addAnswer2">
+                      Add Answers
+                    </button>
+
+                    <button type="button" id="remove_fields" class="btn btn-warning" @click="removeAnswer2">
+                      Remove Answers
+                    </button>
+
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Required:</td>
+
+                <td><input type="checkbox" v-model="required" /></td>
+
+              </tr>
+            </table>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="closeModal2" data-bs-dismiss="modal">
+              Close
+            </button>
+
+            <button type="button" class="btn btn-primary" @click="updateNewQuestion" >
+              Update
+            </button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -261,12 +350,15 @@ export default {
     return {
       data: JSON.parse(localStorage.editForm),
       userType: localStorage.userType,
+      updateQuestionId: "",
       selectedQuestion: [],
       allQuestions: [],
       lastEdited: "",
       dateSubmitted: "",
       answerArray: null,
+      answersArray2: null,
       questionText: "",
+      updateQuestionType: "text",
       questionType: "text",
       questionSectionName: "",
       answerChoices: [],
@@ -366,8 +458,9 @@ export default {
       }
     },
     getQuestionsData() {
-      axios
-        .get("http://localhost:8080/api/form-builder/all", {
+      if(this.data.template){
+        axios
+        .get("http://localhost:8080/api/form-builder/all_templates", {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + localStorage.token,
@@ -376,8 +469,26 @@ export default {
         })
         .then((response) => {
           this.allQuestions = response.data;
+          //this.isQuestionDisabled = false;
           console.log(this.allQuestions);
         });
+      }
+      else{
+        axios
+        .get("http://localhost:8080/api/form-builder/form_edit_qns/" + this.data.formId, {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.token,
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .then((response) => {
+          this.allQuestions = response.data;
+          
+          // disable checkbox for questions that are already linked to workflow
+          this.isQuestionDisabled = true;
+        });
+      }
     },
     addAnswer() {
       console.log("adding answer");
@@ -399,6 +510,159 @@ export default {
       this.answerArray.appendChild(document.createElement("br"));
       this.answerArray.appendChild(document.createElement("br"));
     },
+    updateQuestion(question) {
+      console.log(question);
+      this.answerArray2 = document.getElementById("answers2");
+      this.updateQuestionId = question.questionId;
+      this.questionText = question.questionText;
+      this.questionSectionName = question.questionSectionName;
+      document.getElementById("selectRole2").value = question.questionType;
+      this.updateQuestionType = question.questionType;
+      this.required = question.required;
+
+      for(var i in question.answerChoices)
+      {
+        var answerObj = question.answerChoices[i];
+        console.log(answerObj);
+
+        var inputNameField = document.createElement("input");
+        inputNameField.setAttribute("type", "text");
+        inputNameField.setAttribute("name", "answersArray2[]");
+        inputNameField.setAttribute("siz", 50);
+        inputNameField.setAttribute("placeholder", "Input Name");
+        inputNameField.setAttribute("value", answerObj.inputName);
+        this.answerArray2.appendChild(inputNameField);
+
+        var inputValueField = document.createElement("input");
+        inputValueField.setAttribute("type", "text");
+        inputValueField.setAttribute("name", "answersArray2[]");
+        inputValueField.setAttribute("siz", 50);
+        inputValueField.setAttribute("placeholder", "Input Value");
+        inputValueField.setAttribute("value", answerObj.inputValue);
+        this.answerArray2.appendChild(inputValueField);
+
+        this.answerArray2.appendChild(document.createElement("br"));
+        this.answerArray2.appendChild(document.createElement("br"));        
+      }
+    },
+    addAnswer2() {
+      console.log("adding answer2");
+      var inputNameField = document.createElement("input");
+      inputNameField.setAttribute("type", "text");
+      inputNameField.setAttribute("name", "answersArray2[]");
+      inputNameField.setAttribute("siz", 50);
+      inputNameField.setAttribute("placeholder", "Input Name");
+      this.answerArray2.appendChild(inputNameField);
+
+      var inputValueField = document.createElement("input");
+      inputValueField.setAttribute("type", "text");
+      inputValueField.setAttribute("name", "answersArray2[]");
+      inputValueField.setAttribute("siz", 50);
+      inputValueField.setAttribute("placeholder", "Input Value");
+      this.answerArray2.appendChild(inputValueField);
+
+      this.answerArray2.appendChild(document.createElement("br"));
+      this.answerArray2.appendChild(document.createElement("br"));
+
+    },
+    removeAnswer2() {
+      console.log("remove answer2");
+      var input_tags = this.answerArray2.getElementsByTagName("input");
+
+      var br_tags = this.answerArray2.getElementsByTagName("br");
+      if (input_tags.length > 0) {
+        this.answerArray2.removeChild(input_tags[input_tags.length - 1]);
+        this.answerArray2.removeChild(input_tags[input_tags.length - 1]);
+
+        this.answerArray2.removeChild(br_tags[br_tags.length - 1]);
+        this.answerArray2.removeChild(br_tags[br_tags.length - 1]);
+      }
+    },
+    updateNewQuestion()
+    {
+      console.log("Updating new question");
+
+      var questionId = this.updateQuestionId;
+
+      //the following is a document.html tag
+      var tempAnswerArray = document.getElementsByName("answersArray2[]");
+
+      var tempAnswerArray2 = [];
+      for (var i = 0; i < tempAnswerArray.length; i++) {
+        tempAnswerArray2.push(tempAnswerArray[i].value);
+      }
+
+      this.answerChoices = [];
+
+      for(var x = 0; x < tempAnswerArray2.length; x+=2)
+            {
+                var tempObject = "{";
+                tempObject += "\"" + "inputName" + "\": \"" + tempAnswerArray2[x] + "\",";
+                tempObject += "\"" + "inputValue" + "\": \"" + tempAnswerArray2[x+1] + "\"";
+                tempObject += "}";
+                
+                if(x < tempAnswerArray2.length)
+                {
+                    this.answerChoices.push(tempObject);
+                }
+            }
+
+      /*
+                    {
+                        "questionText": "Some safety questions 1",
+                        "questionType": "textbox",
+                        "questionSectionName": "Safety",
+                        "answerChoices" : [{"inputName": "True", "inputValue": "1"}, {"inputName": "False", "inputValue": "0"}],
+                        "required": true
+                    }
+            */
+
+      if (this.answerChoices.length == 0) {
+        this.answerChoices = null;
+      }
+
+      var tempChoices = "";
+      if (this.answerChoices == null) {
+        tempChoices = '"answerChoices": ' + this.answerChoices + ",";
+      } else {
+        tempChoices = '"answerChoices": [' + this.answerChoices + "],";
+      }
+
+      var createQuestion = "{";
+      createQuestion += '"questionText": "' + this.questionText + '",';
+      createQuestion += '"questionType": "' + this.updateQuestionType + '",';
+      createQuestion +=
+        '"questionSectionName": "' + this.questionSectionName + '",';
+      createQuestion += tempChoices;
+      createQuestion += '"required": ' + this.required;
+      createQuestion += "}";
+
+      console.log("THIS IS UPDATING QUESTIONS");
+      createQuestion = JSON.parse(createQuestion);
+      console.log(createQuestion);
+
+      axios
+        .put(
+          "http://localhost:8080/api/form-builder/edit-question/" + questionId,
+          createQuestion,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.token,
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        )
+        .then((response_question) => {
+          console.log(response_question);
+
+          this.questionData = [];
+          this.getQuestionsData();
+          document.getElementById("closeModal2").click();
+        });
+
+    },
+
     removeAnswer() {
       console.log("remove answer");
       var input_tags = this.answerArray.getElementsByTagName("input");

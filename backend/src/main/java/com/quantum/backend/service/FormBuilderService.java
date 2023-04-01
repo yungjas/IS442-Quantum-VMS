@@ -1,4 +1,5 @@
 package com.quantum.backend.service;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,15 +11,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.quantum.backend.exception.RequestErrorException;
 import com.quantum.backend.exception.ResourceNotFoundException;
+import com.quantum.backend.model.Form;
 import com.quantum.backend.model.Question;
 import com.quantum.backend.repository.*;
 
 @Service
 public class FormBuilderService {
     private final FormBuilderRepository formBuilderRepo;
+    private final FormRepository formRepo;
 
-    public FormBuilderService(FormBuilderRepository formBuilderRepo){
+    public FormBuilderService(FormBuilderRepository formBuilderRepo, FormRepository formRepo){
         this.formBuilderRepo = formBuilderRepo;
+        this.formRepo = formRepo;
     }
 
     public List<Question> getAllQuestions(){
@@ -29,12 +33,41 @@ public class FormBuilderService {
         return formBuilderRepo.findAllQnTemplates();
     }
 
+    public Optional<Question> getQuestionById(String questionId) throws ResourceNotFoundException{
+        Optional<Question> questionData = formBuilderRepo.findById(questionId);
+        if(!questionData.isPresent()){
+            throw new ResourceNotFoundException("Question", "questionId", questionId);
+        }
+        return questionData;
+    }
+
+    // filter remaining template questions for admin to add
+    public List<Question> getRemainingTemplateQns(String formId){
+        List<Question> resultList = new ArrayList<>();
+        List<String> tempList = new ArrayList<>();
+        Form form = formRepo.findById(formId).get();
+        List<Question> templateQns = formBuilderRepo.findAllQnTemplates();
+
+        for(Question qn: form.getQuestions()){
+            tempList.add(qn.getQuestionText());
+        }
+
+        for(Question templateQn: templateQns){
+            if(!tempList.contains(templateQn.getQuestionText())){
+                resultList.add(templateQn);
+            }
+        }
+
+        return resultList;
+    }
+
     public Question addQuestion(@RequestBody Question question) throws IllegalArgumentException{
         // Add code to save the question to the database
         // if(formBuilderRepo.existsById(question.getQuestionId())){
         //     throw new IllegalArgumentException("This question exists");
         // }
         try {
+            question.setTemplate(true);
             formBuilderRepo.save(question);
         } catch (Exception e) {
             throw new RequestErrorException("create", "Question", e.getMessage());
@@ -42,6 +75,7 @@ public class FormBuilderService {
         return question;
     }
 
+    // since we are only listing template questions, this means only template questions wil get updated
     public Question updateQuestion(String questionId, Question questionUpdate) throws IllegalArgumentException{
         Optional<Question> question = formBuilderRepo.findById(questionId);
         Question questionData = null;
@@ -55,8 +89,8 @@ public class FormBuilderService {
             questionData.setQuestionType(questionUpdate.getQuestionType());
             questionData.setQuestionSectionName(questionUpdate.getQuestionSectionName());
             questionData.setAnswerChoices(questionUpdate.getAnswerChoices());
+            questionData.setTemplate(true);
             questionData.setRequired(questionUpdate.isRequired());
-            questionData.setAnswerChoices(questionUpdate.getAnswerChoices());
             formBuilderRepo.save(questionData);
         } catch(Exception e){
             throw new RequestErrorException("update", "Question", e.getMessage());

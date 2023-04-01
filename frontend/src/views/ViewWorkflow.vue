@@ -74,10 +74,10 @@
             </td>
             <td v-if="item.workflowId !== this.workflowId">
               <button
-                class="btn btn-warning"
+                class="btn btn-primary"
                 @click="editWorkflow(item.workflowId)"
               >
-                Edit
+                Edit Workflow
               </button>
             </td>
             <td v-if="item.workflowId !== this.workflowId">
@@ -85,7 +85,7 @@
                 class="btn btn-danger"
                 @click="deleteWorkflow(item.workflowId)"
               >
-                Delete
+                Delete Workflow
               </button>
             </td>
           </tr>
