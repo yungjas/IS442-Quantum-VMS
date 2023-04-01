@@ -67,6 +67,7 @@ public class FormBuilderService {
         //     throw new IllegalArgumentException("This question exists");
         // }
         try {
+            question.setTemplate(true);
             formBuilderRepo.save(question);
         } catch (Exception e) {
             throw new RequestErrorException("create", "Question", e.getMessage());
