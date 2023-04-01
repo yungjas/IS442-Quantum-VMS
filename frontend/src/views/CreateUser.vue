@@ -105,9 +105,9 @@
                                 // this.$router.push({name: 'ViewWorkflow'}); 
                                 // alert("Account created successfully");
                                 var toEmail = document.getElementById("email").value;
-                                var newUsername = document.getElementById("username").value;
+                                //var newUsername = document.getElementById("username").value;
                                 var newPassword = document.getElementById("password").value;
-                                var newMessage = "Your account credentials is Username: " + newUsername + " and Password: " + newPassword; 
+                                var newMessage = "Your account credentials is Email: " + toEmail + " and Password: " + newPassword; 
 
                                 console.log("sending email without attachment");
                                 var data = JSON.parse("{\n    \"to\": \"" + toEmail + "\",\n    \"subject\": \"" + "New Account Created" + "\",\n    \"text\": \"" + newMessage + "\"\n}");
@@ -167,9 +167,9 @@
                                 console.log(response_users);
 
                                 var toEmail = document.getElementById("email").value;
-                                var newUsername = document.getElementById("username").value;
+                                //var newUsername = document.getElementById("username").value;
                                 var newPassword = document.getElementById("password").value;
-                                var newMessage = "The admin has successfully created your account. Your account credentials is Username: " + newUsername + " and Password: " + newPassword; 
+                                var newMessage = "The admin has successfully created your account. Your account credentials is Username: " + toEmail + " and Password: " + newPassword; 
 
                                 console.log("sending email without attachment");
                                 var data = JSON.parse("{\n    \"to\": \"" + toEmail + "\",\n    \"subject\": \"" + "New Account Created" + "\",\n    \"text\": \"" + newMessage + "\"\n}");
