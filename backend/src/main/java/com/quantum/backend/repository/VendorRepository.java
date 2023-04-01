@@ -1,14 +1,16 @@
-package com.quantum.backend.repository;
+// NOT IN USE
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
+// package com.quantum.backend.repository;
 
-import com.quantum.backend.model.Vendor;
+// import org.springframework.data.mongodb.repository.MongoRepository;
+// import org.springframework.stereotype.Repository;
 
-@Repository
-public interface VendorRepository extends MongoRepository<Vendor, String>
-{
-    Boolean existsByUsername(String username);
+// import com.quantum.backend.model.Vendor;
 
-    Boolean existsByEmail(String email);
-}
+// @Repository
+// public interface VendorRepository extends MongoRepository<Vendor, String>
+// {
+//     Boolean existsByUsername(String username);
+
+//     Boolean existsByEmail(String email);
+// }

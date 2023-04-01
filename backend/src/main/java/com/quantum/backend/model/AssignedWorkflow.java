@@ -1,24 +1,26 @@
-package com.quantum.backend.model;
+// NOT IN USE
 
-import org.springframework.data.annotation.Id;
+// package com.quantum.backend.model;
 
-import lombok.Getter;
-import lombok.Setter;
+// import org.springframework.data.annotation.Id;
 
-@Getter
-@Setter
-public class AssignedWorkflow {
-    @Id
-    private String assignedWorkflowId;
+// import lombok.Getter;
+// import lombok.Setter;
 
-    private String workflowId;
+// @Getter
+// @Setter
+// public class AssignedWorkflow {
+//     @Id
+//     private String assignedWorkflowId;
 
-    private Workflow workflow;
+//     private String workflowId;
 
-    private String vendorId;
+//     private Workflow workflow;
 
-    // DD/MM/YYYY
-    private String dateAssigned;
+//     private String vendorId;
 
-    private String deadline;
-}
+//     // DD/MM/YYYY
+//     private String dateAssigned;
+
+//     private String deadline;
+// }
