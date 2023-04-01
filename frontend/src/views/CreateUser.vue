@@ -166,9 +166,31 @@
                             .then((response_users) => {
                                 console.log(response_users);
 
-                                this.$router.push({name: 'ViewWorkflow'});
-                                        
-                                alert("Account created successfully");
+                                var toEmail = document.getElementById("email").value;
+                                var newUsername = document.getElementById("username").value;
+                                var newPassword = document.getElementById("password").value;
+                                var newMessage = "The admin has successfully created your account. Your account credentials is Username: " + newUsername + " and Password: " + newPassword; 
+
+                                console.log("sending email without attachment");
+                                var data = JSON.parse("{\n    \"to\": \"" + toEmail + "\",\n    \"subject\": \"" + "New Account Created" + "\",\n    \"text\": \"" + newMessage + "\"\n}");
+                                console.log(data);
+
+                                axios.post("http://localhost:8080/api/email/send", data, {
+                                            headers:{                                    
+                                                "Content-Type": "application/json",
+                                                "Authorization": "Bearer " + localStorage.token,
+                                                "Access-Control-Allow-Origin": "*",
+                                            }
+                                })
+                                .then((response) => 
+                                {
+                                    console.log(response);
+
+                                    if(response.status == 200)
+                                    {
+                                        alert("Account created successfully");
+                                    }
+                                })    
                             })                               
                     }
 
