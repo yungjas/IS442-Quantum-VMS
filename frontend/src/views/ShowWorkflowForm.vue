@@ -2,7 +2,7 @@
  
   <div>
     <h1>Form</h1>
-    <div id="forms">
+    <div id="forms" class="px-5">
       
     </div>   
     <button id="btnSubmitForm" @click="submitForm()" hidden>Submit Form</button> &nbsp;

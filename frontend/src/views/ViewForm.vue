@@ -23,7 +23,7 @@
             <th scope="col">FormID</th>
             <th scope="col">Name</th>
             <th scope="col">Last Edited</th>
-            <th scope="col">Is Template</th>
+            <th scope="col">Is this a template?</th>
             <th scope="col" colspan="2">Action</th>
           </tr>
         </thead>
