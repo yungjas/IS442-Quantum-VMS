@@ -749,7 +749,7 @@ export default {
           .then((response_users) => {
             console.log(response_users);
 
-            this.$router.push({ name: "Home" });
+            this.$router.push({ name: "ViewForm" });
 
             alert("Form created successfully");
           });
