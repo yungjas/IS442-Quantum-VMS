@@ -259,9 +259,9 @@
         </div>
       </div>
 
-      <br />
+      <br /><br />
 
-      <div class="btn-group justify-content-end align-items-end mb-3" role="submitChange">
+      <div class="btn-group justify-content-end align-items-end" role="submitChange">
         <button type="button" class="btn btn-secondary" @click="createForm">
           Create
         </button>
@@ -592,7 +592,7 @@ export default {
           .then((response_users) => {
             console.log(response_users);
 
-            this.$router.push({ name: "Home" });
+            this.$router.push({ name: "ViewForm" });
 
             alert("Form created successfully");
           });
