@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.quantum.backend.model.Form;
 import com.quantum.backend.model.SendEmailRequest;
 import com.quantum.backend.model.User;
 import com.quantum.backend.model.Workflow;
@@ -48,12 +49,14 @@ public class ScheduledService {
         String subject = "Form Approved";
 
         for(Workflow wf: allWorkflows){
-            if(wf.getForm().getApprovedBy() != null){
-                String text = String.format("%s has been approved", wf.getForm().getFormName());
-                if(wf.getAssignedUsers() != null && wf.getAssignedAdmins() != null && wf.getAssignedVendors() != null){
-                    HashSet<String> emailList = processEmailList(wf.getAssignedUsers(), wf.getAssignedAdmins(), wf.getAssignedVendors());
-                    processEmail(emailList, subject, text);
-                    emailList.clear();
+            for(Form form: wf.getForms()){
+                if(form.getApprovedBy() != null){
+                    String text = String.format("%s has been approved", form.getFormName());
+                    if(wf.getAssignedUsers() != null && wf.getAssignedAdmins() != null && wf.getAssignedVendors() != null){
+                        HashSet<String> emailList = processEmailList(wf.getAssignedUsers(), wf.getAssignedAdmins(), wf.getAssignedVendors());
+                        processEmail(emailList, subject, text);
+                        emailList.clear();
+                    }
                 }
             }
         }

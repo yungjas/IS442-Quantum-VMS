@@ -101,9 +101,12 @@ public class WorkflowService {
 
     public Workflow createWorkflow(Workflow workflow) throws RequestErrorException {
         try {
-            Form form = workflow.getForm();
-            Form actualForm = formService.createForm(form);
-            workflow.setForm(actualForm);
+            List<Form> forms = workflow.getForms();
+            for(Form form: forms){
+                // saving each form to db
+                Form actualForm = formService.createForm(form);
+            }
+            workflow.setForms(forms);
             workflowRepo.save(workflow);
         } catch (Exception e) {
             throw new RequestErrorException("create", "workflow", e.getMessage());
@@ -123,7 +126,7 @@ public class WorkflowService {
             workflowOriginal.setAssignedUsers(workflowUpdate.getAssignedUsers());
             workflowOriginal.setAssignedAdmins(workflowUpdate.getAssignedAdmins());
             workflowOriginal.setAssignedVendors(workflowUpdate.getAssignedVendors());
-            workflowOriginal.setForm(workflowUpdate.getForm());
+            workflowOriginal.setForms(workflowUpdate.getForms());
 
 
             

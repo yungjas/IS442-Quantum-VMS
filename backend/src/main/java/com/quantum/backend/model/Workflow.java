@@ -36,7 +36,7 @@ public class Workflow {
     private List<User> assignedAdmins; 
 
     @DBRef
-    private Form form; // update branch to resolve Form cannot be defined to a type
+    private List<Form> forms; // update branch to resolve Form cannot be defined to a type
 
     // private String adminId;
 
