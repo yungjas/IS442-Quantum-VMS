@@ -264,10 +264,13 @@ export default {
     },
     addUserResponse(qnsId, questionResponse, noResponse) {
       var userId = this.userId;
-      var formId = this.formId;
+      var formId = this.jsonData.form.formId;
       if (questionResponse.length === 0) {
         questionResponse = null;
       }
+
+      console.log("***********************");
+      console.log(this.jsonData.form.formId);
 
       var json = {
         userId: userId,
@@ -559,15 +562,6 @@ export default {
       }
     },
     retrieveForm() {
-
-
-      console.log(localStorage.userType);
-      '642992efae32f0092d49b6d0'
-      if(localStorage.userType !== "ROLE_VENDOR")
-      {
-        this.userId = localStorage.userId;
-      }
-
       console.log("=====================");
 
       console.log(

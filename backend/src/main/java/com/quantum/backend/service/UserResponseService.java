@@ -234,6 +234,9 @@ public class UserResponseService {
 
         try{
             userResponseData = userResponse.get();
+            
+            System.out.println(userResponseData.getUserId());
+            
             userResponseData.setQuestionResponse(userResponseUpdate.getQuestionResponse());
             userResponseRepo.save(userResponseData);
         }
