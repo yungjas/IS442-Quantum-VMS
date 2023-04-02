@@ -10,7 +10,7 @@
           <th scope="col">Assigned Admins</th>
           <th scope="col">Assigned Vendor Staff</th>
           <th scope="col">Deadline</th>
-          <th scope="col" colspan="2">Assigned Form</th>
+          <!-- <th scope="col" colspan="2">Assigned Form</th> -->
         </tr>
       </thead>
       <tbody>
@@ -21,6 +21,13 @@
             <ul>
               <li v-for="form in item.forms"  :key="form.formId">
                 {{ form.formName }}
+                <br>
+                <button style="margin-bottom: 1em;"
+                  class="btn btn-warning"
+                  @click="viewWorkFlowForm(form.formId, item.workflowId)"
+                  >
+                  View form
+                </button>
               </li>
             </ul>
           </td>
@@ -39,26 +46,18 @@
             </ul>
           </td>
           <td>{{ item.deadline }}</td>
-          <td v-if="item.workflowId !== this.workflowId">
+          <!-- <td v-if="item.workflowId !== this.workflowId">
             <ul class="list-unstyled">
               <li v-for="form in item.forms" :key="form.formId">
                 <button style="margin-bottom: 1em;"
                   class="btn btn-warning"
                   @click="viewWorkFlowForm(form.formId, item.workflowId)"
                   >
-                  View
+                  View {{form.formName}} form
                 </button>
               </li>
             </ul>
-            <!-- <span v-for="form in item.forms"  :key="form.formId">
-            <button style="margin-bottom: 1em;"
-              class="btn btn-warning"
-              @click="viewWorkFlowForm(form.formId, item.workflowId)"
-            >
-              View
-            </button>
-            </span> -->
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </table>

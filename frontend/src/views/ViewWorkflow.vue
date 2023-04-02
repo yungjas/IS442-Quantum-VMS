@@ -43,6 +43,20 @@
               <ul>
                 <li v-for="form in item.forms"  :key="form.formId">
                   {{ form.formName }}
+                  <br>
+                  <button
+                    class="btn btn-warning"
+                    style="margin-bottom: 1em;"
+                    @click="
+                    viewWorkFlowForm(
+                      form.formId,
+                      item.assignedVendors,
+                      item.workflowId
+                    )
+                  "
+                  >
+                View form
+                </button>
                 </li>
               </ul>
             </td>
@@ -67,7 +81,7 @@
             <td v-if="item.workflowId !== this.workflowId">
               <span v-for="form in item.forms"  :key="form.formId">
                 
-              <button
+              <!-- <button
                 class="btn btn-warning"
                 style="margin-bottom: 1em;"
                 @click="
@@ -78,8 +92,9 @@
                   )
                 "
               >
-                View Workflow Form
-              </button></span>
+                View {{form.formName}} form
+              </button> -->
+            </span>
             </td>
             <td v-if="item.workflowId !== this.workflowId">
               <button
