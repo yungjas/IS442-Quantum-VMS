@@ -127,6 +127,7 @@
                                             if(response.status == 200)
                                             {
                                                 alert("Account created successfully");
+                                                this.$router.push({name: 'viewUser'});
                                             }
                                         })                                        
                             })                          

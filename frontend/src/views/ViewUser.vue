@@ -106,7 +106,7 @@
                     console.log(response.status);
                     if(response.status == 200)
                     {
-                        alert("User deleted successfully");
+                        // alert("User deleted successfully");
                         this.viewUser();
                     }
                     else
