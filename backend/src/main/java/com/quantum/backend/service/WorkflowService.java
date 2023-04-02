@@ -102,11 +102,13 @@ public class WorkflowService {
     public Workflow createWorkflow(Workflow workflow) throws RequestErrorException {
         try {
             List<Form> forms = workflow.getForms();
+            List<Form> nonTemplateForms = new ArrayList<>();
             for(Form form: forms){
                 // saving each form to db
                 Form actualForm = formService.createForm(form);
+                nonTemplateForms.add(actualForm);
             }
-            workflow.setForms(forms);
+            workflow.setForms(nonTemplateForms);
             workflowRepo.save(workflow);
         } catch (Exception e) {
             throw new RequestErrorException("create", "workflow", e.getMessage());

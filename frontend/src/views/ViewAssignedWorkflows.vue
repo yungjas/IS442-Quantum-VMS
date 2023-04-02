@@ -41,7 +41,7 @@
           <td>{{ item.deadline }}</td>
           <td v-if="item.workflowId !== this.workflowId">
             <ul class="list-unstyled">
-              <li v-for="form in item.forms"  :key="form.formId">
+              <li v-for="form in item.forms" :key="form.formId">
                 <button style="margin-bottom: 1em;"
                   class="btn btn-warning"
                   @click="viewWorkFlowForm(form.formId, item.workflowId)"

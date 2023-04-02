@@ -164,6 +164,8 @@ export default {
         "qnId": qnsId,
         "questionResponse": questionResponse
       }
+
+      console.log(json);
       
       if(noResponse)
       {
