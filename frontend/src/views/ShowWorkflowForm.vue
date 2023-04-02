@@ -182,7 +182,6 @@ export default {
                               .then((response) => {
                                   console.log(response);
                                   this.formStatus.innerHTML = "Submitted";
-                                  alert("Saved Successfully");
                               })
 
       }
