@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       data: [],
-      dropdownData: ['ALL', 'True', 'False'],
+      dropdownData: ['ALL', 'Yes', 'No'],
       userType: localStorage.userType,
       backupData: [],
     };
