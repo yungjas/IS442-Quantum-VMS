@@ -44,6 +44,30 @@
     >
       Request Approval
     </button>
+    <button
+      id="updateStatusForm"
+      class="btn btn-success"
+      @click="updateFormStatus()"
+      hidden
+    >
+      Request Approval
+    </button>
+    <button
+      id="updateStatusForm"
+      class="btn btn-success"
+      @click="updateFormStatus()"
+      hidden
+    >
+      Request Approval
+    </button>
+    <button
+      id="updateStatusForm"
+      class="btn btn-success"
+      @click="updateFormStatus()"
+      hidden
+    >
+      Request Approval
+    </button>
     <p id="formStatus"></p>
   </div>
 </template>
@@ -79,9 +103,10 @@ export default {
   methods: {
     updateFromStatus() {
       var approveformObj = this.jsonData.form;
+      approveformObj.status = "Awaiting Admin Review"
       axios
         .put(
-          "http://localhost:8080/api/forms/regergeg/" + approveFormObj.formId,
+          "http://localhost:8080/api/forms/udateStatus/" + approveFormObj.formId,
           approveFormObj,
           {
             headers: {
