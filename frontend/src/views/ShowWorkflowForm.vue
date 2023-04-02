@@ -36,38 +36,19 @@
     >
       Unapprove Form
     </button>
-    <button
-      id="updateStatusForm"
-      class="btn btn-success"
-      @click="updateFormStatus()"
-      hidden
-    >
-      Request Approval
-    </button>
-    <button
-      id="updateStatusForm"
-      class="btn btn-success"
-      @click="updateFormStatus()"
-      hidden
-    >
-      Request Approval
-    </button>
-    <button
-      id="updateStatusForm"
-      class="btn btn-success"
-      @click="updateFormStatus()"
-      hidden
-    >
-      Request Approval
-    </button>
-    <button
-      id="updateStatusForm"
-      class="btn btn-success"
-      @click="updateFormStatus()"
-      hidden
-    >
-      Request Approval
-    </button>
+    <span v-if="myData == 'Awaiting Vendor Input' ">
+
+    <button @click="updateFormStatusToAdminReview()">Update Status to Awaiting Admin Review</button>
+    </span>
+    <span v-if="myData == 'Awaiting Approval' ">
+
+    <button @click="updateFormStatusToAdminReview()">Update Status to Awaiting Admin Review</button>
+    </span>
+    <span v-if="myData == 'Awaiting Admin Review' ">
+    <button @click="updateFormStatusToAwaitingVendor()">Update status to Awaiting Vendor</button>
+    <button @click="updateFormStatusToAwaitingApproval()">Update status to Awaiting Approval</button>
+    </span>
+
     <p id="formStatus"></p>
   </div>
 </template>
@@ -80,6 +61,7 @@ export default {
   name: "ShowWorkflowForm",
   data() {
     return {
+      myData : "",
       formId: localStorage.formId,
       userId: localStorage.userId,
       jsonData: null,
@@ -101,12 +83,12 @@ export default {
     };
   },
   methods: {
-    updateFromStatus() {
-      var approveformObj = this.jsonData.form;
-      approveformObj.status = "Awaiting Admin Review"
+    updateFormStatusToAdminReview() {
+      var approveFormObj = this.jsonData.form;
       axios
         .put(
-          "http://localhost:8080/api/forms/udateStatus/" + approveFormObj.formId,
+          "http://localhost:8080/api/forms/updateStatus/" + 
+            approveFormObj.formId + "/Awaiting Admin Review",
           approveFormObj,
           {
             headers: {
@@ -117,7 +99,49 @@ export default {
           }
         )
         .then((response) => {
-          alert("Form status updated!");
+          alert("Form status updated to awaiting admin review!");
+          console.log(response);
+          this.$router.push("/viewWorkflow");
+        });
+    },
+    updateFormStatusToAwaitingApproval() {
+      var approveFormObj = this.jsonData.form;
+      axios
+        .put(
+          "http://localhost:8080/api/forms/updateStatus/" +
+            approveFormObj.formId + "/Awaiting Approval",
+          approveFormObj,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.token,
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        )
+        .then((response) => {
+          alert("Form status updated to awaiting admin approval!");
+          console.log(response);
+          this.$router.push("/viewWorkflow");
+        });
+    },
+    updateFormStatusToAwaitingVendor() {
+      var approveFormObj = this.jsonData.form;
+      axios
+        .put(
+          "http://localhost:8080/api/forms/updateStatus/" +
+            approveFormObj.formId + "/Awaiting Vendor Input",
+          approveFormObj,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.token,
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        )
+        .then((response) => {
+          alert("Form status updated to awaiting vendor input!");
           console.log(response);
           this.$router.push("/viewWorkflow");
         });
@@ -253,21 +277,19 @@ export default {
         //CREATE
         // console.log(++this.counter);
         // console.log(json);
-        axios.post("http://localhost:8080/api/response/create", json, {
-                                  headers:{
-                                      "Content-Type": "application/json",
-                                      "Authorization": "Bearer " + localStorage.token,
-                                      "Access-Control-Allow-Origin": "*",
-                                  }
-                              })
-                              .then((response) => {
-                                  console.log(response);
-                                  this.formStatus.innerHTML = "Submitted";
-                              })
-
-      }
-      else if(!noResponse)
-      {
+        axios
+          .post("http://localhost:8080/api/response/create", json, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.token,
+              "Access-Control-Allow-Origin": "*",
+            },
+          })
+          .then((response) => {
+            console.log(response);
+            this.formStatus.innerHTML = "Submitted";
+          });
+      } else if (!noResponse) {
         //UPDATE
         console.log("update");
         console.log(json);
@@ -296,7 +318,7 @@ export default {
       // console.log("populating form\n=========================")
       // console.log("adding answer");
 
-      // console.log(this.jsonData);
+      console.log(this.jsonData.form.status);
       var formObj = this.jsonData.form;
 
       // console.log("=========================")
@@ -554,8 +576,9 @@ export default {
             },
           }
         )
-        .then((response) => {
+        .then((response) => { 
           this.jsonData = response.data;
+          this.myData = response.data.form.status
           console.log(this.jsonData);
 
           if (this.jsonData.form !== undefined) {
