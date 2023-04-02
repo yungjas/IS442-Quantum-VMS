@@ -54,6 +54,16 @@
               <input type="date" v-model="lastEdited" style="width: 100%" />
             </td>
           </tr>
+
+          <tr style="width: 100%" > 
+                <td>
+
+                </td>
+                <td>
+                    <input type="text" class="input" v-model="input" @change="handleSearch" @keyup="handleSearch" style="width: 100%" placeholder="Search Question"/>
+                </td>
+            </tr>
+
           <!-- <tr>
                         <td>
                             <label>Date Submitted</label>
@@ -73,13 +83,14 @@
               <label>Template Questions</label>
             </td>
             <td style="text-align: left">
+              <div v-if="filteredList&&input">
               <div
-                v-for="question in allQuestions"
+                v-for="question in paginatedFilteredData"
                 :key="question.questionId"
                 class="card"
                 style="margin-top: 20px"
               >
-                <div class="cardbody">
+                <div class="cardbody" style=" padding:10px">
                   <input
                     type="checkbox"
                     v-model="selectedQuestion"
@@ -120,18 +131,77 @@
                     Delete
                   </button>
                   <br /><br />
+                  </div>
                 </div>
               </div>
+
+              <div v-else>
+              <div
+                v-for="question in paginatedQuestionData"
+                :key="question.questionId"
+                class="card"
+                style="margin-top: 20px"
+              >
+                <div class="cardbody" style=" padding:10px">
+                  <input
+                    type="checkbox"
+                    v-model="selectedQuestion"
+                    :value="question"
+                  />
+                  &nbsp; <b>Question Text:</b>
+                  <label>{{ question.questionText }}</label
+                  ><br />
+                  &emsp;&nbsp; <b>Question Type:</b>
+                  <label>{{ question.questionType }}</label
+                  ><br />
+                  &emsp;&nbsp; <b>Question Section Name:</b>
+                  <label>{{ question.questionSectionName }}</label
+                  ><br />
+                  &emsp;&nbsp; <b>Is template:</b>
+                  <label>{{ question.template }}</label>
+                  <br />
+                  &emsp;&nbsp; <b>Answer Choices:</b> <br /><label
+                    v-for="choices in question.answerChoices"
+                    :key="choices"
+                  >
+                    <label v-for="(v, k) in choices" :key="k">
+                      &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br />
+                    </label> </label
+                  ><br />
+                  &emsp;&nbsp; <b>Required:</b>
+                  <label>{{ question.required }}</label
+                  ><br />
+                  <button type="button" class="btn btn-success" @click="updateQuestion(question)" data-bs-toggle="modal" data-bs-target="#updateModal" style="margin-left: 20px">
+                    Update
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    @click="deleteQuestion(question.questionId)"
+                    style="margin-left: 20px"
+                  >
+                    Delete
+                  </button>
+                  <br /><br />
+                  </div>
+                </div>
+              </div>
+              <br> 
+
               <button
               type="button"
+              
+              class = "btn btn-primary"
               @click="this.showSelected = !this.showSelected">
               Show Selected Questions
               </button>
-              <ul class="list-group" v-if="this.showSelected==true">
-                <li  class="list-group-item" v-for="question of this.selectedQuestion" :key="question">{{question.questionText }}</li>
+
+              <ul style = "margin-top: 20px; margin-bottom: 20px" class="list-group" v-if="this.showSelected==true">
+                <li  class="list-group-item" v-for="question of this.selectedQuestion" :key="question.questionId">{{question.questionText }}</li>
               </ul>
 
               <button
+                style="margin-left: 20px;"
                 type="button"
                 class="btn btn-danger"
                 @click="addQuestion"
@@ -140,13 +210,45 @@
               >
                 Add New Question
               </button>
+
+              <div v-if = "filteredList&&input" >
+        <div class="font-weight-bold" style="text-align: center">
+          <button type="button" class="btn btn-secondary" v-if="filteredPrevPage" @click="prevPage">
+            Prev
+          </button>
+
+          Page {{ currentPage }} of {{ filteredPages }}
+
+          <button type="button" class="btn btn-secondary" v-if="filteredNextPage" @click="nextPage">
+            Next
+          </button>
+
+        </div>
+      </div>
+
+      <div v-else>
+        <div class="font-weight-bold" style="text-align: center">
+          <button type="button" class="btn btn-secondary" v-if="hasPrevPage" @click="prevPage">
+            Prev
+          </button>
+
+          Page {{ currentPage }} of {{ totalPages }}
+
+          <button type="button" class="btn btn-secondary" v-if="hasNextPage" @click="nextPage">
+            Next
+          </button>
+
+        </div>
+      </div>
             </td>
           </tr>
         </tbody>
       </table>
 
+      
+
       <div class="btn-group" role="submitChange">
-        <button type="button" class="btn btn-secondary" @click="updateForm">
+        <button type="button" style="margin-bottom: 20px" class="btn btn-secondary" @click="updateForm">
           Update
         </button>
       </div>
@@ -365,9 +467,71 @@ export default {
       required: false,
       questionTypeArr: ["text", "radio", "checkbox"],
       showSelected: false,
-    };
+      filteredList: [],
+      input: '', 
+      pageSize: 5, // number of items per page
+      currentPage: 1,// current page number
+    }
+  },
+  computed: {
+        paginatedQuestionData() {
+        // calculate start and end index of current page
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        console.log(this.allQuestions.slice(startIndex, endIndex));
+        // return items for current page
+        return this.allQuestions.slice(startIndex, endIndex);
+        },
+        totalPages() {
+        // calculate total number of pages
+        return Math.ceil(this.allQuestions.length / this.pageSize);
+        },
+        hasPrevPage() {
+        // return true if current page is not the first page
+        return this.currentPage > 1;
+        },
+        hasNextPage() {
+        // return true if current page is not the last page
+        return this.currentPage < this.totalPages;
+    },
+    paginatedFilteredData() {
+        // calculate start and end index of current page
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        console.log(this.filteredList.slice(startIndex, endIndex));
+        // return items for current page
+        return this.filteredList.slice(startIndex, endIndex);
+        },
+        filteredPages() {
+        // calculate total number of pages
+        return Math.ceil(this.filteredList.length / this.pageSize);
+        },
+        filteredPrevPage() {
+        // return true if current page is not the first page
+        return this.currentPage > 1;
+        },
+        filteredNextPage() {
+        // return true if current page is not the last page
+        return this.currentPage < this.filteredPages;
+    },
   },
   methods: {
+    handleSearch() {
+        console.log(this.input);
+        if (this.input && this.input.length > 0) {
+            this.filteredList = this.allQuestions.filter(question => {
+                const input = this.input.toLowerCase();
+                const questionName = question.questionText.toLowerCase();
+                if (input && questionName.indexOf(input) !== -1) {
+                    console.log(this.filteredList);
+                    return this.filteredList;
+                }
+              //  else {
+              //     this.noQuestion = "No Such Question";
+              //  }
+            })
+        } 
+    },
     updateForm() {
       if (this.userType === "ROLE_ADMIN" || this.userType === "ROLE_APPROVER") {
         console.log(this.selectedQuestion);
@@ -803,6 +967,14 @@ export default {
           document.getElementById("closeModal").click();
         });
     },
+    prevPage() {
+      // move to previous page
+      this.currentPage--;
+    },
+    nextPage() {
+      // move to next page
+      this.currentPage++;
+    }
   },
   created() {
     // console.log(this.data);

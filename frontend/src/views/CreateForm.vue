@@ -213,19 +213,17 @@
 
     <br>
      
-    <div>
+    
       <button class="btn btn-primary" type="button" @click="this.showSelected = !this.showSelected">
         Show Selected Questions
       </button>
-    </div>
-
-      <div v-if="this.showSelected == true">
-        <ul>
+    
+        <ul style = "margin-top: 20px; margin-bottom: 20px" class="list-group" v-if="this.showSelected==true">
           <li class="list-group-item" v-for="question in this.selectedQuestion" :key="question.questionId">
             {{ question.questionText }}
           </li>
         </ul>
-      </div>
+     
 
     
 

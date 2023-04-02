@@ -19,7 +19,7 @@ public class Form {
     //private String formDescription;
     
     private int revisionNo;
-    private boolean isApproved;
+    //private boolean isApproved;
     private String lastEdited;
     
     private String dateSubmitted;
