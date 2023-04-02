@@ -5,7 +5,7 @@
     <div id="forms" class="px-5">
       
     </div>   
-    <button id="btnSubmitForm" class="btn btn-primary" @click="submitForm()" hidden>Submit Form</button> &nbsp;
+    <button id="btnSubmitForm" class="btn btn-primary" @click="submitForm()" hidden>Submit/Save Form</button> &nbsp;
     <button id="btnGeneratePDF" class="btn btn-success" @click="generatePDF()" hidden>Generate PDF</button> &nbsp;
     <button id="btnApproveForm" class="btn btn-success" @click="approveForm()" hidden>Approve Form</button>
     <button id="btnUnapproveForm" class="btn btn-danger" @click="unapproveForm()" hidden>Unapprove Form</button>
@@ -233,6 +233,7 @@ export default {
         if(this.approved)
         {
           this.btnGeneratePDF.hidden = false;
+          this.btnSubmitForm.hidden = true;
           if(localStorage.userType === "ROLE_APPROVER")
           {
             this.btnUnapprove.hidden = false;
@@ -430,7 +431,13 @@ export default {
         console.log("APPROVED");
         this.btnSubmitForm.hidden = true;
         this.btnApprove.hidden = true;
-        
+          //disable form input fields
+          let inputs = document.getElementsByTagName("input");
+          for(let i = 0; i < inputs.length; i++)
+          {
+            inputs[i].disabled = "disabled";
+          }
+
         if(localStorage.userType === "ROLE_APPROVER")
           {
             this.btnUnapprove.hidden = false;
