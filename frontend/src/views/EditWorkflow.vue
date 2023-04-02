@@ -84,7 +84,7 @@
               <label for="forms">Select Form for Workflow:</label>
             </td>
             <td>
-              <select v-model="selectedForm" id="formSelect" style="width: 50%">
+              <select v-model="selectedForm" id="formSelect" style="width: 50%" multiple>
                 <option
                   v-for="form in this.allForms"
                   :key="form.formId"
@@ -130,7 +130,7 @@ export default {
       selectedAdmins: [],
       selectedVendors: [],
       selectedUsers: [],
-      selectedForm: {},
+      selectedForm: [],
       workflowId: "",
       workflowName: "",
       deadline: "",
@@ -158,7 +158,7 @@ export default {
       this.data.assignedUsers = this.selectedUsers;
       this.data.assignedVendors = this.selectedVendors;
       this.data.assignedAdmins = this.selectedAdmins;
-      this.data.form = this.selectedForm;
+      this.data.forms = this.selectedForm;
       axios
         .put(
           "http://localhost:8080/api/workflow/update/" + this.data.workflowId,
@@ -221,7 +221,7 @@ export default {
       this.getAllUsers();
       this.getAllForms();
       this.selectedUsers = this.data.assignedUsers;
-      this.selectedForm = this.data.form;
+      this.selectedForm = this.data.forms;
       this.selectedAdmins = this.data.assignedAdmins;
       this.selectedVendors = this.data.assignedVendors;
       console.log(" on edit workflow page");

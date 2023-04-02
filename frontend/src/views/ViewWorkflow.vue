@@ -40,9 +40,11 @@
             <td>{{ item.workflowId }}</td>
             <td>{{ item.workflowName }}</td>
             <td>
-              <span v-for="form in item.forms"  :key="form.formId">
-                {{ form.formName }}
-              </span>
+              <ul>
+                <li v-for="form in item.forms"  :key="form.formId">
+                  {{ form.formName }}
+                </li>
+              </ul>
             </td>
             <td>
               <ul>
