@@ -2,6 +2,7 @@
   <div>
     <h1>Form</h1>
     <div id="forms" class="px-5"></div>
+    <br>
     <button
       id="btnSubmitForm"
       class="btn btn-primary"
@@ -10,7 +11,21 @@
     >
       Submit/Save Form
     </button>
-    &nbsp;
+    <br><br>
+    <span v-if="myData == 'Awaiting Vendor Input' && userType != 'ROLE_VENDOR'">
+      <button class="btn btn-warning" @click="updateFormStatusToAdminReview()">Update Status to Awaiting Admin Review</button>
+    </span>
+    &nbsp; 
+    <span v-if="myData == 'Awaiting Approval' && userType != 'ROLE_VENDOR' ">
+
+      <button class="btn btn-warning" @click="updateFormStatusToAdminReview()">Update Status to Awaiting Admin Review</button>
+    </span>
+    &nbsp; 
+    <span v-if="myData == 'Awaiting Admin Review' && userType != 'ROLE_VENDOR' || approvedBy == null && myData == 'unapproved'">
+      <button class="btn btn-warning" @click="updateFormStatusToAwaitingVendor()">Update status to Awaiting Vendor</button>
+      &nbsp; 
+      <button class="btn btn-warning" @click="updateFormStatusToAwaitingApproval()">Update status to Awaiting Approval</button>
+    </span>
     <button
       id="btnGeneratePDF"
       class="btn btn-success"
@@ -19,7 +34,7 @@
     >
       Generate PDF
     </button>
-    &nbsp;
+    <br><br>
     <button
       id="btnApproveForm"
       class="btn btn-success"
@@ -36,19 +51,6 @@
     >
       Unapprove Form
     </button>
-    <span v-if="myData == 'Awaiting Vendor Input' && userType != 'ROLE_VENDOR' ">
-
-    <button class="btn btn-warning" @click="updateFormStatusToAdminReview()">Update Status to Awaiting Admin Review</button>
-    </span>
-    <span v-if="myData == 'Awaiting Approval' ">
-
-    <button class="btn btn-warning" @click="updateFormStatusToAdminReview()">Update Status to Awaiting Admin Review</button>
-    </span>
-    <span v-if="myData == 'Awaiting Admin Review' && userType != 'ROLE_VENDOR'">
-    <button class="btn btn-warning" @click="updateFormStatusToAwaitingVendor()">Update status to Awaiting Vendor</button>
-    <button class="btn btn-warning" @click="updateFormStatusToAwaitingApproval()">Update status to Awaiting Approval</button>
-    </span>
-
     <p id="formStatus"></p>
   </div>
 </template>
@@ -81,6 +83,7 @@ export default {
       userResponseId: null,
       isApprove: false,
       userType: localStorage.userType,
+      approvedBy: null,
     };
   },
   methods: {
@@ -579,9 +582,12 @@ export default {
           }
         )
         .then((response) => { 
+          console.log("========================");
           this.jsonData = response.data;
           this.myData = response.data.form.status
+          this.approvedBy = response.data.form.approvedBy;
           console.log(this.jsonData);
+          console.log("========================");
 
           if (this.jsonData.form !== undefined) {
             // console.log("formObj:");
@@ -627,3 +633,12 @@ export default {
   created() {},
 };
 </script>
+<style>
+table
+{
+  /* align middle */
+  margin-left: auto;
+  margin-right: auto;
+
+}
+</style>

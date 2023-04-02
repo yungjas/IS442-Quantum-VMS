@@ -122,6 +122,7 @@ public class UserResponseService {
                 formData.put("lastEdited", form.getLastEdited());
                 formData.put("dateSubmitted", form.getDateSubmitted());
                 formData.put("approvedBy", form.getApprovedBy());
+                formData.put("status", form.getStatus());
             }
 
             qnData.put("questionId", question.getQuestionId());

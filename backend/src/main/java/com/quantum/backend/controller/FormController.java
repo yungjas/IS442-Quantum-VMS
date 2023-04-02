@@ -34,6 +34,7 @@ public class FormController {
     @GetMapping("all")
     public ResponseEntity<List<Form>> getAllForms() {
         List<Form> allForms = formService.getAllForms();
+        
         if (allForms.size() == 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
