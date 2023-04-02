@@ -228,20 +228,21 @@ export default {
         //CREATE
         // console.log(++this.counter);
         // console.log(json);
-        axios
-          .post("http://localhost:8080/api/response/create", json, {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.token,
-              "Access-Control-Allow-Origin": "*",
-            },
-          })
-          .then((response) => {
-            console.log(response);
-            this.formStatus.innerHTML = "Submitted";
-            alert("Saved Successfully");
-          });
-      } else if (!noResponse) {
+        axios.post("http://localhost:8080/api/response/create", json, {
+                                  headers:{
+                                      "Content-Type": "application/json",
+                                      "Authorization": "Bearer " + localStorage.token,
+                                      "Access-Control-Allow-Origin": "*",
+                                  }
+                              })
+                              .then((response) => {
+                                  console.log(response);
+                                  this.formStatus.innerHTML = "Submitted";
+                              })
+
+      }
+      else if(!noResponse)
+      {
         //UPDATE
         console.log("update");
         console.log(json);

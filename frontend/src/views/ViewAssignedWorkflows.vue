@@ -21,6 +21,9 @@
             <ul>
               <li v-for="form in item.forms"  :key="form.formId">
                 {{ form.formName }}
+                <div v-if="form.approvedBy != null">
+                    <b style="color: green;">(APPROVED)</b>
+                </div>
                 <br>
                 <button style="margin-bottom: 1em;"
                   class="btn btn-warning"

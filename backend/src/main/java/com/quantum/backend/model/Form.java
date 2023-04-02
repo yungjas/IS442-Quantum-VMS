@@ -25,6 +25,8 @@ public class Form {
     private String dateSubmitted;
 
     private boolean isTemplate;
+
+    private String status;
     
     @DBRef
     private User approvedBy;
