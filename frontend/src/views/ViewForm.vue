@@ -23,7 +23,7 @@
             <th scope="col">FormID</th>
             <th scope="col">Name</th>
             <th scope="col">Last Edited</th>
-            <th scope="col">Is this a template?</th>
+            <th scope="col">Template?</th>
             <th scope="col" colspan="2">Action</th>
           </tr>
         </thead>
@@ -32,7 +32,7 @@
             <td>{{ item.formId }}</td>
             <td>{{ item.formName }}</td>
             <td>{{ item.lastEdited }}</td>
-            <td>{{ item.template }}</td>
+            <td>{{ item.template  === true ? "Yes" : "No"}} </td>
             <td v-if="item.formId !== this.formId">
               <button class="btn btn-warning"
               @click="editForm(item.formId)">Edit</button>
