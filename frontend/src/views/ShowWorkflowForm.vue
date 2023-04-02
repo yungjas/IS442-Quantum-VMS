@@ -104,9 +104,9 @@ export default {
           }
         )
         .then((response) => {
-          alert("Form status updated to awaiting admin review!");
+          // alert("Form status updated to awaiting admin review!");
           console.log(response);
-          this.$router.push("/viewWorkflow");
+          this.$router.push("/showWorkflowForm");
         });
     },
     updateFormStatusToAwaitingApproval() {
@@ -125,9 +125,9 @@ export default {
           }
         )
         .then((response) => {
-          alert("Form status updated to awaiting admin approval!");
+          // alert("Form status updated to awaiting admin approval!");
           console.log(response);
-          this.$router.push("/viewWorkflow");
+          this.$router.push("/showWorkflowForm");
         });
     },
     updateFormStatusToAwaitingVendor() {

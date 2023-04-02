@@ -26,7 +26,8 @@
                 <label for="workflowName">Deadline</label>
               </td>
               <td>
-                <input type="text" id="deadline" v-model="deadline" style="width: 80%" />
+                <input type="date" id="deadline" v-model="deadline" style="width: 80%" />
+                <!-- <input type="text" id="deadline" v-model="deadline" style="width: 80%" /> -->
               </td>
             </tr>         
             <tr>
@@ -146,7 +147,7 @@
         },
         createWorkflow() {
           this.data.workflowName = this.workflowName;
-          this.data.deadline = this.deadline;
+          this.data.deadline = this.formatDate(this.deadline);
           this.data.assignedUsers = this.selectedUsers;
           this.data.assignedVendors = this.selectedVendors;
           this.data.assignedAdmins = this.selectedAdmins;
@@ -194,6 +195,14 @@
               }
             }
           });
+        },
+        formatDate(input) {
+          var datePart = input.match(/\d+/g),
+            year = datePart[0], // get only two digits
+            month = datePart[1],
+            day = datePart[2];
+
+          return day + "/" + month + "/" + year;
         },
         getAllForms() {
           axios
