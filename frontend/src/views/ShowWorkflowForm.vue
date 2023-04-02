@@ -84,6 +84,7 @@ export default {
       isApprove: false,
       userType: localStorage.userType,
       approvedBy: null,
+      formName: null,
     };
   },
   methods: {
@@ -193,7 +194,7 @@ export default {
       console.log("generating pdf");
       html2pdf(this.form, {
         margin: 1,
-        filename: "form.pdf",
+        filename: this.formName + ".pdf",
       });
     },
     submitForm() {
@@ -586,6 +587,7 @@ export default {
           this.jsonData = response.data;
           this.myData = response.data.form.status
           this.approvedBy = response.data.form.approvedBy;
+          this.formName = response.data.form.formName;
           console.log(this.jsonData);
           console.log("========================");
 
