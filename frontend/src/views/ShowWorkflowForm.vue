@@ -5,10 +5,10 @@
     <div id="forms" class="px-5">
       
     </div>   
-    <button id="btnSubmitForm" @click="submitForm()" hidden>Submit Form</button> &nbsp;
-    <button id="btnGeneratePDF" @click="generatePDF()" hidden>Generate PDF</button> &nbsp;
-    <button id="btnApproveForm" @click="approveForm()" hidden>Approve Form</button>
-    <button id="btnUnapproveForm" @click="unapproveForm()" hidden>Unapprove Form</button>
+    <button id="btnSubmitForm" class="btn btn-primary" @click="submitForm()" hidden>Submit Form</button> &nbsp;
+    <button id="btnGeneratePDF" class="btn btn-success" @click="generatePDF()" hidden>Generate PDF</button> &nbsp;
+    <button id="btnApproveForm" class="btn btn-success" @click="approveForm()" hidden>Approve Form</button>
+    <button id="btnUnapproveForm" class="btn btn-danger" @click="unapproveForm()" hidden>Unapprove Form</button>
     <p id="formStatus"></p>
   </div>
   
