@@ -44,7 +44,6 @@
             <td>
               <input type="text" v-model="formNo" style="width: 100%" />
             </td>
-
           </tr>
 
           <tr>
@@ -55,7 +54,6 @@
             <td>
               <input type="text" v-model="formName" style="width: 100%" />
             </td>
-
           </tr>
 
           <tr>
@@ -66,7 +64,6 @@
             <td>
               <input type="text" v-model="revisionNo" style="width: 100%" />
             </td>
-
           </tr>
 
           <tr>
@@ -77,7 +74,6 @@
             <td>
               <input type="date" v-model="lastEdited" style="width: 100%" />
             </td>
-
           </tr>
           <!-- <tr>
                 <td>
@@ -87,16 +83,23 @@
                     <input type=date v-model="dateSubmitted" style="width: 100%">
                 </td>
             </tr> -->
-            <tr style="width: 100%" > 
-                <td>
+          <tr style="width: 100%">
+            <td></td>
+            <td>
+              <input
+                id="search"
+                type="text"
+                class="input"
+                v-model="input"
+                @change="handleSearch"
+                @keyup="handleSearch"
+                style="width: 100%"
+                placeholder="Search Question"
+              />
+            </td>
+          </tr>
 
-                </td>
-                <td>
-                    <input type="text" class="input" v-model="input" @change="handleSearch" @keyup="handleSearch" style="width: 100%" placeholder="Search Question"/>
-                </td>
-            </tr>
-
-            <!-- <tr style="width: 100%" > 
+          <!-- <tr style="width: 100%" > 
                 <td>
 
                 </td>
@@ -107,59 +110,92 @@
                 </td>
             </tr> -->
 
-            <tr>
-              <td>
-                <label>Questions</label>
-              </td>
+          <tr>
+            <td>
+              <label>Questions</label>
+            </td>
 
-            <td style="text-align:left;"> 
-              <div v-if="filteredList&&input">
-               <div style="text-align: left;margin-top: 20px" class="card" v-for="question in paginatedFilteredData" :key="question.questionId">
-                
-                <div class="cardbody" style=" padding:10px">
-                    <input type="checkbox" v-model="selectedQuestion" :value="question"/>
+            <td style="text-align: left">
+              <div v-if="filteredList && input">
+                <div
+                  style="text-align: left; margin-top: 20px"
+                  class="card"
+                  v-for="question in paginatedFilteredData"
+                  :key="question.questionId"
+                >
+                  <div class="cardbody" style="padding: 10px">
+                    <input
+                      type="checkbox"
+                      v-model="selectedQuestion"
+                      :value="question"
+                    />
 
                     &nbsp; <b>Question Text:</b>
-                    <label>{{ question.questionText }}</label><br />
+                    <label>{{ question.questionText }}</label
+                    ><br />
 
                     &emsp;&nbsp; <b>Question Type:</b>
-                    <label>{{ question.questionType }}</label><br />
+                    <label>{{ question.questionType }}</label
+                    ><br />
 
                     &emsp;&nbsp; <b>Question Section Name:</b>
-                    <label>{{ question.questionSectionName }}</label><br />
+                    <label>{{ question.questionSectionName }}</label
+                    ><br />
 
                     &emsp;&nbsp; <b>Answer Choices:</b> <br />
-                    <label v-for="choices in question.answerChoices" :key="choices">
+                    <label
+                      v-for="choices in question.answerChoices"
+                      :key="choices"
+                    >
                       <label v-for="(v, k) in choices" :key="k">
                         &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br />
-                      </label> 
-                    </label><br />
+                      </label> </label
+                    ><br />
 
                     &emsp;&nbsp; <b>Required:</b>
-                    <label>{{ question.required }}</label><br />
+                    <label>{{ question.required }}</label
+                    ><br />
 
-                    <br>
+                    <br />
 
-                    <button type="button" class="btn btn-success" @click="updateQuestion(question)" data-bs-toggle="modal" data-bs-target="#updateModal" style="margin-left: 20px">
-                    Update
+                    <button
+                      type="button"
+                      class="btn btn-success"
+                      @click="updateQuestion(question)"
+                      data-bs-toggle="modal"
+                      data-bs-target="#updateModal"
+                      style="margin-left: 20px"
+                    >
+                      Update
                     </button>
 
-                    <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)" style="margin-left: 20px">
-                    Delete
+                    <button
+                      type="button"
+                      class="btn btn-danger"
+                      @click="deleteQuestion(question.questionId)"
+                      style="margin-left: 20px"
+                    >
+                      Delete
                     </button>
 
-                    <br>
+                    <br />
+                  </div>
                 </div>
-                
               </div>
-            </div>
 
-           
-            <div v-else>
-                <div  v-for="question in paginatedQuestionData" :key="question.questionId" class="card" style="margin-top: 20px">
-
-                <div class="cardbody" style=" padding:10px">
-                    <input type="checkbox" v-model="selectedQuestion" :value="question"/>
+              <div v-else>
+                <div
+                  v-for="question in paginatedQuestionData"
+                  :key="question.questionId"
+                  class="card"
+                  style="margin-top: 20px"
+                >
+                  <div class="cardbody" style="padding: 10px">
+                    <input
+                      type="checkbox"
+                      v-model="selectedQuestion"
+                      :value="question"
+                    />
                     &nbsp; <b>Question Text:</b>
                     <label>{{ question.questionText }}</label>
                     <br />
@@ -176,92 +212,148 @@
                     <label>{{ question.template }}</label>
                     <br />
 
-                    &emsp;&nbsp; <b>Answer Choices:</b> <br /><label v-for="choices in question.answerChoices" :key="choices">
-                    
-                    <label v-for="(v, k) in choices" :key="k">
+                    &emsp;&nbsp; <b>Answer Choices:</b> <br /><label
+                      v-for="choices in question.answerChoices"
+                      :key="choices"
+                    >
+                      <label v-for="(v, k) in choices" :key="k">
                         &emsp;&emsp;&nbsp;&nbsp;<b>{{ k }}:</b> {{ v }} <br />
-                    </label> 
-                    </label><br />
+                      </label> </label
+                    ><br />
                     &emsp;&nbsp; <b>Required:</b>
                     <label>{{ question.required }}</label>
 
-                    <br>
+                    <br />
 
-                    <button type="button" class="btn btn-success" @click="updateQuestion(question)" data-bs-toggle="modal" data-bs-target="#updateModal" style="margin-left: 20px">
-                    Update
+                    <button
+                      type="button"
+                      class="btn btn-success"
+                      @click="updateQuestion(question)"
+                      data-bs-toggle="modal"
+                      data-bs-target="#updateModal"
+                      style="margin-left: 20px"
+                    >
+                      Update
                     </button>
 
-                    <button type="button" class="btn btn-danger" @click="deleteQuestion(question.questionId)" style="margin-left: 20px">
-                    Delete
+                    <button
+                      type="button"
+                      class="btn btn-danger"
+                      @click="deleteQuestion(question.questionId)"
+                      style="margin-left: 20px"
+                    >
+                      Delete
                     </button>
 
-                    <br>
-                  
+                    <br />
                   </div>
-                
+                </div>
               </div>
-            </div>
-
             </td>
           </tr>
         </tbody>
       </table>
 
-    <div>
-        <button type="button" class="btn btn-danger" @click="addQuestion" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Question</button>
-    </div>
+      <div>
+        <button
+          type="button"
+          class="btn btn-danger"
+          @click="addQuestion"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+        >
+          Add New Question
+        </button>
+      </div>
 
-    <br>
-     
-    
-      <button class="btn btn-primary" type="button" @click="this.showSelected = !this.showSelected">
+      <br />
+
+      <button
+        class="btn btn-primary"
+        type="button"
+        @click="this.showSelected = !this.showSelected"
+        style="margin-bottom: 10px;"
+      >
         Show Selected Questions
       </button>
-    
-        <ul style = "margin-top: 20px; margin-bottom: 20px" class="list-group" v-if="this.showSelected==true">
-          <li class="list-group-item" v-for="question in this.selectedQuestion" :key="question.questionId">
-            {{ question.questionText }}
-          </li>
-        </ul>
-     
 
-    
+      <ul
+        style="margin-top: 20px; margin-bottom: 20px"
+        class="list-group"
+        v-if="this.showSelected == true"
+      >
+        <li
+          class="list-group-item"
+          v-for="question in this.selectedQuestion"
+          :key="question.questionId"
+        >
+          {{ question.questionText }}
+        </li>
+      </ul>
 
-    <br> 
+      <br />
 
-    <div v-if = "filteredList&&input">
+      <div v-if="filteredList && input">
         <div class="font-weight-bold">
-          <button type="button" class="btn btn-secondary" v-if="filteredPrevPage" @click="prevPage">
+          <a href="#search">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            v-if="filteredPrevPage"
+            @click="prevPage"
+          >
             Prev
           </button>
+          </a>
 
           Page {{ currentPage }} of {{ filteredPages }}
-
-          <button type="button" class="btn btn-secondary" v-if="filteredNextPage" @click="nextPage">
+          <a href="#search">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            v-if="filteredNextPage"
+            @click="nextPage"
+          >
             Next
           </button>
-
+        </a>
         </div>
       </div>
 
       <div v-else>
         <div class="font-weight-bold">
-          <button type="button" class="btn btn-secondary" v-if="hasPrevPage" @click="prevPage">
-            Prev
-          </button>
+          <a href="#search">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              v-if="hasPrevPage"
+              @click="prevPage"
+            >
+              Prev
+            </button>
+          </a>
 
           Page {{ currentPage }} of {{ totalPages }}
 
-          <button type="button" class="btn btn-secondary" v-if="hasNextPage" @click="nextPage">
-            Next
-          </button>
-
+          <a href="#search"
+            ><button
+              type="button"
+              class="btn btn-secondary"
+              v-if="hasNextPage"
+              @click="nextPage"
+            >
+              Next
+            </button>
+          </a>
         </div>
       </div>
 
       <br /><br />
 
-      <div class="btn-group justify-content-end align-items-end" role="submitChange">
+      <div
+        class="btn-group justify-content-end align-items-end"
+        role="submitChange"
+      >
         <button type="button" class="btn btn-secondary" @click="createForm">
           Create
         </button>
@@ -269,12 +361,23 @@
     </div>
 
     <!-- Modal to Add Question -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Add Question</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body">
             <!-- 
@@ -294,12 +397,19 @@
               <tr>
                 <td>Question Type:</td>
                 <td>
-                  <select style="width: 100%" name="selectRole" id="selectRole" @change="onChange($event)">
-                    
-                    <option v-for="item in questionTypeArr" :key="item" v-bind:value="item">
+                  <select
+                    style="width: 100%"
+                    name="selectRole"
+                    id="selectRole"
+                    @change="onChange($event)"
+                  >
+                    <option
+                      v-for="item in questionTypeArr"
+                      :key="item"
+                      v-bind:value="item"
+                    >
                       {{ item }}
                     </option>
-
                   </select>
                 </td>
               </tr>
@@ -317,14 +427,23 @@
                 <td>
                   <div id="answers"></div>
                   <div v-if="questionType !== 'text'" class="controls">
-                    <button type="button" id="add_more_fields" class="btn btn-primary" @click="addAnswer">
+                    <button
+                      type="button"
+                      id="add_more_fields"
+                      class="btn btn-primary"
+                      @click="addAnswer"
+                    >
                       Add Answers
                     </button>
 
-                    <button type="button" id="remove_fields" class="btn btn-warning" @click="removeAnswer">
+                    <button
+                      type="button"
+                      id="remove_fields"
+                      class="btn btn-warning"
+                      @click="removeAnswer"
+                    >
                       Remove Answers
                     </button>
-
                   </div>
                 </td>
               </tr>
@@ -332,33 +451,50 @@
                 <td>Required:</td>
 
                 <td><input type="checkbox" v-model="required" /></td>
-
               </tr>
             </table>
-
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" id="closeModal" data-bs-dismiss="modal">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="closeModal"
+              data-bs-dismiss="modal"
+            >
               Close
             </button>
 
-            <button type="button" class="btn btn-primary" @click="addNewQuestion" >
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="addNewQuestion"
+            >
               Add
             </button>
-
           </div>
         </div>
       </div>
     </div>
 
     <!-- Modal to Edit Question -->
-    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+    <div
+      class="modal fade"
+      id="updateModal"
+      tabindex="-1"
+      aria-labelledby="updateModal"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="updateModalLabel">Update Question</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body">
             <table>
@@ -369,12 +505,19 @@
               <tr>
                 <td>Question Type:</td>
                 <td>
-                  <select style="width: 100%" name="selectRole" id="selectRole2" @change="onUpdateChange($event)">
-                    
-                    <option v-for="item in questionTypeArr" :key="item" v-bind:value="item">
+                  <select
+                    style="width: 100%"
+                    name="selectRole"
+                    id="selectRole2"
+                    @change="onUpdateChange($event)"
+                  >
+                    <option
+                      v-for="item in questionTypeArr"
+                      :key="item"
+                      v-bind:value="item"
+                    >
                       {{ item }}
                     </option>
-
                   </select>
                 </td>
               </tr>
@@ -392,14 +535,23 @@
                 <td>
                   <div id="answers2"></div>
                   <div v-if="updateQuestionType !== 'text'" class="controls">
-                    <button type="button" id="add_more_fields" class="btn btn-primary" @click="addAnswer2">
+                    <button
+                      type="button"
+                      id="add_more_fields"
+                      class="btn btn-primary"
+                      @click="addAnswer2"
+                    >
                       Add Answers
                     </button>
 
-                    <button type="button" id="remove_fields" class="btn btn-warning" @click="removeAnswer2">
+                    <button
+                      type="button"
+                      id="remove_fields"
+                      class="btn btn-warning"
+                      @click="removeAnswer2"
+                    >
                       Remove Answers
                     </button>
-
                   </div>
                 </td>
               </tr>
@@ -407,26 +559,31 @@
                 <td>Required:</td>
 
                 <td><input type="checkbox" v-model="required" /></td>
-
               </tr>
             </table>
-
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" id="closeModal2" data-bs-dismiss="modal">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="closeModal2"
+              data-bs-dismiss="modal"
+            >
               Close
             </button>
 
-            <button type="button" class="btn btn-primary" @click="updateNewQuestion" >
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="updateNewQuestion"
+            >
               Update
             </button>
-
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -437,72 +594,72 @@ export default {
   name: "CreateForm",
   data() {
     return {
-        questionData: [],
-        updateQuestionId: "",
-        userType: localStorage.userType,
-        selectedQuestion: [],
-        formNo: "",
-        formName: "",
-        revisionNo: "",
-        lastEdited: "",
-        dateSubmitted: "",
-        answerArray: null,
-        answerArray2: null,
-        questionText: "",
-        questionType: "text",
-        updateQuestionType: "text",
-        questionSectionName: "",
-        answerChoices: [],
-        required: false,
-        questionTypeArr: ["text", "radio", "checkbox"],
-        pageSize: 5, // number of items per page
-        currentPage: 1,// current page number
-        filteredList: [],
-        input: '', 
-        showSelected: false,
-        // noQuestion: "",
-    }
+      questionData: [],
+      updateQuestionId: "",
+      userType: localStorage.userType,
+      selectedQuestion: [],
+      formNo: "",
+      formName: "",
+      revisionNo: "",
+      lastEdited: "",
+      dateSubmitted: "",
+      answerArray: null,
+      answerArray2: null,
+      questionText: "",
+      questionType: "text",
+      updateQuestionType: "text",
+      questionSectionName: "",
+      answerChoices: [],
+      required: false,
+      questionTypeArr: ["text", "radio", "checkbox"],
+      pageSize: 5, // number of items per page
+      currentPage: 1, // current page number
+      filteredList: [],
+      input: "",
+      showSelected: false,
+      // noQuestion: "",
+    };
+  },
+  computed: {
+    paginatedQuestionData() {
+      // calculate start and end index of current page
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      console.log(this.questionData.slice(startIndex, endIndex));
+      // return items for current page
+      return this.questionData.slice(startIndex, endIndex);
     },
-    computed: {
-        paginatedQuestionData() {
-        // calculate start and end index of current page
-        const startIndex = (this.currentPage - 1) * this.pageSize;
-        const endIndex = startIndex + this.pageSize;
-        console.log(this.questionData.slice(startIndex, endIndex));
-        // return items for current page
-        return this.questionData.slice(startIndex, endIndex);
-        },
-        totalPages() {
-        // calculate total number of pages
-        return Math.ceil(this.questionData.length / this.pageSize);
-        },
-        hasPrevPage() {
-        // return true if current page is not the first page
-        return this.currentPage > 1;
-        },
-        hasNextPage() {
-        // return true if current page is not the last page
-        return this.currentPage < this.totalPages;
+    totalPages() {
+      // calculate total number of pages
+      return Math.ceil(this.questionData.length / this.pageSize);
+    },
+    hasPrevPage() {
+      // return true if current page is not the first page
+      return this.currentPage > 1;
+    },
+    hasNextPage() {
+      // return true if current page is not the last page
+      return this.currentPage < this.totalPages;
     },
     paginatedFilteredData() {
-        // calculate start and end index of current page
-        const startIndex = (this.currentPage - 1) * this.pageSize;
-        const endIndex = startIndex + this.pageSize;
-        console.log(this.filteredList.slice(startIndex, endIndex));
-        // return items for current page
-        return this.filteredList.slice(startIndex, endIndex);
-        },
-        filteredPages() {
-        // calculate total number of pages
-        return Math.ceil(this.filteredList.length / this.pageSize);
-        },
-        filteredPrevPage() {
-        // return true if current page is not the first page
-        return this.currentPage > 1;
-        },
-        filteredNextPage() {
-        // return true if current page is not the last page
-        return this.currentPage < this.filteredPages;
+      // calculate start and end index of current page
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      console.log(this.filteredList.slice(startIndex, endIndex));
+      // return items for current page
+      return this.filteredList.slice(startIndex, endIndex);
+    },
+    filteredPages() {
+      // calculate total number of pages
+      return Math.ceil(this.filteredList.length / this.pageSize);
+    },
+    filteredPrevPage() {
+      // return true if current page is not the first page
+      return this.currentPage > 1;
+    },
+    filteredNextPage() {
+      // return true if current page is not the last page
+      return this.currentPage < this.filteredPages;
     },
   },
   methods: {
@@ -598,38 +755,37 @@ export default {
           });
       }
     },
-    
+
     handleSearch() {
-        console.log(this.input);
-        if (this.input && this.input.length > 0) {
-            this.filteredList = this.questionData.filter(question => {
-                const input = this.input.toLowerCase();
-                const questionName = question.questionText.toLowerCase();
-                if (input && questionName.indexOf(input) !== -1) {
-                    console.log(this.filteredList);
-                    return this.filteredList;
-                }
-              //  else {
-              //     this.noQuestion = "No Such Question";
-              //  }
-            })
-        } 
+      console.log(this.input);
+      if (this.input && this.input.length > 0) {
+        this.filteredList = this.questionData.filter((question) => {
+          const input = this.input.toLowerCase();
+          const questionName = question.questionText.toLowerCase();
+          if (input && questionName.indexOf(input) !== -1) {
+            console.log(this.filteredList);
+            return this.filteredList;
+          }
+          //  else {
+          //     this.noQuestion = "No Such Question";
+          //  }
+        });
+      }
     },
-    getQuestionsData()
-        {
-            axios.get("http://localhost:8080/api/form-builder/all_templates",
-            {
-                headers:{
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + localStorage.token,
-                    "Access-Control-Allow-Origin": "*",
-                }
-                })
-                .then((response) => {
-                    this.questionData = response.data;
-                    console.log(this.questionData);
-                })
-            },
+    getQuestionsData() {
+      axios
+        .get("http://localhost:8080/api/form-builder/all_templates", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.token,
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .then((response) => {
+          this.questionData = response.data;
+          console.log(this.questionData);
+        });
+    },
     addAnswer() {
       console.log("adding answer");
       var inputNameField = document.createElement("input");
@@ -648,7 +804,6 @@ export default {
 
       this.answerArray.appendChild(document.createElement("br"));
       this.answerArray.appendChild(document.createElement("br"));
-
     },
     removeAnswer() {
       console.log("remove answer");
@@ -681,7 +836,6 @@ export default {
 
       this.answerArray2.appendChild(document.createElement("br"));
       this.answerArray2.appendChild(document.createElement("br"));
-
     },
     removeAnswer2() {
       console.log("remove answer2");
@@ -702,7 +856,7 @@ export default {
       console.log(this.answerArray);
       this.questionText = null;
       this.questionSectionName = null;
-      this.required = false;      
+      this.required = false;
     },
     updateQuestion(question) {
       console.log(question);
@@ -714,8 +868,7 @@ export default {
       this.updateQuestionType = question.questionType;
       this.required = question.required;
 
-      for(var i in question.answerChoices)
-      {
+      for (var i in question.answerChoices) {
         var answerObj = question.answerChoices[i];
         console.log(answerObj);
 
@@ -736,11 +889,10 @@ export default {
         this.answerArray2.appendChild(inputValueField);
 
         this.answerArray2.appendChild(document.createElement("br"));
-        this.answerArray2.appendChild(document.createElement("br"));        
+        this.answerArray2.appendChild(document.createElement("br"));
       }
     },
-    updateNewQuestion()
-    {
+    updateNewQuestion() {
       console.log("Updating new question");
 
       var questionId = this.updateQuestionId;
@@ -755,18 +907,17 @@ export default {
 
       this.answerChoices = [];
 
-      for(var x = 0; x < tempAnswerArray2.length; x+=2)
-            {
-                var tempObject = "{";
-                tempObject += "\"" + "inputName" + "\": \"" + tempAnswerArray2[x] + "\",";
-                tempObject += "\"" + "inputValue" + "\": \"" + tempAnswerArray2[x+1] + "\"";
-                tempObject += "}";
-                
-                if(x < tempAnswerArray2.length)
-                {
-                    this.answerChoices.push(tempObject);
-                }
-            }
+      for (var x = 0; x < tempAnswerArray2.length; x += 2) {
+        var tempObject = "{";
+        tempObject += '"' + "inputName" + '": "' + tempAnswerArray2[x] + '",';
+        tempObject +=
+          '"' + "inputValue" + '": "' + tempAnswerArray2[x + 1] + '"';
+        tempObject += "}";
+
+        if (x < tempAnswerArray2.length) {
+          this.answerChoices.push(tempObject);
+        }
+      }
 
       /*
                     {
@@ -821,16 +972,6 @@ export default {
           this.getQuestionsData();
           document.getElementById("closeModal2").click();
         });
-
-
-
-
-
-
-
-
-
-
     },
     deleteQuestion(questionId) {
       console.log("delete question: " + questionId);
@@ -864,18 +1005,17 @@ export default {
 
       this.answerChoices = [];
 
-      for(var x = 0; x < tempAnswerArray2.length; x+=2)
-            {
-                var tempObject = "{";
-                tempObject += "\"" + "inputName" + "\": \"" + tempAnswerArray2[x] + "\",";
-                tempObject += "\"" + "inputValue" + "\": \"" + tempAnswerArray2[x+1] + "\"";
-                tempObject += "}";
-                
-                if(x < tempAnswerArray2.length)
-                {
-                    this.answerChoices.push(tempObject);
-                }
-            }
+      for (var x = 0; x < tempAnswerArray2.length; x += 2) {
+        var tempObject = "{";
+        tempObject += '"' + "inputName" + '": "' + tempAnswerArray2[x] + '",';
+        tempObject +=
+          '"' + "inputValue" + '": "' + tempAnswerArray2[x + 1] + '"';
+        tempObject += "}";
+
+        if (x < tempAnswerArray2.length) {
+          this.answerChoices.push(tempObject);
+        }
+      }
 
       /*
                     {
@@ -966,7 +1106,7 @@ export default {
     nextPage() {
       // move to next page
       this.currentPage++;
-    }
+    },
   },
   created() {
     this.getQuestionsData();
