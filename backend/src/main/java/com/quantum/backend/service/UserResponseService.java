@@ -28,13 +28,15 @@ public class UserResponseService {
     private final FormBuilderRepository formBuilderRepository;
     private final UserRepository userRepository;
     private final WorkflowRepository workflowRepository;
+    private final UserService userService;
 
-    public UserResponseService(UserResponseRepository userResponseRepo, FormRepository formRepository, FormBuilderRepository formBuilderRepository, UserRepository userRepository, WorkflowRepository workflowRepository){
+    public UserResponseService(UserResponseRepository userResponseRepo, FormRepository formRepository, FormBuilderRepository formBuilderRepository, UserRepository userRepository, WorkflowRepository workflowRepository, UserService userService){
         this.userResponseRepo = userResponseRepo;
         this.formRepository = formRepository;
         this.formBuilderRepository = formBuilderRepository;
         this.userRepository = userRepository;
         this.workflowRepository = workflowRepository;
+        this.userService = userService;
     }
 
     public List<UserResponse> getAllUserResponse(){
@@ -55,7 +57,21 @@ public class UserResponseService {
     {
 		Optional<Workflow> workflowResponses = workflowRepository.findByWorkflowId(workflowId);
 		
-		List<User> assignedVendors = workflowResponses.get().getAssignedVendors();		
+		List<User> assignedVendors = workflowResponses.get().getAssignedVendors();
+		List<User> allAdmin = userService.getUsersByUserType("ROLE_ADMIN");
+		for(User admin: allAdmin)
+		{
+			assignedVendors.add(admin);
+		}
+
+		
+		List<User> allApprover = userService.getUsersByUserType("ROLE_APPROVER");
+		for(User approver: allApprover)
+		{
+			assignedVendors.add(approver);
+		}
+		
+		
 		List<List<UserResponse>> listUserResponses = new ArrayList<List<UserResponse>>();
 		List<UserResponse> userResponses = null;
 		boolean isAssignedVendor = false;

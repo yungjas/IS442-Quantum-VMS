@@ -106,7 +106,7 @@ export default {
         .then((response) => {
           // alert("Form status updated to awaiting admin review!");
           console.log(response);
-          this.$router.push("/showWorkflowForm");
+          // this.$router.push("/viewWorkflow");
         });
     },
     updateFormStatusToAwaitingApproval() {
@@ -127,7 +127,7 @@ export default {
         .then((response) => {
           // alert("Form status updated to awaiting admin approval!");
           console.log(response);
-          this.$router.push("/showWorkflowForm");
+          this.$router.push("/viewWorkflow");
         });
     },
     updateFormStatusToAwaitingVendor() {
@@ -146,7 +146,7 @@ export default {
           }
         )
         .then((response) => {
-          alert("Form status updated to awaiting vendor input!");
+          // alert("Form status updated to awaiting vendor input!");
           console.log(response);
           this.$router.push("/viewWorkflow");
         });
@@ -282,6 +282,7 @@ export default {
         //CREATE
         // console.log(++this.counter);
         // console.log(json);
+        console.log("creating");
         axios
           .post("http://localhost:8080/api/response/create", json, {
             headers: {
@@ -317,6 +318,7 @@ export default {
             console.log(response);
             console.log(this.formStatus);
             this.formStatus.innerHTML = "Update Successfully";
+            this.updateFormStatusToAdminReview();
           });
       }
     },
@@ -557,6 +559,17 @@ export default {
       }
     },
     retrieveForm() {
+
+
+      console.log(localStorage.userType);
+      '642992efae32f0092d49b6d0'
+      if(localStorage.userType !== "ROLE_VENDOR")
+      {
+        this.userId = localStorage.userId;
+      }
+
+      console.log("=====================");
+
       console.log(
         "http://localhost:8080/api/response/form_response/" +
           this.userId +
@@ -565,6 +578,9 @@ export default {
           "/" +
           localStorage.workflowId
       );
+
+      
+      console.log("=====================");
 
       axios
         .get(
@@ -585,7 +601,10 @@ export default {
         .then((response) => { 
           console.log("========================");
           this.jsonData = response.data;
-          this.myData = response.data.form.status
+          if(response.data.form.status !== undefined || response.data.form.status !== null)
+          {
+            this.myData = response.data.form.status
+          }
           this.approvedBy = response.data.form.approvedBy;
           this.formName = response.data.form.formName;
           console.log(this.jsonData);
