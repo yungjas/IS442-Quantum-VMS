@@ -164,6 +164,21 @@ public class FormController {
         return new ResponseEntity<>(approveForm, HttpStatus.OK);
     }
 
+    @PutMapping("updateStatus/{formId}")
+    public ResponseEntity<Object> updateStatus(@PathVariable String formId, @RequestBody Form form){
+        Form approveForm = null;
+        try{
+            approveForm = formService.updateStatus(formId, form);
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(approveForm, HttpStatus.OK);
+    }
+
     @PutMapping("unapprove/{formId}")
     public ResponseEntity<Object> unapproveForm(@PathVariable String formId, @RequestBody Form form){
         Form approveForm = null;

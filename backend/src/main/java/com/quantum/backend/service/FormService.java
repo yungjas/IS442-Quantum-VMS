@@ -55,6 +55,7 @@ public class FormService {
                 formTemplate.setRevisionNo(form.getRevisionNo());
                 formTemplate.setLastEdited(form.getLastEdited());
                 formTemplate.setTemplate(form.isTemplate());
+                formTemplate.setStatus("");
                 saveFormQuestions(form);
                 formTemplate.setQuestions(form.getQuestions());
                 formRepo.save(formTemplate);
@@ -80,6 +81,7 @@ public class FormService {
             actualForm.setDateSubmitted(null); 
             // template should be false since this form is generated from a template
             actualForm.setTemplate(false);
+            actualForm.setStatus("waiting vendor");
             // since this form is just created, shouldn't have anyone to approve yet
             actualForm.setApprovedBy(null); 
             // duplicate questions
@@ -94,6 +96,26 @@ public class FormService {
             throw new RequestErrorException("create", "Form", e.getMessage());
         }
         return actualForm;
+    }
+
+    public Form updateStatus(String formId, Form form) throws RequestErrorException{
+        Optional<Form> currentForm = formRepo.findById(formId);
+        Form currentFormData = null;
+
+        if(!currentForm.isPresent()){
+            throw new ResourceNotFoundException("Form", "formId", formId);
+        }
+        
+        try{
+            currentFormData = currentForm.get();
+            currentFormData.setStatus(form.getStatus());
+            formRepo.save(currentFormData);
+        }
+        catch(Exception e){
+            throw new RequestErrorException("approve", "Form", e.getMessage());
+        }
+        
+        return currentFormData;
     }
 
     public Form approveForm(String formId, Form form) throws RequestErrorException{
@@ -161,6 +183,7 @@ public class FormService {
             formData.setLastEdited(formUpdate.getLastEdited());
             formData.setDateSubmitted(formUpdate.getDateSubmitted());
             formData.setApprovedBy(formUpdate.getApprovedBy());
+            formData.setStatus(formUpdate.getStatus());
             saveFormQuestions(formUpdate);
             formData.setQuestions(formUpdate.getQuestions());
             formRepo.save(formData);
