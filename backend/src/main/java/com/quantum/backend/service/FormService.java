@@ -81,7 +81,7 @@ public class FormService {
             actualForm.setDateSubmitted(null); 
             // template should be false since this form is generated from a template
             actualForm.setTemplate(false);
-            actualForm.setStatus("waiting vendor");
+            actualForm.setStatus("Awaiting Vendor Input");
             // since this form is just created, shouldn't have anyone to approve yet
             actualForm.setApprovedBy(null); 
             // duplicate questions

@@ -36,17 +36,17 @@
     >
       Unapprove Form
     </button>
-    <span v-if="myData == 'Awaiting Vendor Input' ">
+    <span v-if="myData == 'Awaiting Vendor Input' && userType != 'ROLE_VENDOR' ">
 
-    <button @click="updateFormStatusToAdminReview()">Update Status to Awaiting Admin Review</button>
+    <button class="btn btn-warning" @click="updateFormStatusToAdminReview()">Update Status to Awaiting Admin Review</button>
     </span>
     <span v-if="myData == 'Awaiting Approval' ">
 
-    <button @click="updateFormStatusToAdminReview()">Update Status to Awaiting Admin Review</button>
+    <button class="btn btn-warning" @click="updateFormStatusToAdminReview()">Update Status to Awaiting Admin Review</button>
     </span>
-    <span v-if="myData == 'Awaiting Admin Review' ">
-    <button @click="updateFormStatusToAwaitingVendor()">Update status to Awaiting Vendor</button>
-    <button @click="updateFormStatusToAwaitingApproval()">Update status to Awaiting Approval</button>
+    <span v-if="myData == 'Awaiting Admin Review' && userType != 'ROLE_VENDOR'">
+    <button class="btn btn-warning" @click="updateFormStatusToAwaitingVendor()">Update status to Awaiting Vendor</button>
+    <button class="btn btn-warning" @click="updateFormStatusToAwaitingApproval()">Update status to Awaiting Approval</button>
     </span>
 
     <p id="formStatus"></p>
@@ -80,6 +80,7 @@ export default {
       counter: 0,
       userResponseId: null,
       isApprove: false,
+      userType: localStorage.userType,
     };
   },
   methods: {
@@ -288,6 +289,7 @@ export default {
           .then((response) => {
             console.log(response);
             this.formStatus.innerHTML = "Submitted";
+            this.updateFormStatusToAdminReview();
           });
       } else if (!noResponse) {
         //UPDATE

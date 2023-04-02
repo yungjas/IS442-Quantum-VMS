@@ -46,6 +46,9 @@
                   <div v-if="form.approvedBy != null">
                     <b style="color: green;">(APPROVED)</b>
                   </div>
+                  <div else>
+                    <b> {{form.status}} </b>
+                  </div>
                   <br>
                   <button
                     class="btn btn-warning"
