@@ -43,6 +43,9 @@
               <ul>
                 <li v-for="form in item.forms"  :key="form.formId">
                   {{ form.formName }}
+                  <div v-if="form.approvedBy != null">
+                    <b style="color: green;">(APPROVED)</b>
+                  </div>
                   <br>
                   <button
                     class="btn btn-warning"
@@ -172,6 +175,7 @@ export default {
           this.data = response.data;
           this.backupData = response.data;
           console.log(this.data);
+
         });
     },
     deleteWorkflow(workflowId) {
