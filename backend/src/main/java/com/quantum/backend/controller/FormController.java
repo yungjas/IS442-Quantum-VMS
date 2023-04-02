@@ -164,11 +164,11 @@ public class FormController {
         return new ResponseEntity<>(approveForm, HttpStatus.OK);
     }
 
-    @PutMapping("updateStatus/{formId}")
-    public ResponseEntity<Object> updateStatus(@PathVariable String formId, @RequestBody Form form){
+    @PutMapping("updateStatus/{formId}/{status}")
+    public ResponseEntity<Object> updateStatus(@PathVariable String formId, @PathVariable String status){
         Form approveForm = null;
         try{
-            approveForm = formService.updateStatus(formId, form);
+            approveForm = formService.updateStatus(formId, status);
         }
         catch(ResourceNotFoundException re){
             return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);

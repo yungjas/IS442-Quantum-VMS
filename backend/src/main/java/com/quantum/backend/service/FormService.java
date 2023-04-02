@@ -98,7 +98,7 @@ public class FormService {
         return actualForm;
     }
 
-    public Form updateStatus(String formId, Form form) throws RequestErrorException{
+    public Form updateStatus(String formId, String status) throws RequestErrorException{
         Optional<Form> currentForm = formRepo.findById(formId);
         Form currentFormData = null;
 
@@ -108,7 +108,7 @@ public class FormService {
         
         try{
             currentFormData = currentForm.get();
-            currentFormData.setStatus(form.getStatus());
+            currentFormData.setStatus(status);
             formRepo.save(currentFormData);
         }
         catch(Exception e){
