@@ -261,9 +261,9 @@
         </div>
       </div>
 
-      <br /><br />
+      <br />
 
-      <div class="btn-group justify-content-end align-items-end" role="submitChange">
+      <div class="btn-group justify-content-end align-items-end mb-3" role="submitChange">
         <button type="button" class="btn btn-secondary" @click="createForm">
           Create
         </button>
