@@ -135,6 +135,7 @@ public class FormService {
             if(user.isPresent()){
                 currentFormData = currentForm.get();
                 currentFormData.setApprovedBy(user.get());
+                currentFormData.setStatus("approved");
                 formRepo.save(currentFormData);
             }
         }
@@ -156,6 +157,7 @@ public class FormService {
         try{
             currentFormData = currentForm.get();
             currentFormData.setApprovedBy(null);
+            currentFormData.setStatus("unapproved");
             formRepo.save(currentFormData);
         }
         catch(Exception e){
