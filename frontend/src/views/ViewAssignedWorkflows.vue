@@ -17,7 +17,11 @@
         <tr v-for="item in assignedWorkflows" :key="item.workflowId">
           <td>{{ item.workflowId }}</td>
           <td>{{ item.workflowName }}</td>
-          <td>{{ item.form.formName }}</td>
+          <td>
+            <span v-for="form in item.forms"  :key="form.formId">
+                {{ form.formName }}
+              </span>
+          </td>
           <td>
             <ul>
               <li v-for="admin in item.assignedAdmins" :key="admin.username">
@@ -34,12 +38,14 @@
           </td>
           <td>{{ item.deadline }}</td>
           <td v-if="item.workflowId !== this.workflowId">
-            <button
+            <span v-for="form in item.forms"  :key="form.formId">
+            <button style="margin-bottom: 1em;"
               class="btn btn-warning"
-              @click="viewWorkFlowForm(item.form.formId, item.workflowId)"
+              @click="viewWorkFlowForm(form.formId, item.workflowId)"
             >
               View
             </button>
+            </span>
           </td>
         </tr>
       </tbody>

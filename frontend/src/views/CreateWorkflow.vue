@@ -34,7 +34,7 @@
                 <label for="forms">Select Forms:</label>
               </td>
               <td>
-                <select v-model="selectedForms" id="form" style="width: 50%">
+                <select v-model="selectedForms" id="form" style="width: 50%" multiple>
                   <option v-for="form in this.displayedForms" :key="form.formId" :value="form">
                     {{ form.formName }}
                   </option>
@@ -107,8 +107,8 @@
         </div>
       </div>
     </div>
-  </template>
-  <script>
+</template>
+<script>
     import axios from "axios";
     export default {
       name: "CreateWorkflow",
@@ -118,7 +118,7 @@
           userType: localStorage.userType,
           workflowName: "",
           deadline: "",
-          selectedForms:{},
+          selectedForms:[],
           allUsers:[],
           selectedUsers: [],
           allAdmins: [],
@@ -140,7 +140,7 @@
           this.workflowName = "";
           this.deadline = "";
           this.selectedAdmins = [];
-          this.selectedForms = {};
+          this.selectedForms = [];
           this.selectedUsers = [];
           this.selectedVendors = [];
         },
@@ -150,7 +150,8 @@
           this.data.assignedUsers = this.selectedUsers;
           this.data.assignedVendors = this.selectedVendors;
           this.data.assignedAdmins = this.selectedAdmins;
-          this.data.form = this.selectedForms;
+          // var tempArray = [this.selectedForms];
+          this.data.forms = this.selectedForms;
           console.log(this.data);
           axios
             .post(
@@ -170,7 +171,7 @@
             })
             .catch(function (error) {
               alert("Error:" + error.response.status);
-            });
+            }); 
         },
         getAllUsers() {
           axios
