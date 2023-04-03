@@ -34,6 +34,7 @@ public class FormController {
     @GetMapping("all")
     public ResponseEntity<List<Form>> getAllForms() {
         List<Form> allForms = formService.getAllForms();
+        
         if (allForms.size() == 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -154,6 +155,21 @@ public class FormController {
         Form approveForm = null;
         try{
             approveForm = formService.approveForm(formId, form);
+        }
+        catch(ResourceNotFoundException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(approveForm, HttpStatus.OK);
+    }
+
+    @PutMapping("updateStatus/{formId}/{status}")
+    public ResponseEntity<Object> updateStatus(@PathVariable String formId, @PathVariable String status){
+        Form approveForm = null;
+        try{
+            approveForm = formService.updateStatus(formId, status);
         }
         catch(ResourceNotFoundException re){
             return new ResponseEntity<>(re.getMessage(), HttpStatus.NOT_FOUND);
